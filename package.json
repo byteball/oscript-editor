@@ -1,0 +1,17 @@
+{
+	"name": "oscript-editor",
+	"version": "0.1.0",
+	"description": "Online editor for Oscript - a language of autonomous agents",
+	"main": "index.js",
+	"scripts": {
+		"simpleserver": "node_modules/.bin/http-server -c-1 ./ -p 8888"
+	},
+	"author": "Obyte",
+	"license": "MIT",
+	"dependencies": {
+		"ocore": "git+https://github.com/byteball/ocore.git",
+		"headless-obyte": "git+https://github.com/byteball/headless-obyte.git",
+		"http-server": "^0.11.1",
+		"monaco-editor": "^0.17.0"
+	}
+}
