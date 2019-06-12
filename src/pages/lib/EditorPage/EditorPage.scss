@@ -1,0 +1,30 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+.root-editor-page {
+  @include flex(column, flex-start, center);
+  margin: 0 auto;
+  width: $content-max-width;
+  height: 100%;
+  .editor-header {
+    color: $color-primary;
+    margin: 3rem 0;
+    font-size: 4rem;
+  }
+  .editor {
+    flex-basis: 75%;
+    width: 100%;
+  }
+  .deploy-button {
+    cursor: pointer;
+    user-select: none;
+    margin: 3rem auto;
+    padding: 2rem 4rem;
+    background-color: $color-primary;
+    color: $color-white;
+    transition: background-color .2s ease-out;
+    &:hover {
+      background-color: lighten($color-primary, 15);
+    }
+  }
+}

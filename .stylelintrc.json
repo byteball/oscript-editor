@@ -1,0 +1,26 @@
+{
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "extends": "stylelint-config-recommended-scss",
+  "ignoreFiles": "lib/templates/**",
+  "rules": {
+    "max-empty-lines": 1,
+    "indentation": 2,
+    "number-leading-zero": "never",
+    "declaration-block-trailing-semicolon": "always",
+    "length-zero-no-unit": true,
+    "no-eol-whitespace": true,
+    "number-no-trailing-zeros": true,
+    "shorthand-property-no-redundant-values": true,
+    "string-quotes": "single",
+    "unit-whitelist": [["rem", "deg", "%", "s"], {
+      "ignoreProperties": {
+        "px": [ "/^border/", "box-shadow" ]
+      }
+    }],
+
+    "scss/at-mixin-argumentless-call-parentheses": "never",
+    "scss/no-duplicate-dollar-variables": true
+  }
+}
