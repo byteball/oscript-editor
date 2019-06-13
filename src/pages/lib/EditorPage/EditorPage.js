@@ -1,7 +1,7 @@
 import MonacoEditor from 'vue-monaco'
 import monacoLanguages from 'src/languages'
 
-const oscript = monacoLanguages['oscript']
+const ojson = monacoLanguages['ojson']
 
 export default {
 	components: {
@@ -9,8 +9,8 @@ export default {
 	},
 	data () {
 		return {
-			language: oscript.id,
-			code: oscript.codeStub
+			language: ojson.id,
+			code: ojson.codeStub
 		}
 	},
 	methods: {
