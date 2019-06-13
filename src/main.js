@@ -6,25 +6,25 @@ import router from './router'
 import store from './store'
 
 Object.keys(monacoLanguages).forEach(l => {
-  const language = monacoLanguages[l]
-  monaco.languages.register({
-    id: language.id
-  })
-  monaco.languages.setMonarchTokensProvider(language.id, language.tokensProvider)
+	const language = monacoLanguages[l]
+	monaco.languages.register({
+		id: language.id
+	})
+	monaco.languages.setMonarchTokensProvider(language.id, language.tokensProvider)
 })
 
 monaco.editor.defineTheme('obyte-dark', {
-  base: 'vs-dark',
-  inherit: true,
-  rules: [
-    { token: 'variable', foreground: '00d0b3' }
-  ]
+	base: 'vs-dark',
+	inherit: true,
+	rules: [
+		{ token: 'variable', foreground: '00d0b3' }
+	]
 })
 
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+	router,
+	store,
+	render: h => h(App)
 }).$mount('#app')

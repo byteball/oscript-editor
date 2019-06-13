@@ -3,17 +3,17 @@ const MonacoEditorPlugin = require('monaco-editor-webpack-plugin')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 module.exports = {
-  configureWebpack: {
-    plugins: [
-      new StyleLintPlugin(),
-      new MonacoEditorPlugin({
-        languages: ['javascript', 'css', 'html']
-      })
-    ]
-  },
+	configureWebpack: {
+		plugins: [
+			new StyleLintPlugin(),
+			new MonacoEditorPlugin({
+				languages: ['javascript', 'css', 'html']
+			})
+		]
+	},
 
-  chainWebpack: config => {
-    config.resolve.alias
-      .set('src', path.resolve(__dirname, 'src'))
-  }
+	chainWebpack: config => {
+		config.resolve.alias
+			.set('src', path.resolve(__dirname, 'src'))
+	}
 }
