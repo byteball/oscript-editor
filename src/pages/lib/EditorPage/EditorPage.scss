@@ -7,9 +7,22 @@
   width: $content-max-width;
   height: 100%;
   .editor-header {
+    align-self: flex-start;
     color: $color-primary;
-    margin: 3rem 0;
+    margin-top: 3rem;
     font-size: 4rem;
+  }
+  .editor-controls {
+    @include flex(row, flex-end, stretch);
+    width: 100%;
+    padding-bottom: 1rem;
+    .editor-controls-theme {
+      color: $color-dark-grey;
+      select {
+        min-width: 12rem;
+        background-color: $color-white;
+      }
+    }
   }
   .editor {
     flex-basis: 75%;

@@ -9,6 +9,7 @@ export default {
 	},
 	data () {
 		return {
+			theme: 'dark',
 			language: ojson.id,
 			code: ojson.codeStub
 		}

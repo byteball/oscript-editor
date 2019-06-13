@@ -13,8 +13,16 @@ Object.keys(monacoLanguages).forEach(l => {
 	monaco.languages.setMonarchTokensProvider(language.id, language.tokensProvider)
 })
 
-monaco.editor.defineTheme('obyte-dark', {
+monaco.editor.defineTheme('dark', {
 	base: 'vs-dark',
+	inherit: true,
+	rules: [
+		{ token: 'variable', foreground: '00d0b3' }
+	]
+})
+
+monaco.editor.defineTheme('white', {
+	base: 'vs',
 	inherit: true,
 	rules: [
 		{ token: 'variable', foreground: '00d0b3' }
