@@ -10,10 +10,12 @@
     </div>
   </div>
   <monaco-editor 
+    ref="editor"
     class="editor"
     v-model="code" 
     :language="language"
     :theme="theme"
   />
   <div class="deploy-button" @click="deploy">Deploy</div>
+  <div class="deploy-error">{{ error }}</div>
 </div>

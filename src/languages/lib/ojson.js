@@ -30,8 +30,6 @@ export default {
 				[/[;,.:]/, 'delimiter'],
 
 				// strings
-				[/"([^"\\]|\\.)*$/, 'string.invalid'],
-				[/'([^'\\]|\\.)*$/, 'string.invalid'],
 				[/"@whites*{/, { token: 'string', next: '@oscript_double', nextEmbedded: 'oscript' }],
 				[/'@whites*{/, { token: 'string', next: '@oscript_single', nextEmbedded: 'oscript' }],
 				[/`@whites*{/, { token: 'string', next: '@oscript_backtick', nextEmbedded: 'oscript' }],

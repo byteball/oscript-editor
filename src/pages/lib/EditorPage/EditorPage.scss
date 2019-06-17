@@ -31,7 +31,7 @@
   .deploy-button {
     cursor: pointer;
     user-select: none;
-    margin: 3rem auto;
+    margin: 3rem auto .5rem;
     padding: 2rem 4rem;
     background-color: $color-primary;
     color: $color-white;
@@ -39,5 +39,9 @@
     &:hover {
       background-color: lighten($color-primary, 15);
     }
+  }
+  .deploy-error {
+    color: red;
+    font-size: 1.2rem;
   }
 }
