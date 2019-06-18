@@ -2,6 +2,7 @@ import MonacoEditor from 'vue-monaco'
 import isString from 'lodash/isString'
 import isObject from 'lodash/isObject'
 import * as RRJSON from 'really-relaxed-json'
+import { mapActions, mapState } from 'vuex'
 import monacoLanguages from 'src/languages'
 
 const ojson = monacoLanguages['ojson']
@@ -14,15 +15,31 @@ export default {
 		return {
 			theme: 'dark',
 			language: ojson.id,
-			code: ojson.codeStub,
+			code: '',
 			error: ''
 		}
 	},
+	created () {
+		this.code = this.templates.simple_aa
+	},
+	computed: {
+		...mapState({
+			templates: state => state.ojson.templates
+		})
+	},
 	methods: {
-		deploy () {
+		...mapActions({
+			deployOjson: 'ojson/deploy'
+		}),
+		async deploy () {
 			this.error = ''
 			try {
-				this.serializeOjson(this.code)
+				const ojson = this.serializeOjson(this.code)
+				const result = await this.deployOjson(ojson)
+				console.log('result', result)
+				if (result.validation) {
+					throw new Error(result.validation)
+				}
 			} catch (e) {
 				this.error = e.message
 			}
@@ -57,13 +74,21 @@ export default {
 				rehydrateEmbeddedOscript(ojson)
 			}
 
-			console.log('code', code)
-			console.log('embeddedOscript', embeddedOscript)
-			console.log('ojson', ojson)
+			// console.log('code', code)
+			// console.log('embeddedOscript', embeddedOscript)
+			// console.log('ojson', ojson)
 			const json = JSON.stringify(ojson)
 			if (json.includes('<EMBEDDED_OSCRIPT_')) {
 				throw new Error('Parsing error')
 			}
+
+			return json
+		},
+		templateSelect (event) {
+			const template = event.target.value
+			this.code = this.templates[template]
+			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
+			this.error = ''
 		}
 	}
 }

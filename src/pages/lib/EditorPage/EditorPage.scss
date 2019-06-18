@@ -16,7 +16,8 @@
     @include flex(row, flex-end, stretch);
     width: 100%;
     padding-bottom: 1rem;
-    .editor-controls-theme {
+    .editor-controls-select {
+      margin-left: 2rem;
       color: $color-dark-grey;
       select {
         min-width: 12rem;

@@ -1,7 +1,13 @@
 <div class="root-editor-page">
   <div class="editor-header">Oscript Editor</div>
   <div class="editor-controls">
-    <div class="editor-controls-theme">
+    <div class="editor-controls-select">
+      Template:
+      <select @change="templateSelect">
+        <option v-for="(value, key) in templates">{{ key }}</option>
+      </select>
+    </div>
+    <div class="editor-controls-select">
       Theme:
       <select v-model="theme">
         <option>dark</option>
