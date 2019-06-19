@@ -29,16 +29,19 @@
     flex-basis: 75%;
     width: 100%;
   }
-  .deploy-button {
-    cursor: pointer;
-    user-select: none;
-    margin: 3rem auto .5rem;
-    padding: 2rem 4rem;
-    background-color: $color-primary;
-    color: $color-white;
-    transition: background-color .2s ease-out;
-    &:hover {
-      background-color: lighten($color-primary, 15);
+  .actions-row {
+    @include flex(row, center, stretch);
+    .actions-row-action {
+      cursor: pointer;
+      user-select: none;
+      margin: 3rem 2rem .5rem;
+      padding: 2rem 4rem;
+      background-color: $color-primary;
+      color: $color-white;
+      transition: background-color .2s ease-out;
+      &:hover {
+        background-color: lighten($color-primary, 15);
+      }
     }
   }
   .deploy-error {

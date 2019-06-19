@@ -24,18 +24,32 @@ export default {
 	},
 	computed: {
 		...mapState({
-			templates: state => state.ojson.templates
+			templates: state => state.aa.templates
 		})
 	},
 	methods: {
 		...mapActions({
-			deployOjson: 'ojson/deploy'
+			validateAa: 'aa/validate',
+			deployAa: 'aa/deploy'
 		}),
 		async deploy () {
 			this.error = ''
 			try {
 				const ojson = this.serializeOjson(this.code)
-				const result = await this.deployOjson(ojson)
+				const result = await this.deployAa(ojson)
+				console.log('result', result)
+				if (result.validation) {
+					throw new Error(result.validation)
+				}
+			} catch (e) {
+				this.error = e.message
+			}
+		},
+		async validate () {
+			this.error = ''
+			try {
+				const ojson = this.serializeOjson(this.code)
+				const result = await this.validateAa(ojson)
 				console.log('result', result)
 				if (result.validation) {
 					throw new Error(result.validation)

@@ -15,13 +15,16 @@
       </select>
     </div>
   </div>
-  <monaco-editor 
-    ref="editor"
+  <monaco-editor
+      ref="editor"
     class="editor"
-    v-model="code" 
+    v-model="code"
     :language="language"
     :theme="theme"
   />
-  <div class="deploy-button" @click="deploy">Deploy</div>
+  <div class="actions-row">
+    <div class="actions-row-action" @click="validate">Validate</div>
+    <div class="actions-row-action" @click="deploy">Deploy</div>
+  </div>
   <div class="deploy-error">{{ error }}</div>
 </div>
