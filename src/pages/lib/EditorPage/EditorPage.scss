@@ -4,8 +4,8 @@
 .root-editor-page {
   @include flex(column, flex-start, center);
   margin: 0 auto;
+  min-height: 1080px;
   width: $content-max-width;
-  height: 100%;
   .editor-header {
     align-self: flex-start;
     color: $color-primary;
@@ -26,15 +26,25 @@
     }
   }
   .editor {
-    flex-basis: 75%;
+    height: 700px;
+    margin-bottom: 2rem;
     width: 100%;
+  }
+  .result-pane-container {
+    width: 100%;
+    max-height: 14rem;
+    overflow: hidden;
+    transition: opacity .4s ease, max-height .4s ease;
+    .result-pane {
+      min-height: 14rem;
+    }
   }
   .actions-row {
     @include flex(row, center, stretch);
     .actions-row-action {
       cursor: pointer;
       user-select: none;
-      margin: 3rem 2rem .5rem;
+      margin: 2rem 2rem .5rem;
       padding: 2rem 4rem;
       background-color: $color-primary;
       color: $color-white;
@@ -44,8 +54,8 @@
       }
     }
   }
-  .deploy-error {
-    color: red;
-    font-size: 1.2rem;
+  .collapse-enter, .collapse-leave-to {
+    max-height: 0;
+    opacity: 0;
   }
 }

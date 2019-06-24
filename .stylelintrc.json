@@ -14,7 +14,7 @@
     "number-no-trailing-zeros": true,
     "shorthand-property-no-redundant-values": true,
     "string-quotes": "single",
-    "unit-whitelist": [["rem", "deg", "%", "s"], {
+    "unit-whitelist": [["rem", "deg", "%", "s", "px"], {
       "ignoreProperties": {
         "px": [ "/^border/", "box-shadow" ]
       }

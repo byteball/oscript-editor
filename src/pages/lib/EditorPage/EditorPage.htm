@@ -16,15 +16,29 @@
     </div>
   </div>
   <monaco-editor
-      ref="editor"
+    @wheel.native.stop.prevent
+    ref="editor"
     class="editor"
     v-model="code"
     :language="language"
     :theme="theme"
   />
+  <transition name="collapse">
+    <div
+      v-if="resultPaneOpened"
+      class="result-pane-container"
+      @wheel.stop.prevent>
+      <monaco-editor
+        class="result-pane"
+        :options="resultPaneEditorOptions"
+        v-model="resultMessage"
+        language="result-highlighter"
+        :theme="theme"
+      />
+    </div>
+  </transition>
   <div class="actions-row">
     <div class="actions-row-action" @click="validate">Validate</div>
     <div class="actions-row-action" @click="deploy">Deploy</div>
   </div>
-  <div class="deploy-error">{{ error }}</div>
 </div>

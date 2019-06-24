@@ -1,6 +1,7 @@
 import MonacoEditor from 'vue-monaco'
 import isString from 'lodash/isString'
 import isObject from 'lodash/isObject'
+import get from 'lodash/get'
 import * as RRJSON from 'really-relaxed-json'
 import { mapActions, mapState } from 'vuex'
 import monacoLanguages from 'src/languages'
@@ -16,7 +17,18 @@ export default {
 			theme: 'dark',
 			language: ojson.id,
 			code: '',
-			error: ''
+			resultMessage: '',
+			resultPaneOpened: false,
+			resultPaneHeight: '14',
+			resultPaneEditorOptions: {
+				lineNumbers: 'off',
+				readOnly: true,
+				scrollBeyondLastLine: false,
+				automaticLayout: true,
+				minimap: {
+					enabled: false
+				}
+			}
 		}
 	},
 	created () {
@@ -33,29 +45,33 @@ export default {
 			deployAa: 'aa/deploy'
 		}),
 		async deploy () {
-			this.error = ''
+			this.resultMessage = ''
+			this.resultPaneOpened = true
 			try {
 				const ojson = this.serializeOjson(this.code)
 				const result = await this.deployAa(ojson)
 				console.log('result', result)
-				if (result.validation) {
-					throw new Error(result.validation)
-				}
+				const unitAddress = get(result, 'result.unit.unit', null)
+				this.resultMessage = 'Success\n' +
+					(unitAddress ? `Agent has been deployed in unit ${unitAddress}\n` : '') +
+					JSON.stringify(get(result, 'result', ''), null, 2)
 			} catch (e) {
-				this.error = e.message
+				console.error('Deployment error:', { ...e })
+				this.resultMessage = e.response ? get(e, 'response.data.error', 'Unexpected error') : e.message
 			}
 		},
 		async validate () {
-			this.error = ''
+			this.resultMessage = ''
+			this.resultPaneOpened = true
+
 			try {
 				const ojson = this.serializeOjson(this.code)
 				const result = await this.validateAa(ojson)
 				console.log('result', result)
-				if (result.validation) {
-					throw new Error(result.validation)
-				}
+				this.resultMessage = 'Success'
 			} catch (e) {
-				this.error = e.message
+				console.error('Validation error:', { ...e })
+				this.resultMessage = e.response ? get(e, 'response.data.error', 'Unexpected error') : e.message
 			}
 		},
 		serializeOjson (input) {
@@ -88,9 +104,6 @@ export default {
 				rehydrateEmbeddedOscript(ojson)
 			}
 
-			// console.log('code', code)
-			// console.log('embeddedOscript', embeddedOscript)
-			// console.log('ojson', ojson)
 			const json = JSON.stringify(ojson)
 			if (json.includes('<EMBEDDED_OSCRIPT_')) {
 				throw new Error('Parsing error')
@@ -102,7 +115,7 @@ export default {
 			const template = event.target.value
 			this.code = this.templates[template]
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
-			this.error = ''
+			this.resultMessage = ''
 		}
 	}
 }
