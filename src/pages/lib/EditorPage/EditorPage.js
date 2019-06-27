@@ -1,11 +1,16 @@
 import MonacoEditor from 'vue-monaco'
 import isString from 'lodash/isString'
 import isObject from 'lodash/isObject'
+import isArray from 'lodash/isArray'
 import get from 'lodash/get'
 import * as RRJSON from 'really-relaxed-json'
 import { mapActions, mapState } from 'vuex'
 import monacoLanguages from 'src/languages'
+import { ValidationError, ParsingError } from 'src/errors'
 
+/* eslint-disable-next-line no-undef */
+const config = __APP_CONFIG__
+const explorerUrl = config.explorer.url
 const ojson = monacoLanguages['ojson']
 
 export default {
@@ -28,6 +33,9 @@ export default {
 				minimap: {
 					enabled: false
 				}
+			},
+			editorOptions: {
+				scrollBeyondLastLine: false
 			}
 		}
 	},
@@ -50,13 +58,12 @@ export default {
 			try {
 				const ojson = this.serializeOjson(this.code)
 				const result = await this.deployAa(ojson)
-				console.log('result', result)
-				const unitAddress = get(result, 'result.unit.unit', null)
+				const unit = get(result, 'result.unit', null)
+				const definitionMessage = get(unit, 'messages', []).find(m => m.app === 'definition')
 				this.resultMessage = 'Success\n' +
-					(unitAddress ? `Agent has been deployed in unit ${unitAddress}\n` : '') +
-					JSON.stringify(get(result, 'result', ''), null, 2)
+					(unit ? `Check in explorer: ${explorerUrl}#${unit.unit}\n` : '') +
+					(definitionMessage ? `Agent address: ${definitionMessage.payload.address}` : '')
 			} catch (e) {
-				console.error('Deployment error:', { ...e })
 				this.resultMessage = e.response ? get(e, 'response.data.error', 'Unexpected error') : e.message
 			}
 		},
@@ -66,12 +73,12 @@ export default {
 
 			try {
 				const ojson = this.serializeOjson(this.code)
-				const result = await this.validateAa(ojson)
-				console.log('result', result)
+				await this.validateAa(ojson)
 				this.resultMessage = 'Success'
 			} catch (e) {
-				console.error('Validation error:', { ...e })
-				this.resultMessage = e.response ? get(e, 'response.data.error', 'Unexpected error') : e.message
+				if (e instanceof ValidationError) { this.resultMessage = e.message }
+				if (e instanceof ParsingError) { this.resultMessage = e.message }
+				this.resultMessage = e.message
 			}
 		},
 		serializeOjson (input) {
@@ -84,7 +91,7 @@ export default {
 				embeddedCounter++
 				return key
 			})
-			const ojson = JSON.parse(RRJSON.toJson(code))
+			const ojson = this.toOjsonFromText(code)
 
 			function rehydrateEmbeddedOscript (obj) {
 				for (const key in obj) {
@@ -110,6 +117,15 @@ export default {
 			}
 
 			return json
+		},
+		toOjsonFromText (text) {
+			const data = JSON.parse(RRJSON.toJson(text))
+			if (isArray(data)) {
+				return data[0] === 'autonomous agent'
+					? data
+					: ['autonomous agent', ...data]
+			}
+			return ['autonomous agent', data]
 		},
 		templateSelect (event) {
 			const template = event.target.value

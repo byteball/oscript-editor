@@ -30,9 +30,9 @@ export default {
 				[/[;,.:]/, 'delimiter'],
 
 				// strings
-				[/"@whites*{/, { token: 'string', next: '@oscript_double', nextEmbedded: 'oscript' }],
-				[/'@whites*{/, { token: 'string', next: '@oscript_single', nextEmbedded: 'oscript' }],
-				[/`@whites*{/, { token: 'string', next: '@oscript_backtick', nextEmbedded: 'oscript' }],
+				[/"{/, { token: 'string', next: '@oscript_double', nextEmbedded: 'oscript' }],
+				[/'{/, { token: 'string', next: '@oscript_single', nextEmbedded: 'oscript' }],
+				[/`{/, { token: 'string', next: '@oscript_backtick', nextEmbedded: 'oscript' }],
 				[/"/, { token: 'string.quote', bracket: '@open', next: '@string_double' }],
 				[/`/, { token: 'string.quote', bracket: '@open', next: '@string_backtick' }],
 				[/'/, { token: 'string.quote', bracket: '@open', next: '@string_single' }],
@@ -71,13 +71,13 @@ export default {
 			],
 
 			oscript_double: [
-				[/}@whites*"/, { token: 'string', next: '@pop', nextEmbedded: '@pop' }]
+				[/}"/, { token: 'string', next: '@pop', nextEmbedded: '@pop' }]
 			],
 			oscript_single: [
-				[/}@whites*'/, { token: 'string', next: '@pop', nextEmbedded: '@pop' }]
+				[/}'/, { token: 'string', next: '@pop', nextEmbedded: '@pop' }]
 			],
 			oscript_backtick: [
-				[/}@whites*`/, { token: 'string', next: '@pop', nextEmbedded: '@pop' }]
+				[/}`/, { token: 'string', next: '@pop', nextEmbedded: '@pop' }]
 			],
 
 			whitespace: [

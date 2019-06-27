@@ -1,44 +1,46 @@
 <div class="root-editor-page">
-  <div class="editor-header">Oscript Editor</div>
-  <div class="editor-controls">
-    <div class="editor-controls-select">
-      Template:
-      <select @change="templateSelect">
-        <option v-for="(value, key) in templates">{{ key }}</option>
-      </select>
-    </div>
-    <div class="editor-controls-select">
-      Theme:
-      <select v-model="theme">
-        <option>dark</option>
-        <option>white</option>
-      </select>
-    </div>
-  </div>
-  <monaco-editor
-    @wheel.native.stop.prevent
-    ref="editor"
-    class="editor"
-    v-model="code"
-    :language="language"
-    :theme="theme"
-  />
-  <transition name="collapse">
-    <div
-      v-if="resultPaneOpened"
-      class="result-pane-container"
-      @wheel.stop.prevent>
-      <monaco-editor
-        class="result-pane"
-        :options="resultPaneEditorOptions"
-        v-model="resultMessage"
-        language="result-highlighter"
-        :theme="theme"
-      />
-    </div>
-  </transition>
-  <div class="actions-row">
-    <div class="actions-row-action" @click="validate">Validate</div>
-    <div class="actions-row-action" @click="deploy">Deploy</div>
-  </div>
+	<div class="editor-header">Oscript Editor</div>
+	<div class="editor-controls">
+		<div class="editor-controls-select">
+			Template:
+			<select @change="templateSelect">
+				<option v-for="(value, key) in templates">{{ key }}</option>
+			</select>
+		</div>
+		<div class="editor-controls-select">
+			Theme:
+			<select v-model="theme">
+				<option>dark</option>
+				<option>white</option>
+			</select>
+		</div>
+	</div>
+	<monaco-editor
+		:options="editorOptions"
+		ref="editor"
+		class="editor"
+		:class="`theme-${theme}`"
+		v-model="code"
+		:language="language"
+		:theme="theme"
+	/>
+	<transition name="collapse">
+		<div
+			v-if="resultPaneOpened"
+			class="result-pane-container"
+			:class="`theme-${theme}`"
+		>
+			<monaco-editor
+				class="result-pane"
+				:options="resultPaneEditorOptions"
+				v-model="resultMessage"
+				language="result-highlighter"
+				:theme="theme"
+			/>
+		</div>
+	</transition>
+	<div class="actions-row">
+		<div class="actions-row-action" @click="validate">Validate</div>
+		<div class="actions-row-action" @click="deploy">Deploy</div>
+	</div>
 </div>
