@@ -24,7 +24,6 @@ export default {
 			code: '',
 			resultMessage: '',
 			resultPaneOpened: false,
-			resultPaneHeight: '14',
 			resultPaneEditorOptions: {
 				lineNumbers: 'off',
 				readOnly: true,
@@ -35,12 +34,13 @@ export default {
 				}
 			},
 			editorOptions: {
-				scrollBeyondLastLine: false
+				scrollBeyondLastLine: false,
+				automaticLayout: true
 			}
 		}
 	},
 	created () {
-		this.code = this.templates.simple_aa
+		this.code = this.templates[Object.keys(this.templates)[0]]
 	},
 	computed: {
 		...mapState({
@@ -119,7 +119,7 @@ export default {
 			return json
 		},
 		toOjsonFromText (text) {
-			const data = JSON.parse(RRJSON.toJson(text))
+			const data = JSON.parse(RRJSON.toJson(text, false))
 			if (isArray(data)) {
 				return data[0] === 'autonomous agent'
 					? data

@@ -15,15 +15,16 @@
 			</select>
 		</div>
 	</div>
-	<monaco-editor
-		:options="editorOptions"
-		ref="editor"
-		class="editor"
-		:class="`theme-${theme}`"
-		v-model="code"
-		:language="language"
-		:theme="theme"
-	/>
+	<div class="editor-container" :class="`theme-${theme}`">
+		<monaco-editor
+			:options="editorOptions"
+			ref="editor"
+			class="editor"
+			v-model="code"
+			:language="language"
+			:theme="theme"
+		/>
+	</div>
 	<transition name="collapse">
 		<div
 			v-if="resultPaneOpened"
