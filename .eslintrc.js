@@ -11,7 +11,8 @@ module.exports = {
 		'indent': ['error', 'tab'],
 		'no-tabs': 'off',
 		'no-console': 'error',
-		'no-debugger': 'error'
+		'no-debugger': 'error',
+		'no-warning-comments': ['error', { 'terms': ['fixme'], 'location': 'start' }]
 	},
 	parserOptions: {
 		parser: 'babel-eslint'

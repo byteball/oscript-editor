@@ -11,13 +11,24 @@ Object.keys(monacoLanguages).forEach(l => {
 		id: language.id
 	})
 	monaco.languages.setMonarchTokensProvider(language.id, language.tokensProvider)
+	if (language.conf) {
+		monaco.languages.setLanguageConfiguration(language.id, language.conf)
+	}
+	if (language.proposals) {
+		monaco.languages.registerCompletionItemProvider(language.id, {
+			provideCompletionItems: (model, position) => {
+				return { suggestions: language.proposals(model, position) }
+			}
+		})
+	}
 })
 
 monaco.editor.defineTheme('dark', {
 	base: 'vs-dark',
 	inherit: true,
 	rules: [
-		{ token: 'variable', foreground: '00d0b3' }
+		{ token: 'variable', foreground: '00d0b3' },
+		{ token: 'keyword.ojson', foreground: 'ffc966' }
 	]
 })
 
@@ -25,7 +36,8 @@ monaco.editor.defineTheme('white', {
 	base: 'vs',
 	inherit: true,
 	rules: [
-		{ token: 'variable', foreground: '00d0b3' }
+		{ token: 'variable', foreground: '00d0b3' },
+		{ token: 'keyword.ojson', foreground: 'c28800' }
 	]
 })
 
