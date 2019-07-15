@@ -28,7 +28,7 @@ $result_pane_height: 10rem;
 	}
 	.editor-container {
 		height: calc(100vh - (#{$result_pane_height} + 12rem));
-		min-height: calc(768px - (#{$result_pane_height} + 12rem));
+		min-height: calc(700px - (#{$result_pane_height} + 12rem));
 		width: 100%;
 		align-self: stretch;
 		margin-bottom: 2rem;
