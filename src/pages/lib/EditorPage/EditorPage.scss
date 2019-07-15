@@ -1,7 +1,7 @@
 @import 'src/styles/mixins';
 @import 'src/styles/variables';
 
-$result_pane_height: 9rem;
+$result_pane_height: 10rem;
 
 .root-editor-page {
 	@include flex(column, flex-start, center);

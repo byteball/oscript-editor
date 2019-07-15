@@ -15,7 +15,7 @@ export default {
 		],
 
 		words: [
-			'autonomous agent', 'payment', 'base', 'state', 'true', 'false'
+			'autonomous agent', 'payment', 'base', 'state', 'true', 'false', 'data'
 		],
 
 		// C# style strings
@@ -27,7 +27,7 @@ export default {
 				// identifiers and keywords
 				[/[a-z_$][\w$]*/, { cases: {
 					'@keyword': 'keyword.ojson',
-					'@words': 'predefined',
+					'@words': 'variable.predefined',
 					'@default': 'invalid'
 				} }],
 
@@ -311,6 +311,23 @@ export default {
 				insertText: 'true'
 			}
 		]
+
+		const text = model.getValueInRange({
+			startLineNumber: 1,
+			startColumn: 1,
+			endLineNumber: position.lineNumber,
+			endColumn: position.column
+		})
+
+		for (let i = text.length - 1; i > 0; i--) {
+			const pair = text[i - 1] + text[i]
+			if (pair === '"{' || pair === '`{' || pair === "'{") {
+				return oscriptProposals(model, position)
+			} else if (pair === '}"' || pair === '}`' || pair === "}'") {
+				break
+			}
+		}
+
 		const textUntilPosition = model.getValueInRange({
 			startLineNumber: position.lineNumber,
 			startColumn: 1,
@@ -322,4 +339,25 @@ export default {
 			? values
 			: keys
 	}
+}
+
+const oscriptProposals = (model, position) => {
+	const words = [
+		'if', 'else', 'return', 'true', 'false',
+		'var', 'bounce', 'response', 'response_unit', 'timestamp', 'mci', 'this_address', 'base',
+		'data_feed', 'in_data_feed',
+		'attestation', 'balance',
+		'address', 'amount', 'asset', 'attestors', 'ifseveral', 'ifnone', 'type',
+		'oracles', 'feed_name', 'min_mci', 'feed_value', 'what',
+		'min', 'max', 'pi', 'e', 'sqrt', 'ln', 'ceil', 'floor', 'round', 'abs', 'hypot',
+		'is_valid_signed_package', 'sha256', 'json_parse', 'json_stringify',
+		'OR', 'AND', 'NOT', 'OTHERWISE', 'or', 'and', 'not', 'otherwise',
+		'this', 'address', 'trigger.data', 'trigger.address', 'trigger.output',
+		'trigger.unit'
+	]
+	return words.map(w => ({
+		label: w,
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		insertText: w
+	}))
 }
