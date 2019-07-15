@@ -15,12 +15,12 @@ let lexer = moo.states({
 		formulaDoubleStart: { match: '"{', push: 'formulaDouble' },
 		formulaSingleStart: { match: "'{", push: 'formulaSingle' },
 		formulaBackStart: { match: '`{', push: 'formulaBack' },
-    '{': '{',
-    '}': '}',
+		'{': '{',
+		'}': '}',
 		'[': '[',
-    ']': ']',
-    ':': ':',
-    ',': ',',
+		']': ']',
+		':': ':',
+		',': ',',
 		autonomous_agent: 'autonomous agent',
 		comment: /\/\/.*$/,
 		ifWord: 'if',
@@ -38,16 +38,16 @@ let lexer = moo.states({
 			/`(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})`/,
 		],
 		'"': '"',
-    "'": "'",
-    '`': '`',
+		"'": "'",
+		'`': '`',
 		int: /[0-9]+/,
 	},
 	appList: {
 		space: {match: /\s+/, lineBreaks: true},
 		comment: /\/\/.*$/,
 		'"': '"',
-    "'": "'",
-    '`': '`',
+		"'": "'",
+		'`': '`',
 		appList: {
 			match: ['payment', 'data', 'data_feed', 'profile',
 							'text', 'definition', 'asset_attestors',
@@ -64,37 +64,37 @@ let lexer = moo.states({
 		"{": {match: "{", push: "payload"},
 		"}": {match: "}", pop: 1},
 		'[': '[',
-    ']': ']',
-    ':': ':',
-    ',': ',',
+		']': ']',
+		':': ':',
+		',': ',',
 		comment: /\/\/.*$/,
 		true: 'true',
-    false: 'false',
+		false: 'false',
 		base64: [
 			/'(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})'/,
 			/"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})"/,
 			/`(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})`/,
 		],
 		'"': '"',
-    "'": "'",
-    '`': '`',
+		"'": "'",
+		'`': '`',
 		// [+-]?([0-9]*[.])?[0-9]+
 		decimal: /(?:[+-])?(?:[0-9]*[.])?[0-9]+/,
 		str: /[a-zA-Z_0-9 =+*/@-]+/,
 	},
 	formulaDouble: {
 		formulaDoubleEnd: { match: '}"', pop: 1 },
-    formula: {match: /[\s\S]+?(?=}")/, lineBreaks: true},
+		formula: {match: /[\s\S]+?(?=}")/, lineBreaks: true},
 	},
 	formulaSingle: {
 		formulaSingleEnd: { match: "}'", pop: 1 },
-    formula: {match: /[\s\S]+?(?=}')/, lineBreaks: true},
+		formula: {match: /[\s\S]+?(?=}')/, lineBreaks: true},
 	},
 	formulaBack: {
 		formulaBackEnd: { match: '}`', pop: 1 },
-    formula: {match: /[\s\S]+?(?=}`)/, lineBreaks: true},
+		formula: {match: /[\s\S]+?(?=}`)/, lineBreaks: true},
 	},
-})
+	})
 
 const TYPES = {
 	IF: 'IF',
@@ -135,7 +135,7 @@ const main = (d) => ({
 	context: c(d[1])
 })
 
-const formula  = (d) => ({
+const formula = (d) => ({
 	type: TYPES.FORMULA,
 	value: d[1] ? d[1].text : '',
 	context: d[1] ? c(d[1]) : c(d[0])

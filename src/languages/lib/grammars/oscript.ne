@@ -71,7 +71,7 @@
 
 	var origNext = lexer.next;
 
-    lexer.next = function () {
+	lexer.next = function () {
 		var tok = origNext.call(this);
 		if (tok) {
 			switch (tok.type) {
@@ -98,7 +98,7 @@ statement -> local_var_assignment {% id %}
 	| return_statement {% id %}
 	| empty_return_statement {% id %}
 
-ifelse -> "if" "(" expr ")" block ("else" block):?  {% function(d){  
+ifelse -> "if" "(" expr ")" block ("else" block):?  {% function(d){
 	var else_block = d[5] ? d[5][1] : null;
 	return ['ifelse', d[2], d[4], else_block];
 } %}
@@ -183,45 +183,45 @@ balance_param_list -> balance_param ("," balance_param):*  {% function(d) { retu
 
 
 P -> "(" expr ")" {% function(d) {return d[1]; } %}
-    | N      {% id %}
+	| N      {% id %}
 	| string {% id %}
 
 Exp -> P "^" Exp    {% function(d) {return ['^', d[0], d[2]]; } %}
-    | P             {% id %}
+		| P             {% id %}
 
 unary_expr -> Exp {% id %}
 	| %not unary_expr {% function(d) {return ['not', d[1]];}%}
 
 MD -> MD "*" unary_expr  {% function(d) {return ['*', d[0], d[2]]; } %}
-    | MD "/" unary_expr  {% function(d) {return ['/', d[0], d[2]]; } %}
-    | unary_expr             {% id %}
+		| MD "/" unary_expr  {% function(d) {return ['/', d[0], d[2]]; } %}
+		| unary_expr             {% id %}
 
 AS -> AS "+" MD {% function(d) {return ['+', d[0], d[2]]; } %}
-    | AS "-" MD {% function(d) {return ['-', d[0], d[2]]; } %}
-    | "-" MD {% function(d) {return ['-', new Decimal(0), d[1]]; } %}
-    | AS %concat MD {% function(d) {return ['concat', d[0], d[2]]; } %}
-    | MD            {% id %}
+		| AS "-" MD {% function(d) {return ['-', d[0], d[2]]; } %}
+		| "-" MD {% function(d) {return ['-', new Decimal(0), d[1]]; } %}
+		| AS %concat MD {% function(d) {return ['concat', d[0], d[2]]; } %}
+		| MD            {% id %}
 
 N -> float          {% id %}
 	| boolean       {% id %}
 	| local_var     {% id %}
-    | "pi"          {% function(d) {return ['pi']; } %}
-    | "e"           {% function(d) {return ['e']; } %}
-    | "sqrt" "(" expr ")"    {% function(d) {return ['sqrt', d[2]]; } %}
-    | "ln" "(" expr ")"    {% function(d) {return ['ln', d[2]]; } %}
-    | "min" "(" expr_list ")"  {% function(d) {return ['min', d[2]]; }  %}
-    | "max" "(" expr_list ")"  {% function(d) {return ['max', d[2]]; }  %}
-    | "hypot" "(" expr_list ")"  {% function(d) {return ['hypot', d[2]]; }  %}
-    | "ceil" "(" expr (%comma expr):? ")"    {% function(d) {return ['ceil', d[2], d[3] ? d[3][1] : null]; } %}
-    | "floor" "(" expr (%comma expr):? ")"    {% function(d) {return ['floor', d[2], d[3] ? d[3][1] : null]; } %}
-    | "round" "(" expr (%comma expr):? ")"    {% function(d) {return ['round', d[2], d[3] ? d[3][1] : null]; } %}
-    | "abs" "(" expr ")"  {% function(d) {return ['abs', d[2]]; }  %}
-    | "is_valid_signed_package" "(" expr "," expr ")"    {% function(d) {return ['is_valid_signed_package', d[2], d[4]]; } %}
-    | "sha256" "(" expr ")"    {% function(d) {return ['sha256', d[2]]; } %}
-    | "json_parse" "(" expr ")"    {% function(d) {return ['json_parse', d[2]]; } %}
-    | "json_stringify" "(" expr ")"    {% function(d) {return ['json_stringify', d[2]]; } %}
-    | bounce_expr    {% id %}
-    | %data_feed ("[" "[") df_param_list ("]" "]") {% function (d, location, reject){
+	| "pi"          {% function(d) {return ['pi']; } %}
+	| "e"           {% function(d) {return ['e']; } %}
+	| "sqrt" "(" expr ")"    {% function(d) {return ['sqrt', d[2]]; } %}
+	| "ln" "(" expr ")"    {% function(d) {return ['ln', d[2]]; } %}
+	| "min" "(" expr_list ")"  {% function(d) {return ['min', d[2]]; }  %}
+	| "max" "(" expr_list ")"  {% function(d) {return ['max', d[2]]; }  %}
+	| "hypot" "(" expr_list ")"  {% function(d) {return ['hypot', d[2]]; }  %}
+	| "ceil" "(" expr (%comma expr):? ")"    {% function(d) {return ['ceil', d[2], d[3] ? d[3][1] : null]; } %}
+	| "floor" "(" expr (%comma expr):? ")"    {% function(d) {return ['floor', d[2], d[3] ? d[3][1] : null]; } %}
+	| "round" "(" expr (%comma expr):? ")"    {% function(d) {return ['round', d[2], d[3] ? d[3][1] : null]; } %}
+	| "abs" "(" expr ")"  {% function(d) {return ['abs', d[2]]; }  %}
+	| "is_valid_signed_package" "(" expr "," expr ")"    {% function(d) {return ['is_valid_signed_package', d[2], d[4]]; } %}
+	| "sha256" "(" expr ")"    {% function(d) {return ['sha256', d[2]]; } %}
+	| "json_parse" "(" expr ")"    {% function(d) {return ['json_parse', d[2]]; } %}
+	| "json_stringify" "(" expr ")"    {% function(d) {return ['json_stringify', d[2]]; } %}
+	| bounce_expr    {% id %}
+	| %data_feed ("[" "[") df_param_list ("]" "]") {% function (d, location, reject){
 		var params = {};
 		var arrParams = d[2];
 		for(var i = 0; i < arrParams.length; i++){
@@ -233,7 +233,7 @@ N -> float          {% id %}
 		}
 		return [d[0].value, params]
 	}%}
-    | %io ("[" "[") io_param_list ("]" "]")  %dotSelector {% function (d, location, reject){
+		| %io ("[" "[") io_param_list ("]" "]")  %dotSelector {% function (d, location, reject){
 		var params = {};
 		var arrParams = d[2];
 		for(var i = 0; i < arrParams.length; i++){
@@ -245,7 +245,7 @@ N -> float          {% id %}
 		}
 		return [d[0].value, params, d[4].value.substr(1)]
 	}%}
-    | "attestation" ("[" "[") attestation_param_list ("]" "]") (%dotSelector|"[" expr "]"):? {% function (d, location, reject){
+		| "attestation" ("[" "[") attestation_param_list ("]" "]") (%dotSelector|"[" expr "]"):? {% function (d, location, reject){
 		var params = {};
 		var arrParams = d[2];
 		for(var i = 0; i < arrParams.length; i++){
@@ -260,7 +260,7 @@ N -> float          {% id %}
 			field = (d[4][0].type === 'dotSelector') ? d[4][0].value.substr(1) : d[4][1];
 		return ["attestation", params, field];
 	}%}
-    | "balance" ("[" "[") balance_param_list ("]" "]")   {% function (d, location, reject){
+		| "balance" ("[" "[") balance_param_list ("]" "]")   {% function (d, location, reject){
 		var params = {};
 		var arrParams = d[2];
 		for(var i = 0; i < arrParams.length; i++){

@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import send_all from './lib/send_all'
 import simple_aa from './lib/simple_aa'
-import parser_test from './lib/parser_test'
 import just_a_bouncer from './lib/just_a_bouncer'
 import create_an_asset from './lib/create_an_asset'
 import option_contract from './lib/option_contract'
@@ -19,7 +18,6 @@ import sending_prepared_objects_through_trigger_data from './lib/sending_prepare
 export default {
 	send_all,
 	simple_aa,
-	parser_test,
 	just_a_bouncer,
 	create_an_asset,
 	option_contract,
