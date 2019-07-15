@@ -16,7 +16,7 @@ export default {
 			'is_valid_signed_package', 'sha256', 'json_parse', 'json_stringify'
 		],
 		operators: [
-			'=', '>', '<', '!', '?', ':', '==', '<=', '>=', '!=',
+			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
 			'||', '+', '-', '*', '/', '^',
 			'+=', '-=', '*=', '/=', '||=', 'OR', 'AND', 'NOT', 'OTHERWISE', 'or', 'and', 'not', 'otherwise'
 		],
@@ -88,6 +88,29 @@ export default {
 				[/\/\*/, 'comment', '@comment'],
 				[/\/\/.*$/, 'comment']
 			]
+		}
+	},
+	conf: {
+		brackets: [['{', '}'], ['[', ']'], ['(', ')']],
+		autoClosingPairs: [
+			{ open: '{', close: '}' },
+			{ open: '[', close: ']' },
+			{ open: '(', close: ')' },
+			{ open: '"', close: '"' },
+			{ open: "'", close: "'" },
+			{ open: '`', close: '`' }
+		],
+		surroundingPairs: [
+			{ open: '{', close: '}' },
+			{ open: '[', close: ']' },
+			{ open: '(', close: ')' },
+			{ open: '"', close: '"' },
+			{ open: "'", close: "'" },
+			{ open: '`', close: '`' }
+		],
+		comments: {
+			lineComment: '//',
+			blockComment: ['/*', '*/']
 		}
 	}
 }
