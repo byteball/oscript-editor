@@ -45,6 +45,7 @@ export default {
 			theme: 'dark',
 			language: ojson.id,
 			code: '',
+			isWordWrappingEnabled: true,
 			resultMessage: '',
 			resultPaneOpened: false,
 			resultPaneEditorOptions: {
@@ -58,6 +59,7 @@ export default {
 				}
 			},
 			editorOptions: {
+				wordWrap: 'on',
 				scrollBeyondLastLine: false,
 				automaticLayout: true
 			}
@@ -230,6 +232,14 @@ export default {
 			this.code = this.templates[template]
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
 			this.resultMessage = ''
+		},
+		handleWordWrappingCheckbox () {
+			this.isWordWrappingEnabled = !this.isWordWrappingEnabled
+			if (this.isWordWrappingEnabled) {
+				this.$refs.editor.getMonaco().updateOptions({ wordWrap: 'on' })
+			} else {
+				this.$refs.editor.getMonaco().updateOptions({ wordWrap: 'off' })
+			}
 		}
 	}
 }

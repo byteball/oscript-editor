@@ -1,6 +1,10 @@
 <div class="root-editor-page">
 	<div class="editor-header">Oscript Editor</div>
 	<div class="editor-controls">
+		<div class="editor-controls-checkbox">
+			Wrap lines:
+			<input type="checkbox" :checked="isWordWrappingEnabled" @change="handleWordWrappingCheckbox">
+		</div>
 		<div class="editor-controls-select">
 			Template:
 			<select @change="templateSelect">

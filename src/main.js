@@ -28,7 +28,8 @@ monaco.editor.defineTheme('dark', {
 	inherit: true,
 	rules: [
 		{ token: 'variable', foreground: '00d0b3' },
-		{ token: 'keyword.ojson', foreground: 'ffc966' }
+		{ token: 'keyword.ojson', foreground: 'ffc966' },
+		{ token: 'autocomplete', foreground: 'CE9178' }
 	]
 })
 
@@ -37,7 +38,8 @@ monaco.editor.defineTheme('white', {
 	inherit: true,
 	rules: [
 		{ token: 'variable', foreground: '00d0b3' },
-		{ token: 'keyword.ojson', foreground: 'c28800' }
+		{ token: 'keyword.ojson', foreground: 'c28800' },
+		{ token: 'autocomplete', foreground: 'A31515' }
 	]
 })
 
