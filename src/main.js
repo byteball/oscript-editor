@@ -1,0 +1,52 @@
+import Vue from 'vue'
+import * as monaco from 'monaco-editor'
+import monacoLanguages from 'src/languages'
+import App from './App/App.vue'
+import router from './router'
+import store from './store'
+
+Object.keys(monacoLanguages).forEach(l => {
+	const language = monacoLanguages[l]
+	monaco.languages.register({
+		id: language.id
+	})
+	monaco.languages.setMonarchTokensProvider(language.id, language.tokensProvider)
+	if (language.conf) {
+		monaco.languages.setLanguageConfiguration(language.id, language.conf)
+	}
+	if (language.proposals) {
+		monaco.languages.registerCompletionItemProvider(language.id, {
+			provideCompletionItems: (model, position) => {
+				return { suggestions: language.proposals(model, position) }
+			}
+		})
+	}
+})
+
+monaco.editor.defineTheme('dark', {
+	base: 'vs-dark',
+	inherit: true,
+	rules: [
+		{ token: 'variable', foreground: '00d0b3' },
+		{ token: 'keyword.ojson', foreground: 'ffc966' },
+		{ token: 'autocomplete', foreground: 'CE9178' }
+	]
+})
+
+monaco.editor.defineTheme('white', {
+	base: 'vs',
+	inherit: true,
+	rules: [
+		{ token: 'variable', foreground: '00d0b3' },
+		{ token: 'keyword.ojson', foreground: 'c28800' },
+		{ token: 'autocomplete', foreground: 'A31515' }
+	]
+})
+
+Vue.config.productionTip = false
+
+new Vue({
+	router,
+	store,
+	render: h => h(App)
+}).$mount('#app')

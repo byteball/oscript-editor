@@ -1,0 +1,85 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+$result_pane_height: 10rem;
+
+.root-editor-page {
+	@include flex(column, flex-start, center);
+	margin: 0 auto;
+	width: $content-max-width;
+	.editor-header {
+		align-self: flex-start;
+		color: $color-primary;
+		margin-top: 3rem;
+		font-size: 4rem;
+	}
+	.editor-controls {
+		@include flex(row, flex-end, stretch);
+		width: 100%;
+		padding-bottom: 1rem;
+		.editor-controls-select {
+			margin-left: 2rem;
+			color: $color-dark-grey;
+			select {
+				min-width: 12rem;
+				background-color: $color-white;
+			}
+		}
+		.editor-controls-checkbox {
+			@include flex(row, flex-start, center);
+			margin-left: 2rem;
+			color: $color-dark-grey;
+			input {
+				margin: 0 0 0 1rem;
+				width: 1.8rem;
+				height: 1.8rem;
+			}
+		}
+	}
+	.editor-container {
+		height: calc(100vh - (#{$result_pane_height} + 12rem));
+		min-height: calc(700px - (#{$result_pane_height} + 12rem));
+		width: 100%;
+		align-self: stretch;
+		margin-bottom: 2rem;
+		.editor {
+			height: 100%;
+			width: 100%;
+		}
+		&.theme-white {
+			outline: 1px solid lighten($color-primary, 50%);
+		}
+	}
+	.result-pane-container {
+		width: 100%;
+		max-height: $result_pane_height;
+		overflow: hidden;
+		transition: opacity .4s ease, max-height .4s ease;
+		margin-bottom: 2rem;
+		.result-pane {
+			min-height: $result_pane_height;
+		}
+		&.theme-white {
+			outline: 1px solid lighten($color-primary, 50%);
+		}
+	}
+	.actions-row {
+		@include flex(row, center, stretch);
+		.actions-row-action {
+			cursor: pointer;
+			user-select: none;
+			margin: 0 2rem 2rem;
+			padding: 2rem 4rem;
+			background-color: $color-primary;
+			color: $color-white;
+			transition: background-color .2s ease-out;
+			&:hover {
+				background-color: lighten($color-primary, 15);
+			}
+		}
+	}
+	.collapse-enter, .collapse-leave-to {
+		max-height: 0;
+		opacity: 0;
+	}
+}
