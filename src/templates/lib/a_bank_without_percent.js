@@ -39,14 +39,14 @@ export default `{
 						if (trigger.output[[asset=base]] > 10000){
 							$base_key = 'balance_'||trigger.address||'_'||'base';
 							var[$base_key] = var[$base_key] + trigger.output[[asset=base]];
-							$response_base = trigger.output[[asset=base]] || ' bytes';
+							$response_base = trigger.output[[asset=base]] || ' bytes\\n';
 						}
 						if ($asset != 'none'){
 							$asset_key = 'balance_'||trigger.address||'_'||$asset;
 							var[$asset_key] = var[$asset_key] + trigger.output[[asset=$asset]];
-							$response_asset = trigger.output[[asset=$asset]] || ' of ' || $asset || '';
+							$response_asset = trigger.output[[asset=$asset]] || ' of ' || $asset || '\\n';
 						}
-						response['message'] = 'accepted coins:' || ($response_base otherwise '') || ($response_asset otherwise '');
+						response['message'] = 'accepted coins:\\n' || ($response_base otherwise '') || ($response_asset otherwise '');
 					}\`
 				}]
 			},

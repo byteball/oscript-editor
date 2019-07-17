@@ -6,16 +6,16 @@
 			<input type="checkbox" :checked="isWordWrappingEnabled" @change="handleWordWrappingCheckbox">
 		</div>
 		<div class="editor-controls-select">
-			Template:
-			<select @change="templateSelect">
-				<option v-for="(value, key) in templates">{{ key }}</option>
-			</select>
-		</div>
-		<div class="editor-controls-select">
 			Theme:
 			<select v-model="theme">
 				<option>dark</option>
 				<option>white</option>
+			</select>
+		</div>
+		<div class="editor-controls-select">
+			Template:
+			<select @change="templateSelect">
+				<option v-for="(value, key) in templates">{{ key }}</option>
 			</select>
 		</div>
 	</div>

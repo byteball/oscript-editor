@@ -32,15 +32,15 @@ export default `{
 						return false;
 					if ($order1.sell_asset != $order2.buy_asset OR $order1.buy_asset != $order2.sell_asset)
 						return false;
-					
+
 					// to do check expiry
-					
+
 					$sell_key1 = 'balance_' || $order1.address || '_' || $order1.sell_asset;
 					$sell_key2 = 'balance_' || $order2.address || '_' || $order2.sell_asset;
-					
+
 					$id1 = sha256($order1.address || $order1.sell_asset || $order1.buy_asset || $order1.sell_amount || $order1.price || trigger.data.order1.last_ball_unit);
 					$id2 = sha256($order2.address || $order2.sell_asset || $order2.buy_asset || $order2.sell_amount || $order2.price || trigger.data.order2.last_ball_unit);
-					
+
 					if (var['executed_' || $id1] OR var['executed_' || $id2])
 						return false;
 
@@ -81,7 +81,7 @@ export default `{
 						var[$base_key2] = var[$base_key2] - $fee;
 						if (var[$base_key1] < 0 OR var[$base_key2] < 0)
 							bounce('not enough balance for fees');
-						
+
 						var['executed_' || $id1] = 1;
 						$new_amount_left2 = $amount_left2 - $buy_amount1;
 						if ($new_amount_left2)
@@ -108,14 +108,14 @@ export default `{
 						if (trigger.output[[asset=base]] > 10000){
 							$base_key = 'balance_'||trigger.address||'_'||'base';
 							var[$base_key] = var[$base_key] + trigger.output[[asset=base]];
-							$response_base = trigger.output[[asset=base]] || ' bytes\n';
+							$response_base = trigger.output[[asset=base]] || ' bytes\\n';
 						}
 						if ($asset != 'none'){
 							$asset_key = 'balance_'||trigger.address||'_'||$asset;
 							var[$asset_key] = var[$asset_key] + trigger.output[[asset=$asset]];
-							$response_asset = trigger.output[[asset=$asset]] || ' of ' || $asset || '\n';
+							$response_asset = trigger.output[[asset=$asset]] || ' of ' || $asset || '\\n';
 						}
-						response['message'] = 'accepted coins:\n' || ($response_base otherwise '') || ($response_asset otherwise '');
+						response['message'] = 'accepted coins:\\n' || ($response_base otherwise '') || ($response_asset otherwise '');
 					}\`
 				}]
 			},
