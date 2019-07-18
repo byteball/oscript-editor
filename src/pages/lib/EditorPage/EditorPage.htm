@@ -3,18 +3,19 @@
 	<div class="editor-controls">
 		<div class="editor-controls-checkbox">
 			Wrap lines:
-			<input type="checkbox" :checked="isWordWrappingEnabled" @change="handleWordWrappingCheckbox">
+			<input type="checkbox" :checked="wrapLines" @change="handleWrapLinesCheckbox">
 		</div>
 		<div class="editor-controls-select">
 			Theme:
-			<select v-model="theme">
+			<select @change="handleThemeSelect" :value="theme">
 				<option>dark</option>
 				<option>white</option>
 			</select>
 		</div>
 		<div class="editor-controls-select">
 			Template:
-			<select @change="templateSelect">
+			<select @change="handleTemplateSelect" :value="template">
+				<option disabled value="">select template</option>
 				<option v-for="(value, key) in templates">{{ key }}</option>
 			</select>
 		</div>

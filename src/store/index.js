@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 import * as modules from './modules'
 
@@ -17,7 +18,13 @@ export default function () {
 			.reduce((t, entry) => ({
 				...t,
 				[entry.key]: entry.value
-			}), {})
+			}), {}),
+		plugins: [
+			createPersistedState({
+				key: 'persistedState',
+				paths: [ 'ui' ]
+			})
+		]
 	})
 
 	return store
