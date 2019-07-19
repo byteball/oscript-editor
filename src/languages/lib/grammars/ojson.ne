@@ -5,6 +5,8 @@ const moo = require('moo')
 let lexer = moo.states({
 	main: {
 		space: {match: /\s+/, lineBreaks: true},
+		comment: /\/\/.*$/,
+		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
 		messages: 'messages',
 		init: 'init',
 		bounce_fees: 'bounce_fees',
@@ -18,7 +20,6 @@ let lexer = moo.states({
 		':': ':',
 		',': ',',
 		autonomous_agent: 'autonomous agent',
-		comment: /\/\/.*$/,
 		ifWord: 'if',
 		null: 'null',
 		base: 'base',
@@ -41,6 +42,7 @@ let lexer = moo.states({
 	appList: {
 		space: {match: /\s+/, lineBreaks: true},
 		comment: /\/\/.*$/,
+		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
 		'"': '"',
 		"'": "'",
 		'`': '`',
@@ -54,6 +56,8 @@ let lexer = moo.states({
 	},
 	payload: {
 		space: {match: /\s+/, lineBreaks: true},
+		comment: /\/\/.*$/,
+		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
 		formulaDoubleStart: { match: '"{', push: 'formulaDouble' },
 		formulaSingleStart: { match: "'{", push: 'formulaSingle' },
 		formulaBackStart: { match: '`{', push: 'formulaBack' },
@@ -63,7 +67,6 @@ let lexer = moo.states({
 		']': ']',
 		':': ':',
 		',': ',',
-		comment: /\/\/.*$/,
 		true: 'true',
 		false: 'false',
 		base64: [
@@ -395,6 +398,8 @@ formula ->
 _ -> null
 	| %space (%comment _):? {% (d) => null %}
 	| %comment _ {% (d) => null %}
+	| _ %blockComment _ {% (d) => null %}
+
 int -> %int {% int %}
 str -> %str {% str %}
 true -> %true {% trueP %}
