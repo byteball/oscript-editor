@@ -9,6 +9,8 @@ const moo = require('moo')
 let lexer = moo.states({
 	main: {
 		space: {match: /\s+/, lineBreaks: true},
+		comment: /\/\/.*$/,
+		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
 		messages: 'messages',
 		init: 'init',
 		bounce_fees: 'bounce_fees',
@@ -22,7 +24,6 @@ let lexer = moo.states({
 		':': ':',
 		',': ',',
 		autonomous_agent: 'autonomous agent',
-		comment: /\/\/.*$/,
 		ifWord: 'if',
 		null: 'null',
 		base: 'base',
@@ -45,6 +46,7 @@ let lexer = moo.states({
 	appList: {
 		space: {match: /\s+/, lineBreaks: true},
 		comment: /\/\/.*$/,
+		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
 		'"': '"',
 		"'": "'",
 		'`': '`',
@@ -58,6 +60,8 @@ let lexer = moo.states({
 	},
 	payload: {
 		space: {match: /\s+/, lineBreaks: true},
+		comment: /\/\/.*$/,
+		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
 		formulaDoubleStart: { match: '"{', push: 'formulaDouble' },
 		formulaSingleStart: { match: "'{", push: 'formulaSingle' },
 		formulaBackStart: { match: '`{', push: 'formulaBack' },
@@ -67,7 +71,6 @@ let lexer = moo.states({
 		']': ']',
 		':': ':',
 		',': ',',
-		comment: /\/\/.*$/,
 		true: 'true',
 		false: 'false',
 		base64: [
@@ -530,6 +533,7 @@ var grammar = {
     {"name": "_$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
     {"name": "_", "symbols": [(lexer.has("space") ? {type: "space"} : space), "_$ebnf$1"], "postprocess": (d) => null},
     {"name": "_", "symbols": [(lexer.has("comment") ? {type: "comment"} : comment), "_"], "postprocess": (d) => null},
+    {"name": "_", "symbols": ["_", (lexer.has("blockComment") ? {type: "blockComment"} : blockComment), "_"], "postprocess": (d) => null},
     {"name": "int", "symbols": [(lexer.has("int") ? {type: "int"} : int)], "postprocess": int},
     {"name": "str", "symbols": [(lexer.has("str") ? {type: "str"} : str)], "postprocess": str},
     {"name": "true", "symbols": [(lexer.has("true") ? {type: "true"} : true)], "postprocess": trueP},
