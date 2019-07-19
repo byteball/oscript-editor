@@ -42,10 +42,10 @@ export default {
 	data () {
 		return {
 			serializedOjson: '',
-			theme: 'dark',
 			language: ojson.id,
 			code: '',
-			isWordWrappingEnabled: true,
+			template: '',
+			preserveLastInput: false,
 			resultMessage: '',
 			resultPaneOpened: false,
 			resultPaneEditorOptions: {
@@ -67,24 +67,44 @@ export default {
 	},
 	watch: {
 		code () {
+			if (this.preserveLastInput) {
+				this.preserveLastInput = false
+			} else {
+				this.setLastInput(this.code)
+			}
 			this.debouncedCodeChanged()
 		}
 	},
 	created () {
 		this.debouncedCodeChanged = debounce(this.codeChanged, 500, { trailing: true })
-		this.code = this.templates[Object.keys(this.templates)[1]]
+		if (this.lastInput) {
+			this.code = this.lastInput
+		} else {
+			this.code = this.templates[Object.keys(this.templates)[1]]
+		}
+	},
+	mounted () {
+		this.switchEditorWrapLines(this.wrapLines)
 	},
 	computed: {
 		...mapState({
-			templates: state => state.aa.templates
+			wrapLines: state => state.ui.settings.wrapLines,
+			theme: state => state.ui.settings.theme,
+			templates: state => state.aa.templates,
+			lastInput: state => state.ui.lastInput
 		})
 	},
 	methods: {
 		...mapActions({
 			parseOscript: 'grammars/parseOscript',
 			parseOjson: 'grammars/parseOjson',
+
 			validateAa: 'aa/validate',
-			deployAa: 'aa/deploy'
+			deployAa: 'aa/deploy',
+
+			setLastInput: 'ui/setLastInput',
+			setWrapLines: 'ui/setWrapLines',
+			setTheme: 'ui/setTheme'
 		}),
 		async codeChanged () {
 			this.serializedOjson = ''
@@ -227,19 +247,29 @@ export default {
 			}
 			return arr
 		},
-		templateSelect (event) {
+		handleTemplateSelect (event) {
 			const template = event.target.value
+			this.template = template
+			this.preserveLastInput = true
 			this.code = this.templates[template]
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
 			this.resultMessage = ''
 		},
-		handleWordWrappingCheckbox () {
-			this.isWordWrappingEnabled = !this.isWordWrappingEnabled
-			if (this.isWordWrappingEnabled) {
+		handleWrapLinesCheckbox () {
+			const newWrapLines = !this.wrapLines
+			this.switchEditorWrapLines(newWrapLines)
+			this.setWrapLines(newWrapLines)
+		},
+		switchEditorWrapLines (wrapLines) {
+			if (wrapLines) {
 				this.$refs.editor.getMonaco().updateOptions({ wordWrap: 'on' })
 			} else {
 				this.$refs.editor.getMonaco().updateOptions({ wordWrap: 'off' })
 			}
+		},
+		handleThemeSelect (event) {
+			const theme = event.target.value
+			this.setTheme(theme)
 		}
 	}
 }
