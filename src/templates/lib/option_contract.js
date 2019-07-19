@@ -63,7 +63,7 @@ export default `{
 					state: \`{
 						if (trigger.data.winner == 'yes' AND data_feed[[oracles='X55IWSNMHNDUIYKICDW3EOYAWHRUKANP', feed_name='GBYTE_USD']] > 60)
 							var['winner'] = 'yes';
-						else if (trigger.data.winner == 'no' AND data_feed[[oracles='ZQFHJXFWT2OCEBXF26GFXJU4MPASWPJT', feed_name='timestamp']] > 1556668800000)
+						else if (trigger.data.winner == 'no' AND timestamp > 1556668800)
 							var['winner'] = 'no';
 						else
 							bounce('suggested outcome not confirmed');

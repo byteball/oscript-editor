@@ -1,8 +1,11 @@
 export default `{
+	init: \`{
+		$my_address = '2QHG44PZLJWD2H7C5ZIWH4NZZVB6QCC7';
+	}\`,
 	messages: {
 		cases: [
 			{ // withdraw funds
-				if: "{trigger.data.withdraw AND trigger.data.asset AND trigger.data.amount AND trigger.address == '"+my_address+"'}",
+				if: "{trigger.data.withdraw AND trigger.data.asset AND trigger.data.amount AND trigger.address == $my_address}",
 				messages: [{
 					app: 'payment',
 					payload: {
@@ -14,7 +17,7 @@ export default `{
 				}]
 			},
 			{ // update exchange rate
-				if: "{trigger.data.exchange_rate AND trigger.address == '"+my_address+"'}",
+				if: "{trigger.data.exchange_rate AND trigger.address == $my_address}",
 				messages: [{
 					app: 'state',
 					state: "{ var['rate'] = trigger.data.exchange_rate; response['message'] = 'set exchange rate to '||var['rate']||' tokens/byte'; }"  // asset-units/byte

@@ -57,7 +57,7 @@ export default `{
 				]
 			},
 			{ // record blackswan event
-				if: \`{ trigger.data.blackswan AND !var['blackswan'] AND data_feed[[oracles='X55IWSNMHNDUIYKICDW3EOYAWHRUKANP', feed_name='GBYTE_USD_MA']] < 25 AND data_feed[[oracles='ZQFHJXFWT2OCEBXF26GFXJU4MPASWPJT', feed_name='timestamp']] < 1556668800000 }\`,
+				if: \`{ trigger.data.blackswan AND !var['blackswan'] AND data_feed[[oracles='X55IWSNMHNDUIYKICDW3EOYAWHRUKANP', feed_name='GBYTE_USD_MA']] < 25 AND timestamp < 1556668800 }\`,
 				messages: [{
 					app: 'state',
 					state: \`{
@@ -83,8 +83,7 @@ export default `{
 					if (var['blackswan'])
 						$bytes = $usd_asset_amount;
 					else{
-						$ts = data_feed[[oracles='ZQFHJXFWT2OCEBXF26GFXJU4MPASWPJT', feed_name='timestamp']];
-						if ($ts < 1556668800000)
+						if (timestamp < 1556668800)
 							bounce('wait for maturity date');
 						// data_feed will abort if the exchange rate not posted yet
 						$exchange_rate = data_feed[[oracles='X55IWSNMHNDUIYKICDW3EOYAWHRUKANP', feed_name='GBYTE_USD_MA_2019_04_30']];
