@@ -14,6 +14,8 @@ import a_bank_without_percent from './lib/a_bank_without_percent'
 import bouncer_infinite_cycle from './lib/bouncer_infinite_cycle'
 import uniswap_like_market_maker from './lib/uniswap_like_market_maker'
 import sending_prepared_objects_through_trigger_data from './lib/sending_prepared_objects_through_trigger_data'
+import a51_attack_game from './lib/51_attack_game'
+import fundraising_proxy from './lib/fundraising_proxy'
 
 export default {
 	send_all,
@@ -30,5 +32,7 @@ export default {
 	a_bank_without_percent,
 	bouncer_infinite_cycle,
 	uniswap_like_market_maker,
-	sending_prepared_objects_through_trigger_data
+	sending_prepared_objects_through_trigger_data,
+	'51_attack_game': a51_attack_game,
+	fundraising_proxy
 }
