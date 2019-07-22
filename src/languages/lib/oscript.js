@@ -37,6 +37,7 @@ export default {
 				[/trigger\.address/, 'keyword'],
 				[/trigger\.output/, 'keyword'],
 				[/trigger\.unit/, 'keyword'],
+				[/trigger\.initial_address/, 'keyword'],
 				[/\w+\b/, { cases: { '@builtins': 'keyword',
 					'@keywords': 'keyword',
 					'@default': 'identifier'

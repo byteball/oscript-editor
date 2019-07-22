@@ -1,0 +1,10 @@
+{
+	"frontend": {
+		"api": {
+			"url": "https://oscript.org/api/v1/"
+		},
+		"explorer": {
+			"url": "https://explorer.obyte.org/"
+		}
+	}
+}
