@@ -60,6 +60,7 @@ export default {
 			},
 			editorOptions: {
 				wordWrap: 'on',
+				wrappingIndent: 'same',
 				scrollBeyondLastLine: false,
 				automaticLayout: true
 			}

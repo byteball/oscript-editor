@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/dist_testnet
+/dist_prod
 
 # local env files
 .env.local

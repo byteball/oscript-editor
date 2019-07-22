@@ -14,10 +14,17 @@ Object.keys(monacoLanguages).forEach(l => {
 	if (language.conf) {
 		monaco.languages.setLanguageConfiguration(language.id, language.conf)
 	}
-	if (language.proposals) {
+	if (language.suggestions) {
 		monaco.languages.registerCompletionItemProvider(language.id, {
 			provideCompletionItems: (model, position) => {
-				return { suggestions: language.proposals(model, position) }
+				return { suggestions: language.suggestions(model, position) }
+			}
+		})
+	}
+	if (language.hovers) {
+		monaco.languages.registerHoverProvider(language.id, {
+			provideHover: (model, position) => {
+				return language.hovers(model, position)
 			}
 		})
 	}
