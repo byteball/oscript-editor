@@ -670,25 +670,27 @@ Returns sha256 of input string in base64 encoding.  Non-string inputs are conver
 Returns \`true\` if \`signedPackage\` object is a valid signed package signed by address \`address\`, returns \`false\` otherwise (the formula doesn't fail even if \`signedPackage\` doesn't have the correct format). \`address\` must be a valid address, otherwise the expression fails with an error. This function adds +1 to complexity count.
 
 \`signedPackage\` object is usually passed through the trigger and has the following structure:
-\`{
-	{
-		"signed_message": {
-			"field1": "value1",
-			"field2": "value2",
-			...
-		},
-		"authors": [
-			{
-				"address": "2QHG44PZLJWD2H7C5ZIWH4NZZVB6QCC7",
-				"authentifiers": {
-					"r": "MFZ0eFJeLAgAmm6BJdvbEzNt7x0H2Fb5RQBBpMSmyVFMLM2r2SX5chU9hbEWXExkz/T2hXAk1qHmxkAbbpZw8w=="
+
+	\`{
+		{
+			"signed_message": {
+				"field1": "value1",
+				"field2": "value2",
+				...
+			},
+			"authors": [
+				{
+					"address": "2QHG44PZLJWD2H7C5ZIWH4NZZVB6QCC7",
+					"authentifiers": {
+						"r": "MFZ0eFJeLAgAmm6BJdvbEzNt7x0H2Fb5RQBBpMSmyVFMLM2r2SX5chU9hbEWXExkz/T2hXAk1qHmxkAbbpZw8w=="
+					}
 				}
-			}
-		],
-		"last_ball_unit": "izgjyn9bpbJjwpKQV7my0Dq1VUHbzrLpWLrdR0fDydw=",
-		"version": "2.0"
-	}
-}\`
+			],
+			"last_ball_unit": "izgjyn9bpbJjwpKQV7my0Dq1VUHbzrLpWLrdR0fDydw=",
+			"version": "2.0"
+		}
+	}\`
+
 Here:
 * \`signed_message\` is the message being signed, it can be an object, an array, or scalar;
 * \`authors\` is an array of authors who signed the message (usually one), it has the same structure as unit authors and includes the signing address, authentifiers (usually signatures) and optionally definitions;
@@ -696,15 +698,17 @@ Here:
 * \`version\`: always \`2.0\`.
 
 Usually, \`signedPackage\` is created by calling \`signMessage\` function from \`signed_message\` module:
+
 	\`{
-	var headlessWallet = require('headless-obyte');
-	var signed_message = require('ocore/signed_message.js');
-	
-	signed_message.signMessage(message, address, headlessWallet.signer, true, function (err, signedPackage) {
-		// handle result here
-		trigger.data.signedPackage = signedPackage;
-	});
+		var headlessWallet = require('headless-obyte');
+		var signed_message = require('ocore/signed_message.js');
+
+		signed_message.signMessage(message, address, headlessWallet.signer, true, function (err, signedPackage) {
+			// handle result here
+			trigger.data.signedPackage = signedPackage;
+		});
 	}\`
+
 The function creates a correctly structured \`signedPackage\` object which can be added to \`trigger.data\`.
 `
 		}
