@@ -41,7 +41,7 @@
 		else: "else",
 		comparisonOperators: ["==", ">=", "<=", "!=", ">", "<", "="],
 		dfParamsName: ['oracles', 'feed_name', 'min_mci', 'feed_value', 'what'],
-		name: ['min', 'max', 'pi', 'e', 'sqrt', 'ln', 'ceil', 'floor', 'round', 'abs', 'hypot', 'is_valid_signed_package', 'sha256', 'json_parse', 'json_stringify'],
+		name: ['min', 'max', 'pi', 'e', 'sqrt', 'ln', 'ceil', 'floor', 'round', 'abs', 'hypot', 'is_valid_signed_package', 'sha256', 'is_valid_sig', 'json_parse', 'json_stringify', 'number_from_seed'],
 		and: ['and', 'AND'],
 		or: ['or', 'OR'],
 		not: ['not', 'NOT', '!'],
