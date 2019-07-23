@@ -16,6 +16,7 @@ import uniswap_like_market_maker from './lib/uniswap_like_market_maker'
 import sending_prepared_objects_through_trigger_data from './lib/sending_prepared_objects_through_trigger_data'
 import a51_attack_game from './lib/51_attack_game'
 import fundraising_proxy from './lib/fundraising_proxy'
+import ico_with_milestones from './lib/ico_with_milestones'
 
 export default {
 //	simple_aa,
@@ -34,5 +35,6 @@ export default {
 	send_all,
 	sending_prepared_objects_through_trigger_data,
 	'51_attack_game': a51_attack_game,
-	fundraising_proxy
+	fundraising_proxy,
+	'ICO with milestone based release of funds': ico_with_milestones
 }
