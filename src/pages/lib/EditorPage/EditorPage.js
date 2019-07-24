@@ -2,7 +2,7 @@ import MonacoEditor from 'vue-monaco'
 import isArray from 'lodash/isArray'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import monacoLanguages from 'src/languages'
 import { ValidationError, ParsingError } from 'src/errors'
 
@@ -45,9 +45,11 @@ export default {
 			language: ojson.id,
 			code: '',
 			template: '',
-			preserveLastInput: false,
+			doNotUpdateAgentText: true,
 			resultMessage: '',
 			resultPaneOpened: false,
+			renameInput: '1234567890',
+			isRenamingActive: false,
 			resultPaneEditorOptions: {
 				tabSize: 1,
 				lineNumbers: 'off',
@@ -68,42 +70,59 @@ export default {
 	},
 	watch: {
 		code () {
-			if (this.preserveLastInput) {
-				this.preserveLastInput = false
+			if (this.doNotUpdateAgentText) {
+				this.doNotUpdateAgentText = false
 			} else {
-				this.setLastInput(this.code)
+				this.updateAgentText(this.code)
 			}
 			this.debouncedCodeChanged()
 		}
 	},
 	created () {
 		this.debouncedCodeChanged = debounce(this.codeChanged, 500, { trailing: true })
-		if (this.lastInput) {
-			this.code = this.lastInput
-		} else {
-			this.code = this.templates[Object.keys(this.templates)[1]]
-		}
+		this.code = this.selectedAgent.text || ''
 	},
 	mounted () {
 		this.switchEditorWrapLines(this.wrapLines)
 	},
 	computed: {
 		...mapState({
-			wrapLines: state => state.ui.settings.wrapLines,
 			theme: state => state.ui.settings.theme,
-			templates: state => state.aa.templates,
-			lastInput: state => state.ui.lastInput
-		})
+			wrapLines: state => state.ui.settings.wrapLines,
+
+			templates: state => state.agents.templates,
+			userAgents: state => state.agents.userAgents
+		}),
+		...mapGetters({
+			selectedAgent: 'agents/selectedAgent',
+			isSelectedAgentUser: 'agents/isSelectedAgentUser',
+			isSelectedAgentTemplate: 'agents/isSelectedAgentTemplate'
+		}),
+		badge () {
+			switch (config.mode) {
+			case 'development':
+				return 'develop'
+			case 'testnet':
+				return 'testnet'
+			default:
+				return ''
+			}
+		}
 	},
 	methods: {
 		...mapActions({
 			parseOscript: 'grammars/parseOscript',
 			parseOjson: 'grammars/parseOjson',
 
-			validateAa: 'aa/validate',
-			deployAa: 'aa/deploy',
+			validateAa: 'backend/validate',
+			deployAa: 'backend/deploy',
 
-			setLastInput: 'ui/setLastInput',
+			changeSelectedAgent: 'agents/changeSelected',
+			createNewAgent: 'agents/createNewAgent',
+			deleteUserAgent: 'agents/deleteAgent',
+			renameUserAgent: 'agents/renameAgent',
+			updateAgentText: 'agents/updateText',
+
 			setWrapLines: 'ui/setWrapLines',
 			setTheme: 'ui/setTheme'
 		}),
@@ -123,10 +142,10 @@ export default {
 		},
 		async deploy () {
 			this.resultMessage = ''
-			this.resultPaneOpened = true
 			await this.codeChanged()
 
 			if (this.serializedOjson !== '') {
+				this.resultPaneOpened = true
 				try {
 					const result = await this.deployAa(this.serializedOjson)
 					const unit = get(result, 'result.unit', null)
@@ -141,10 +160,10 @@ export default {
 		},
 		async validate () {
 			this.resultMessage = ''
-			this.resultPaneOpened = true
 
 			await this.codeChanged()
 			if (this.serializedOjson !== '') {
+				this.resultPaneOpened = true
 				try {
 					await this.validateAa(this.serializedOjson)
 					this.resultMessage = 'Success'
@@ -248,11 +267,11 @@ export default {
 			}
 			return arr
 		},
-		handleTemplateSelect (event) {
-			const template = event.target.value
-			this.template = template
-			this.preserveLastInput = true
-			this.code = this.templates[template]
+		async handleTemplateSelect (event) {
+			const selected = event.target.value
+			await this.changeSelectedAgent(selected)
+			this.doNotUpdateAgentText = true
+			this.code = this.selectedAgent.text
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
 			this.resultMessage = ''
 		},
@@ -271,6 +290,31 @@ export default {
 		handleThemeSelect (event) {
 			const theme = event.target.value
 			this.setTheme(theme)
+		},
+		async handleAgentActionNew () {
+			await this.createNewAgent('New Agent')
+			this.doNotUpdateAgentText = true
+			this.code = ''
+		},
+		async handleAgentActionDelete () {
+			await this.deleteUserAgent(this.selectedAgent.id)
+			this.doNotUpdateAgentText = true
+			this.code = this.selectedAgent.text
+		},
+		async handleAgentActionRename () {
+			this.renameInput = this.selectedAgent.label
+			this.isRenamingActive = true
+			setTimeout(() => {
+				this.$refs.renameInputEl.focus()
+				this.$refs.renameInputEl.setSelectionRange(0, this.renameInput.length)
+			}, 10)
+		},
+		async handleAgentActionRenameDone () {
+			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel: this.renameInput })
+			this.isRenamingActive = false
+		},
+		async handleAgentActionRenameCancel () {
+			this.isRenamingActive = false
 		}
 	}
 }

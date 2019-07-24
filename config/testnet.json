@@ -3,6 +3,7 @@
 		"api": {
 			"url": "https://testnet.oscript.org/api/v1/"
 		},
+		"mode": "testnet",
 		"explorer": {
 			"url": "https://testnetexplorer.obyte.org/"
 		}

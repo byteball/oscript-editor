@@ -1,5 +1,8 @@
 <div class="root-editor-page">
-	<div class="editor-header">Oscript Editor</div>
+	<div class="editor-header">
+		<span>Oscript Editor</span>
+		<div v-if="badge" class="editor-header-badge">{{badge}}</div>
+	</div>
 	<div class="editor-controls">
 		<div class="editor-controls-checkbox">
 			Wrap lines:
@@ -13,10 +16,38 @@
 			</select>
 		</div>
 		<div class="editor-controls-select">
-			Template:
-			<select @change="handleTemplateSelect" :value="template">
-				<option disabled value="">select template</option>
-				<option v-for="(value, key) in templates">{{ key }}</option>
+			<div class="agent-actions" :class="{ renaming: isRenamingActive }">
+				<div class="agent-actions-rename" v-show="isRenamingActive">
+					<input
+						@keyup.enter="handleAgentActionRenameDone"
+						@keyup.esc="handleAgentActionRenameCancel"
+						@blur="handleAgentActionRenameCancel"
+						ref="renameInputEl"
+						class="agent-actions-rename-input"
+						type="text" v-model="renameInput"
+					>
+				</div>
+				<div v-show="isSelectedAgentUser && !isRenamingActive" class="agent-actions-action edit" title="Rename Agent" @click="handleAgentActionRename">
+					<img class="agent-actions-action-img" src="static/images/icons/edit.png">
+				</div>
+				<div v-show="isSelectedAgentUser && isRenamingActive" class="agent-actions-action rename" title="Done" @mousedown="handleAgentActionRenameDone">
+					<img class="agent-actions-action-img" src="static/images/icons/check.png">
+				</div>
+				<div v-show="isSelectedAgentUser && !isRenamingActive" class="agent-actions-action delete" title="Delete Agent" @click="handleAgentActionDelete">
+					<img class="agent-actions-action-img" src="static/images/icons/delete.png">
+				</div>
+				<div v-show="!isRenamingActive" class="agent-actions-action add" title="New Agent" @click="handleAgentActionNew">
+					<img class="agent-actions-action-img" src="static/images/icons/add.png">
+				</div>
+			</div>
+			AAs:
+			<select @change="handleTemplateSelect" :value="selectedAgent.id" :disabled="isRenamingActive">
+				<optgroup v-if="userAgents.length" label="Autonomous Agents:">
+					<option v-for="agent in userAgents" :value="agent.id">{{ agent.label }}</option>
+				</optgroup>
+				<optgroup label="Templates:">
+					<option v-for="agent in templates" :value="agent.id">{{ agent.label }}</option>
+				</optgroup>
 			</select>
 		</div>
 	</div>
@@ -48,5 +79,17 @@
 	<div class="actions-row">
 		<div class="actions-row-action" @click="validate">Validate</div>
 		<div class="actions-row-action" @click="deploy">Deploy</div>
+	</div>
+	<div class="socials-row">
+		<div class="social">
+			<a href="https://developer.obyte.org/autonomous-agents">
+				<img src="static/images/icons/obyte.png" title="AA Documentation">
+			</a>
+		</div>
+		<div class="social">
+			<a href="https://github.com/byteball/oscript-editor">
+				<img src="static/images/icons/github.png" title="GitHub Repository">
+			</a>
+		</div>
 	</div>
 </div>

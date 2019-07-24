@@ -1,3 +1,5 @@
+import agentTemplates from 'src/templates'
+
 export const SET_THEME = 'ui/settings/theme'
 export const SET_WRAP_LINES = 'ui/settings/wrapLines'
 export const SET_LAST_INPUT = 'ui/lastInput'
@@ -9,7 +11,9 @@ export default () => ({
 			theme: 'dark',
 			wrapLines: true
 		},
-		lastInput: ''
+		lastInput: '',
+		agentTemplates,
+		userAgents: []
 	},
 	mutations: {
 		[SET_THEME] (state, theme) {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import get from 'lodash/get'
 
 import * as modules from './modules'
 
@@ -23,6 +24,19 @@ export default function () {
 			createPersistedState({
 				key: 'persistedState',
 				paths: [ 'ui' ]
+			}),
+			createPersistedState({
+				key: 'persistedAgents',
+				paths: [ 'agents.selected', 'agents.userAgents' ],
+				getState (name, storage) {
+					const state = JSON.parse(storage[name] || '{}')
+					return {
+						agents: {
+							...state.agents,
+							selected: get(state, 'agents.selected') || 'template_0'
+						}
+					}
+				}
 			})
 		]
 	})

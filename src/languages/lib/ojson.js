@@ -5,7 +5,6 @@ import { ojsonKeysList, ojsonValuesList, oscriptWordsList } from './words'
 export default {
 	id: 'ojson',
 	tokensProvider: {
-		defaultToken: 'invalid',
 		keyword: [
 			'messages', 'bounce_fees', 'app', 'data',
 			'payload', 'asset', 'outputs', 'address', 'amount',
@@ -34,7 +33,7 @@ export default {
 				[/[a-z_$][\w$]*/, { cases: {
 					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
-					'@default': 'invalid'
+					'@default': ''
 				} }],
 
 				// whitespace
