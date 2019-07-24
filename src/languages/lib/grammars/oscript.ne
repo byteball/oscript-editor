@@ -52,6 +52,7 @@
 		var: 'var',
 		mci: 'mci',
 		timestamp: 'timestamp',
+		mc_unit: 'mc_unit',
 		this_address: 'this_address',
 		response_unit: 'response_unit',
 		response: 'response',
@@ -212,6 +213,7 @@ N -> float          {% id %}
 	| "min" "(" expr_list ")"  {% function(d) {return ['min', d[2]]; }  %}
 	| "max" "(" expr_list ")"  {% function(d) {return ['max', d[2]]; }  %}
 	| "hypot" "(" expr_list ")"  {% function(d) {return ['hypot', d[2]]; }  %}
+    | "number_from_seed" "(" expr_list ")"    {% function(d) {return ['number_from_seed', d[2]]; } %}
 	| "ceil" "(" expr (%comma expr):? ")"    {% function(d) {return ['ceil', d[2], d[3] ? d[3][1] : null]; } %}
 	| "floor" "(" expr (%comma expr):? ")"    {% function(d) {return ['floor', d[2], d[3] ? d[3][1] : null]; } %}
 	| "round" "(" expr (%comma expr):? ")"    {% function(d) {return ['round', d[2], d[3] ? d[3][1] : null]; } %}
@@ -294,6 +296,7 @@ N -> float          {% id %}
 	} %}
 	| "mci"  {% function(d) {return ['mci']; }  %}
 	| "timestamp"  {% function(d) {return ['timestamp']; }  %}
+	| "mc_unit"  {% function(d) {return ['mc_unit']; }  %}
 	| "this_address"  {% function(d) {return ['this_address']; }  %}
 	| "response_unit"  {% function(d) {return ['response_unit']; }  %}
 	| "trigger.address"  {% function(d) {return ['trigger.address']; }  %}

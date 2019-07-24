@@ -7,7 +7,7 @@ export default {
 			'if', 'else', 'return', 'true', 'false'
 		],
 		builtins: [
-			'var', 'bounce', 'response', 'response_unit', 'timestamp', 'mci', 'this_address', 'base',
+			'var', 'bounce', 'response', 'response_unit', 'timestamp', 'mci', 'mc_unit', 'this_address', 'base',
 			'data_feed', 'in_data_feed',
 			'attestation', 'balance',
 			'address', 'amount', 'asset', 'attestors', 'ifseveral', 'ifnone', 'type',
