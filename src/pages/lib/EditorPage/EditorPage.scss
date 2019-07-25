@@ -8,86 +8,45 @@ $result_pane_height: 10rem;
 	position: relative;
 	margin: 0 auto;
 	width: $content-max-width;
-	.editor-header {
-		position: relative;
-		align-self: flex-start;
-		color: $color-primary;
-		margin-top: 3rem;
-		font-size: 4rem;
-		&-badge {
-			position: absolute;
-			top: -.4rem;
-			right: 0;
-			font-size: .8rem;
-			color: $color-primary;
-			border: 1px solid $color-primary;
-			padding: .1rem .4rem .1rem .3rem;
-			border-radius: .5rem;
-		}
-	}
 	.editor-controls {
-		@include flex(row, flex-end, stretch);
+		@include flex(row, flex-end, flex-end);
 		width: 100%;
 		padding-bottom: 1rem;
+		margin-top: 4rem;
+		.editor-header {
+			align-self: flex-end;
+			position: relative;
+			margin-right: auto;
+			color: $color-primary;
+			font-size: 4rem;
+			&-badge {
+				position: absolute;
+				top: -.4rem;
+				right: 0;
+				font-size: .8rem;
+				color: $color-primary;
+				border: 1px solid $color-primary;
+				padding: .1rem .4rem .1rem .3rem;
+				border-radius: .5rem;
+			}
+		}
 		.editor-controls-select {
 			position: relative;
 			margin-left: 2rem;
 			color: $color-dark-grey;
 			select {
-				min-width: 12rem;
+				margin-left: .5rem;
+				height: 32px;
+				padding-left: .5rem;
 				background-color: $color-white;
 			}
 			.agent-actions {
-				@include flex (row, flex-end, center);
 				width: 100%;
 				position: absolute;
 				right: 0;
 				bottom: 100%;
 				opacity: 0;
 				transition: opacity .2s ease-out, visibility .2s ease-out;
-				&.renaming {
-					opacity: 1;
-				}
-				&-rename {
-					@include flex(row, flex-start, center);
-					position: relative;
-					width: 100%;
-					bottom: .5rem;
-					&-input {
-						padding-left: .2rem;
-						width: 100%;
-					}
-				}
-				&-action {
-					@include flex(row, center, center);
-					position: relative;
-					bottom: .5rem;
-					margin-left: .5rem;
-					border-radius: 4px;
-					width: 32px;
-					height: 32px;
-					opacity: .8;
-					transition: opacity .2s ease;
-					cursor: pointer;
-					user-select: none;
-					&:hover {
-						opacity: 1;
-					}
-					&.add, &.rename {
-						background-color: $color-green;
-					}
-					&.edit {
-						background-color: $color-primary;
-					}
-					&.delete {
-						background-color: $color-red;
-					}
-					&-img {
-						width: 20px;
-						height: 20px;
-						object-fit: contain;
-					}
-				}
 				&:hover {
 					opacity: 1;
 				}
@@ -100,6 +59,7 @@ $result_pane_height: 10rem;
 		}
 		.editor-controls-checkbox {
 			@include flex(row, flex-start, center);
+			height: 32px;
 			margin-left: 2rem;
 			color: $color-dark-grey;
 			input {
@@ -114,7 +74,6 @@ $result_pane_height: 10rem;
 		min-height: calc(700px - (#{$result_pane_height} + 12rem));
 		width: 100%;
 		align-self: stretch;
-		margin-bottom: 2rem;
 		.editor {
 			height: 100%;
 			width: 100%;
@@ -128,13 +87,19 @@ $result_pane_height: 10rem;
 		max-height: $result_pane_height;
 		overflow: hidden;
 		transition: opacity .4s ease, max-height .4s ease;
-		margin-bottom: 2rem;
+		margin-top: 2rem;
 		.result-pane {
 			min-height: $result_pane_height;
 		}
 		&.theme-white {
 			outline: 1px solid lighten($color-primary, 50%);
 		}
+	}
+	.documentation-link {
+		color: $color-primary;
+		margin-top: .4rem;
+		font-size: 14px;
+		align-self: flex-end;
 	}
 	.actions-row {
 		@include flex(row, center, stretch);

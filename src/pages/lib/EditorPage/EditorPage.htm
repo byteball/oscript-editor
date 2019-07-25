@@ -1,9 +1,9 @@
 <div class="root-editor-page">
-	<div class="editor-header">
-		<span>Oscript Editor</span>
-		<div v-if="badge" class="editor-header-badge">{{badge}}</div>
-	</div>
 	<div class="editor-controls">
+		<div class="editor-header">
+			<span>Oscript Editor</span>
+			<div v-if="badge" class="editor-header-badge">{{badge}}</div>
+		</div>
 		<div class="editor-controls-checkbox">
 			Wrap lines:
 			<input type="checkbox" :checked="wrapLines" @change="handleWrapLinesCheckbox">
@@ -16,32 +16,15 @@
 			</select>
 		</div>
 		<div class="editor-controls-select">
-			<div class="agent-actions" :class="{ renaming: isRenamingActive }">
-				<div class="agent-actions-rename" v-show="isRenamingActive">
-					<input
-						@keyup.enter="handleAgentActionRenameDone"
-						@keyup.esc="handleAgentActionRenameCancel"
-						@blur="handleAgentActionRenameCancel"
-						ref="renameInputEl"
-						class="agent-actions-rename-input"
-						type="text" v-model="renameInput"
-					>
-				</div>
-				<div v-show="isSelectedAgentUser && !isRenamingActive" class="agent-actions-action edit" title="Rename Agent" @click="handleAgentActionRename">
-					<img class="agent-actions-action-img" src="static/images/icons/edit.png">
-				</div>
-				<div v-show="isSelectedAgentUser && isRenamingActive" class="agent-actions-action rename" title="Done" @mousedown="handleAgentActionRenameDone">
-					<img class="agent-actions-action-img" src="static/images/icons/check.png">
-				</div>
-				<div v-show="isSelectedAgentUser && !isRenamingActive" class="agent-actions-action delete" title="Delete Agent" @click="handleAgentActionDelete">
-					<img class="agent-actions-action-img" src="static/images/icons/delete.png">
-				</div>
-				<div v-show="!isRenamingActive" class="agent-actions-action add" title="New Agent" @click="handleAgentActionNew">
-					<img class="agent-actions-action-img" src="static/images/icons/add.png">
-				</div>
-			</div>
+			<agent-controls class="agent-actions"
+				:isSelectedAgentUser="isSelectedAgentUser"
+				:selectedLabel="selectedAgent.label"
+				@rename="handleAgentActionRename"
+				@delete="handleAgentActionDelete"
+				@new="handleAgentActionNew"
+			></agent-controls>
 			AAs:
-			<select @change="handleTemplateSelect" :value="selectedAgent.id" :disabled="isRenamingActive">
+			<select @change="handleTemplateSelect" :value="selectedAgent.id">
 				<optgroup v-if="userAgents.length" label="Autonomous Agents:">
 					<option v-for="agent in userAgents" :value="agent.id">{{ agent.label }}</option>
 				</optgroup>
@@ -68,27 +51,32 @@
 			:class="`theme-${theme}`"
 		>
 			<monaco-editor
+				ref="resultPaneEditor"
 				class="result-pane"
-				:options="resultPaneEditorOptions"
 				v-model="resultMessage"
 				language="result-highlighter"
 				:theme="theme"
 			/>
 		</div>
 	</transition>
+	<a class="documentation-link"
+		target="_blank"
+		href="https://developer.obyte.org/autonomous-agents"
+		title="Autonomous Agents Documentation"
+	>Autonomous Agents Documentation</a>
 	<div class="actions-row">
 		<div class="actions-row-action" @click="validate">Validate</div>
 		<div class="actions-row-action" @click="deploy">Deploy</div>
 	</div>
 	<div class="socials-row">
 		<div class="social">
-			<a href="https://developer.obyte.org/autonomous-agents">
-				<img src="static/images/icons/obyte.png" title="AA Documentation">
+			<a href="https://obyte.org/" title="Official Website" target="_blank">
+				<img src="static/images/icons/obyte.png">
 			</a>
 		</div>
 		<div class="social">
-			<a href="https://github.com/byteball/oscript-editor">
-				<img src="static/images/icons/github.png" title="GitHub Repository">
+			<a href="https://github.com/byteball/oscript-editor" title="GitHub Repository" target="_blank">
+				<img src="static/images/icons/github.png">
 			</a>
 		</div>
 	</div>

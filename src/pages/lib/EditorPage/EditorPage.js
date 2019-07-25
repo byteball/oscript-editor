@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import monacoLanguages from 'src/languages'
+import { AgentControls } from 'src/components'
 import { ValidationError, ParsingError } from 'src/errors'
 
 const TYPES = {
@@ -37,7 +38,8 @@ const ojson = monacoLanguages['ojson']
 
 export default {
 	components: {
-		MonacoEditor
+		MonacoEditor,
+		AgentControls
 	},
 	data () {
 		return {
@@ -48,10 +50,7 @@ export default {
 			doNotUpdateAgentText: true,
 			resultMessage: '',
 			resultPaneOpened: false,
-			renameInput: '1234567890',
-			isRenamingActive: false,
 			resultPaneEditorOptions: {
-				tabSize: 1,
 				lineNumbers: 'off',
 				readOnly: true,
 				scrollBeyondLastLine: false,
@@ -59,6 +58,9 @@ export default {
 				minimap: {
 					enabled: false
 				}
+			},
+			resultPaneModelOptions: {
+				tabSize: 1
 			},
 			editorOptions: {
 				wordWrap: 'on',
@@ -135,7 +137,7 @@ export default {
 					const parserResult = await this.parseOjson(this.code)
 					this.serializedOjson = await this.serializeOjson(parserResult)
 				} catch (e) {
-					this.resultPaneOpened = true
+					this.openResultPane()
 					this.resultMessage = e.message
 				}
 			}
@@ -145,7 +147,7 @@ export default {
 			await this.codeChanged()
 
 			if (this.serializedOjson !== '') {
-				this.resultPaneOpened = true
+				this.openResultPane()
 				try {
 					const result = await this.deployAa(this.serializedOjson)
 					const unit = get(result, 'result.unit', null)
@@ -163,7 +165,7 @@ export default {
 
 			await this.codeChanged()
 			if (this.serializedOjson !== '') {
-				this.resultPaneOpened = true
+				this.openResultPane()
 				try {
 					await this.validateAa(this.serializedOjson)
 					this.resultMessage = 'Success'
@@ -294,27 +296,23 @@ export default {
 		async handleAgentActionNew () {
 			await this.createNewAgent('New Agent')
 			this.doNotUpdateAgentText = true
-			this.code = ''
+			this.code = this.templates[0].text
 		},
 		async handleAgentActionDelete () {
 			await this.deleteUserAgent(this.selectedAgent.id)
 			this.doNotUpdateAgentText = true
 			this.code = this.selectedAgent.text
 		},
-		async handleAgentActionRename () {
-			this.renameInput = this.selectedAgent.label
-			this.isRenamingActive = true
-			setTimeout(() => {
-				this.$refs.renameInputEl.focus()
-				this.$refs.renameInputEl.setSelectionRange(0, this.renameInput.length)
-			}, 10)
+		async handleAgentActionRename (newLabel) {
+			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel })
 		},
-		async handleAgentActionRenameDone () {
-			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel: this.renameInput })
-			this.isRenamingActive = false
-		},
-		async handleAgentActionRenameCancel () {
-			this.isRenamingActive = false
+		openResultPane () {
+			if (!this.resultPaneOpened) {
+				this.resultPaneOpened = true
+				this.$nextTick(() => {
+					this.$refs.resultPaneEditor.getMonaco().getModel().updateOptions(this.resultPaneModelOptions)
+				})
+			}
 		}
 	}
 }

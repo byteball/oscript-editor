@@ -42,6 +42,7 @@ export default {
 					'@keywords': 'keyword',
 					'@default': 'identifier'
 				} }],
+				[/\$\{/, { token: 'variable', next: '@localVariable' }],
 				[/\$\w+/, 'variable'],
 				// whitespace
 				{ include: '@whitespace' },
@@ -65,6 +66,10 @@ export default {
 			comment: [
 				[/[^/*]+/, 'comment'],
 				[/[/*]/, 'comment']
+			],
+			localVariable: [
+				[/}/, { token: 'variable', next: '@pop' }],
+				{ include: 'root' }
 			],
 			string: [
 				[/[^\\"]+/, 'string'],

@@ -81,12 +81,14 @@ export default () => ({
 		async changeSelected ({ commit }, id) {
 			commit(CHANGE_SELECTED, id)
 		},
-		async createNewAgent ({ commit }, label) {
+		async createNewAgent ({ commit, state, dispatch }, prefix) {
 			const id = uniqid('userAgent-')
+			const label = await dispatch('getIncrementedLabel', prefix)
+
 			await commit(CREATE_USER_AGENT, {
 				id,
 				label,
-				text: ''
+				text: state.templates[0].text
 			})
 			await commit(CHANGE_SELECTED, id)
 		},
@@ -100,7 +102,7 @@ export default () => ({
 		async renameAgent ({ commit, state }, { id, newLabel }) {
 			return commit(RENAME_USER_AGENT, { id, newLabel })
 		},
-		async updateText ({ commit, getters }, text) {
+		async updateText ({ commit, getters, dispatch }, text) {
 			const agent = getters.selectedAgent
 			if (getters.isSelectedAgentUser) {
 				commit(UPDATE_USER_AGENT_TEXT, {
@@ -109,10 +111,20 @@ export default () => ({
 				})
 			} else if (getters.isSelectedAgentTemplate) {
 				const id = uniqid('userAgent-')
-				const label = agent.label + ' copy'
+				const label = await dispatch('getIncrementedLabel', agent.label + ' copy')
+
 				await commit(CREATE_USER_AGENT, { id, label, text })
 				await commit(CHANGE_SELECTED, id)
 			}
+		},
+		async getIncrementedLabel ({ state }, prefix) {
+			const max = state.userAgents
+				.filter(a => a.label.startsWith(prefix))
+				.reduce((max, cur) => {
+					const m = cur.label.match(/\d+$/)
+					return m ? Math.max(m[0], max) : max
+				}, 0)
+			return `${prefix} ${max + 1}`
 		}
 	}
 })
