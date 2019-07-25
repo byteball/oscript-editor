@@ -2,8 +2,9 @@ import MonacoEditor from 'vue-monaco'
 import isArray from 'lodash/isArray'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import monacoLanguages from 'src/languages'
+import { AgentControls } from 'src/components'
 import { ValidationError, ParsingError } from 'src/errors'
 
 const TYPES = {
@@ -37,7 +38,8 @@ const ojson = monacoLanguages['ojson']
 
 export default {
 	components: {
-		MonacoEditor
+		MonacoEditor,
+		AgentControls
 	},
 	data () {
 		return {
@@ -45,11 +47,10 @@ export default {
 			language: ojson.id,
 			code: '',
 			template: '',
-			preserveLastInput: false,
+			doNotUpdateAgentText: true,
 			resultMessage: '',
 			resultPaneOpened: false,
 			resultPaneEditorOptions: {
-				tabSize: 1,
 				lineNumbers: 'off',
 				readOnly: true,
 				scrollBeyondLastLine: false,
@@ -57,6 +58,9 @@ export default {
 				minimap: {
 					enabled: false
 				}
+			},
+			resultPaneModelOptions: {
+				tabSize: 1
 			},
 			editorOptions: {
 				wordWrap: 'on',
@@ -68,42 +72,59 @@ export default {
 	},
 	watch: {
 		code () {
-			if (this.preserveLastInput) {
-				this.preserveLastInput = false
+			if (this.doNotUpdateAgentText) {
+				this.doNotUpdateAgentText = false
 			} else {
-				this.setLastInput(this.code)
+				this.updateAgentText(this.code)
 			}
 			this.debouncedCodeChanged()
 		}
 	},
 	created () {
 		this.debouncedCodeChanged = debounce(this.codeChanged, 500, { trailing: true })
-		if (this.lastInput) {
-			this.code = this.lastInput
-		} else {
-			this.code = this.templates[Object.keys(this.templates)[1]]
-		}
+		this.code = this.selectedAgent.text || ''
 	},
 	mounted () {
 		this.switchEditorWrapLines(this.wrapLines)
 	},
 	computed: {
 		...mapState({
-			wrapLines: state => state.ui.settings.wrapLines,
 			theme: state => state.ui.settings.theme,
-			templates: state => state.aa.templates,
-			lastInput: state => state.ui.lastInput
-		})
+			wrapLines: state => state.ui.settings.wrapLines,
+
+			templates: state => state.agents.templates,
+			userAgents: state => state.agents.userAgents
+		}),
+		...mapGetters({
+			selectedAgent: 'agents/selectedAgent',
+			isSelectedAgentUser: 'agents/isSelectedAgentUser',
+			isSelectedAgentTemplate: 'agents/isSelectedAgentTemplate'
+		}),
+		badge () {
+			switch (config.mode) {
+			case 'development':
+				return 'develop'
+			case 'testnet':
+				return 'testnet'
+			default:
+				return ''
+			}
+		}
 	},
 	methods: {
 		...mapActions({
 			parseOscript: 'grammars/parseOscript',
 			parseOjson: 'grammars/parseOjson',
 
-			validateAa: 'aa/validate',
-			deployAa: 'aa/deploy',
+			validateAa: 'backend/validate',
+			deployAa: 'backend/deploy',
 
-			setLastInput: 'ui/setLastInput',
+			changeSelectedAgent: 'agents/changeSelected',
+			createNewAgent: 'agents/createNewAgent',
+			deleteUserAgent: 'agents/deleteAgent',
+			renameUserAgent: 'agents/renameAgent',
+			updateAgentText: 'agents/updateText',
+
 			setWrapLines: 'ui/setWrapLines',
 			setTheme: 'ui/setTheme'
 		}),
@@ -116,17 +137,17 @@ export default {
 					const parserResult = await this.parseOjson(this.code)
 					this.serializedOjson = await this.serializeOjson(parserResult)
 				} catch (e) {
-					this.resultPaneOpened = true
+					this.openResultPane()
 					this.resultMessage = e.message
 				}
 			}
 		},
 		async deploy () {
 			this.resultMessage = ''
-			this.resultPaneOpened = true
 			await this.codeChanged()
 
 			if (this.serializedOjson !== '') {
+				this.openResultPane()
 				try {
 					const result = await this.deployAa(this.serializedOjson)
 					const unit = get(result, 'result.unit', null)
@@ -141,10 +162,10 @@ export default {
 		},
 		async validate () {
 			this.resultMessage = ''
-			this.resultPaneOpened = true
 
 			await this.codeChanged()
 			if (this.serializedOjson !== '') {
+				this.openResultPane()
 				try {
 					await this.validateAa(this.serializedOjson)
 					this.resultMessage = 'Success'
@@ -248,11 +269,11 @@ export default {
 			}
 			return arr
 		},
-		handleTemplateSelect (event) {
-			const template = event.target.value
-			this.template = template
-			this.preserveLastInput = true
-			this.code = this.templates[template]
+		async handleTemplateSelect (event) {
+			const selected = event.target.value
+			await this.changeSelectedAgent(selected)
+			this.doNotUpdateAgentText = true
+			this.code = this.selectedAgent.text
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
 			this.resultMessage = ''
 		},
@@ -271,6 +292,27 @@ export default {
 		handleThemeSelect (event) {
 			const theme = event.target.value
 			this.setTheme(theme)
+		},
+		async handleAgentActionNew () {
+			await this.createNewAgent('New Agent')
+			this.doNotUpdateAgentText = true
+			this.code = this.templates[0].text
+		},
+		async handleAgentActionDelete () {
+			await this.deleteUserAgent(this.selectedAgent.id)
+			this.doNotUpdateAgentText = true
+			this.code = this.selectedAgent.text
+		},
+		async handleAgentActionRename (newLabel) {
+			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel })
+		},
+		openResultPane () {
+			if (!this.resultPaneOpened) {
+				this.resultPaneOpened = true
+				this.$nextTick(() => {
+					this.$refs.resultPaneEditor.getMonaco().getModel().updateOptions(this.resultPaneModelOptions)
+				})
+			}
 		}
 	}
 }

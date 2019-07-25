@@ -1,0 +1,60 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+.root-agent-controls {
+	.agent-controls {
+		@include flex (row, flex-end, center);
+		> * {
+			bottom: .5rem;
+			position: relative;
+		}
+		&-rename {
+			@include flex(row, flex-start, center);
+			flex: 1;
+			&::before {
+				content: '';
+				width: 50px;
+			}
+			&-input {
+				height: 32px;
+				padding-left: .8rem;
+				width: 100%;
+			}
+		}
+		&-text {
+			margin-right: 1rem;
+		}
+		&-action {
+			@include flex(row, center, center);
+			margin-left: .5rem;
+			border-radius: 4px;
+			width: 32px;
+			height: 32px;
+			opacity: .8;
+			transition: opacity .2s ease;
+			cursor: pointer;
+			user-select: none;
+			background-color: $color-primary;
+			&:hover {
+				opacity: 1;
+			}
+			&.green {
+				background-color: $color-green;
+			}
+			&.red {
+				background-color: $color-red;
+			}
+			&-img {
+				width: 20px;
+				height: 20px;
+				object-fit: contain;
+			}
+		}
+		&:hover {
+			opacity: 1;
+		}
+	}
+	&.renaming {
+		opacity: 1!important;
+	}
+}

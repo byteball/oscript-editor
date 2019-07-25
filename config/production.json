@@ -3,6 +3,7 @@
 		"api": {
 			"url": "https://oscript.org/api/v1/"
 		},
+		"mode": "production",
 		"explorer": {
 			"url": "https://explorer.obyte.org/"
 		}

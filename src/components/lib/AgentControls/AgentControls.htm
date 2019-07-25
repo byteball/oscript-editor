@@ -1,0 +1,39 @@
+<div class="root-agent-controls" :class="{ renaming: isRenamingActive }" @mouseleave="handleMouseleave">
+	<div class="agent-controls">
+		<template v-if="isRenamingActive">
+			<div class="agent-controls-rename">
+				<input
+					@keyup.enter="handleActionRenameDone"
+					@keyup.esc="handleActionRenameCancel"
+					@blur="handleActionRenameCancel"
+					ref="renameInputEl"
+					class="agent-controls-rename-input"
+					type="text" v-model="renameInput"
+				>
+			</div>
+			<div class="agent-controls-action green" title="Done" @mousedown="handleActionRenameDone">
+				<img class="agent-controls-action-img" src="static/images/icons/check.png">
+			</div>
+		</template>
+		<template v-else-if="isDeletingActive">
+			<div class="agent-controls-text">Delete Autonomous Agent?</div>
+			<div class="agent-controls-action red" title="Cancel" @click="handleActionDeleteCancel">
+				<img class="agent-controls-action-img" src="static/images/icons/cross.png">
+			</div>
+			<div class="agent-controls-action green" title="Confirm" @click="handleActionDeleteConfirm">
+				<img class="agent-controls-action-img" src="static/images/icons/check.png">
+			</div>
+		</template>
+		<template v-else>
+			<div v-show="isSelectedAgentUser" class="agent-controls-action" title="Rename Agent" @click="handleActionRename">
+				<img class="agent-controls-action-img" src="static/images/icons/edit.png">
+			</div>
+			<div v-show="isSelectedAgentUser" class="agent-controls-action red" title="Delete Agent" @click="handleActionDelete">
+				<img class="agent-controls-action-img" src="static/images/icons/delete.png">
+			</div>
+			<div class="agent-controls-action green" title="New Agent" @click="handleActionNew">
+				<img class="agent-controls-action-img" src="static/images/icons/add.png">
+			</div>
+		</template>
+	</div>
+</div>
