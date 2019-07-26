@@ -24,7 +24,68 @@ export default [
 	{
 		label: 'var',
 		insertText: 'var',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`var` state variable',
+		documentation: {
+			value:
+`
+State variables are persisted across invocations of autonomous agents.
+
+Accessing state variables:
+
+	\`{
+	var['var_name1']
+	var['JVUJQ7OPBJ7ZLZ57TTNFJIC3EW7AE2RY']['var_name1']
+	}\`
+
+Assigning state variables:
+
+	\`{
+	var['var_name1'] = 'var_value';
+	var['var_name2'] = 10;
+	var['var_name3'] += 10;
+	var['var_name4'] = false;
+	}\`
+
+\`var['var_name']\` reads the value of state variable \`var_name\` stored under current AA.
+
+\`var['AA_ADDRESS']['var_name']\` reads the value of state variable \`var_name\` stored under AA \`AA_ADDRESS\`.  \`AA_ADDRESS\` is a valid address or \`this address\` to refer to the current AA.
+
+If there is no such variable, \`false\` is returned.
+
+State variables can be accessed in any oscript but can be assigned only in state script.  Only state vars of the current AA can be assigned, state vars of other AAs are read-only.  State vars can be reassigned multiple times but only the final value will be saved to the database and only if the AA finishes successfully.  All changes are committed atomically.  If the AA fails, all changes to state vars are rolled back.
+
+State vars can temporarily hold strings, numbers, and booleans but when persisting, \`true\` values are converted to 1 and \`false\` values result in removal of the state variable from storage.
+
+If the right-hand side of the assignment is an object, \`true\` is assigned.  State vars cannot hold objects.
+
+In addition to regular assignment \`=\`, state variables can also be modified in place using the following operators:
+* \`+=\`: increment by;
+* \`-=\`: decrement by;
+* \`*=\`: multiply by;
+* \`/=\`: divide by;
+* \`%=\`: remainder of division by;
+* \`||=\`: concatenate to the end of string.
+
+For concatenation, the existing value of the var is converted to string.
+
+For \`+=\`, \`-=\`, \`*=\`, \`/=\`, \`%=\`, the existing boolean value is converted to 1 or 0, strings result in error.
+
+If the variable didn't exist prior to one of these assignments, it is taken as \`false\` and converted to number or string accordingly.
+
+Each read or write operation on a state variable adds +1 to complexity.  Assignment with modification also costs 1 in complexity.
+
+Examples:
+
+	\`{
+	var['sent_back'] = $half_amount;
+	var['count_investors'] += 1;
+	var['amount_owed'] += trigger.output[[asset=base]];
+	var['pending'] = false;
+	$x = var['JVUJQ7OPBJ7ZLZ57TTNFJIC3EW7AE2RY']['var_name1'];
+	}\`
+`
+		}
 	},
 	{
 		quoted: false,
@@ -243,7 +304,7 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 	},
 	{
 		quoted: false,
-		label: 'asset',
+		label: 'asset[',
 		insertText: 'asset',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`asset` external reference',
