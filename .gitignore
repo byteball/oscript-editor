@@ -3,6 +3,7 @@ node_modules
 /dist
 /dist_testnet
 /dist_prod
+package-lock.json
 
 # local env files
 .env.local
