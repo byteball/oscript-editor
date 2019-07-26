@@ -174,7 +174,17 @@ export default {
 
 		let hints
 		if (isOscript(model, position)) {
-			hints = oscriptWordsList.filter(w => w.label === hover.word && w.documentation)
+			let label = hover.word
+			if (label === 'asset') {
+				const nextChar = getNextChar(model, position.lineNumber, hover.endColumn)
+				if (nextChar === '[') {
+					label = 'asset['
+				}
+			} else {
+				label = getDotMergedWord(model, position.lineNumber, hover)
+			}
+
+			hints = oscriptWordsList.filter(w => w.label === label && w.documentation)
 		} else if (isOjsonValues(model, position)) {
 			hints = ojsonValuesList.filter(w => w.label === hover.word && w.documentation)
 		} else {
@@ -232,4 +242,29 @@ const quotedAutocomplete = (textUntilPosition, label) => {
 	}
 
 	return insertText
+}
+
+const getCharWithOffset = (model, lineNumber, column, offset) => {
+	const range = {
+		startColumn: column,
+		endColumn: column + offset,
+		startLineNumber: lineNumber,
+		endLineNumber: lineNumber
+	}
+	return model.getValueInRange(range)
+}
+
+const getNextChar = (model, lineNumber, column) => getCharWithOffset(model, lineNumber, column, 1)
+const getPrevChar = (model, lineNumber, column) => getCharWithOffset(model, lineNumber, column, -1)
+
+const getDotMergedWord = (model, lineNumber, { startColumn, endColumn, word }) => {
+	if (getPrevChar(model, lineNumber, startColumn) === '.') {
+		const prev = model.getWordAtPosition({ lineNumber, column: startColumn - 2 }).word
+		return `${prev}.${word}`
+	} else if (getNextChar(model, lineNumber, endColumn) === '.') {
+		const next = model.getWordAtPosition({ lineNumber, column: endColumn + 2 }).word
+		return `${word}.${next}`
+	} else {
+		return word
+	}
 }

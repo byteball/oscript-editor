@@ -113,6 +113,7 @@ The object in \`payload\` is the data this message delivers.
 		documentation: {
 			value:
 `
+Autonomous Agent outputs
 `
 		}
 	},
@@ -125,6 +126,7 @@ The object in \`payload\` is the data this message delivers.
 		documentation: {
 			value:
 `
+Output Address
 `
 		}
 	},
@@ -137,6 +139,7 @@ The object in \`payload\` is the data this message delivers.
 		documentation: {
 			value:
 `
+Output amount
 `
 		}
 	},
