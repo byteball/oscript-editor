@@ -2,7 +2,7 @@ export default `{
 	/*
 	This is an ICO agent with milestone-based release of the raised funds.
 
-	The funds are released only after a trusted thrird party (an auditor) verifies the team's performance and approves the release of the next milestone payment.  The auditor can be a multisig address.
+	The funds are released only after a trusted third party (an auditor) verifies the team's performance and approves the release of the next milestone payment.  The auditor can be a multisig address.
 
 	If the ICO doesn't reach its target, the investors can get a refund by exchanging their tokens back to bytes.
 	*/
