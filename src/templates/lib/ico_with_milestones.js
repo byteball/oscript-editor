@@ -12,7 +12,7 @@ export default `{
 		$auditor_address = 'JE3HACDALPUAQ6SJOFM74W43EGVFWEIF';
 		$price = 13.3; // bytes per token
 		$target = 100e9; // if raised less, will refund
-		$expiry_ts = 1577836800000; // Jan 1, 2020
+		$expiry_ts = 1577836000; // Jan 1, 2020
 		$milestone1 = 10; // in %
 		$milestone2 = 30;
 		$milestone3 = 40;
