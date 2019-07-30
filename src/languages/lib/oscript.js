@@ -18,7 +18,7 @@ export default {
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
 			'||', '+', '-', '*', '/', '%', '^',
-			'+=', '-=', '*=', '/=', '||=', 'OR', 'AND', 'NOT', 'OTHERWISE', 'or', 'and', 'not', 'otherwise'
+			'+=', '-=', '*=', '/=', '%=', '||=', 'OR', 'AND', 'NOT', 'OTHERWISE', 'or', 'and', 'not', 'otherwise'
 		],
 		// we include these common regular expressions
 		symbols: /[=><!?:|+\-*/%^]+/,
