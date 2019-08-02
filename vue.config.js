@@ -21,5 +21,12 @@ module.exports = {
 	chainWebpack: config => {
 		config.resolve.alias
 			.set('src', path.resolve(__dirname, 'src'))
+		config.module
+			.rule('eslint')
+			.use('eslint-loader')
+			.tap(options => {
+				options.configFile = path.resolve(__dirname, '.eslintrc.js')
+				return options
+			})
 	}
 }

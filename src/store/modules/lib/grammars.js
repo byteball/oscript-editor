@@ -1,11 +1,10 @@
+import { promisify } from 'util'
 import nearley from 'nearley'
-import { UndefinedGrammarError } from 'src/errors'
+import { UndefinedGrammarError, ValidationError } from 'src/errors'
 
+const aaValidation = require('ocore/aa_validation')
 const ojsonGrammar = require('src/languages/lib/grammars/ojson.js')
-
-// TBD reqiring oscript grammar file results empty module, avoiding this behavior by getting grammar from window.grammar
-require('src/languages/lib/grammars/oscript.js')
-const oscriptGrammar = window.grammar
+const oscriptGrammar = require('ocore/formula/grammar.js')
 
 export default () => ({
 	namespaced: true,
@@ -28,6 +27,13 @@ export default () => ({
 		},
 		async parseOscript ({ dispatch }, text) {
 			return dispatch('parse', { text, grammar: 'oscript' })
+		},
+		async validateOjson ({ commit }, ojson) {
+			try {
+				await promisify(aaValidation.validateAADefinition)(JSON.parse(ojson))
+			} catch (err) {
+				throw new ValidationError(err)
+			}
 		}
 	}
 })

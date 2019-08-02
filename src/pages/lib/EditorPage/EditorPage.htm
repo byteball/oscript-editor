@@ -51,6 +51,7 @@
 			:class="`theme-${theme}`"
 		>
 			<monaco-editor
+				:options="resultPaneEditorOptions"
 				ref="resultPaneEditor"
 				class="result-pane"
 				v-model="resultMessage"
