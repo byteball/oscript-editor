@@ -115,8 +115,8 @@ export default {
 		...mapActions({
 			parseOscript: 'grammars/parseOscript',
 			parseOjson: 'grammars/parseOjson',
+			validateAa: 'grammars/validateOjson',
 
-			validateAa: 'backend/validate',
 			deployAa: 'backend/deploy',
 
 			changeSelectedAgent: 'agents/changeSelected',
