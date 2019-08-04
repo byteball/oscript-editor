@@ -1,5 +1,7 @@
 import uniqid from 'uniqid'
 import templates from 'src/templates'
+import axios from 'axios'
+import router from '../../../router.js'
 
 const templatesArray = Object.keys(templates).map((t, index) => ({
 	id: 'template_' + index,
@@ -9,6 +11,7 @@ const templatesArray = Object.keys(templates).map((t, index) => ({
 
 export const CHANGE_SELECTED = 'agents/selected/change'
 export const CREATE_USER_AGENT = 'agents/userAgent/create'
+export const SHARE_USER_AGENT = 'agents/userAgent/share'
 export const RENAME_USER_AGENT = 'agents/userAgent/rename'
 export const DELETE_USER_AGENT = 'agents/userAgent/delete'
 export const UPDATE_USER_AGENT_TEXT = 'agents/userAgent/update/text'
@@ -64,6 +67,17 @@ export default () => ({
 				text
 			})
 		},
+		[SHARE_USER_AGENT] (state, id) {
+			const agent = state.userAgents.find(a => a.id === id)
+			axios({
+				url: 'https://api.myjson.com/bins',
+				method: 'POST',
+				data: { id: agent }
+			}).then(function (response) {
+				let urlCode = response.data.uri.split('/bins/').pop()
+				router.push({ path: '/s/' + urlCode })
+			})
+		},
 		[DELETE_USER_AGENT] (state, id) {
 			const index = state.userAgents.findIndex(a => a.id === id)
 			if (index !== -1) {
@@ -89,6 +103,18 @@ export default () => ({
 				id,
 				label,
 				text: state.templates[0].text
+			})
+			await commit(CHANGE_SELECTED, id)
+		},
+		async shareThisAgent ({ commit }, id) {
+			await commit(SHARE_USER_AGENT, id)
+		},
+		async createNewAgentShared ({ commit }, response) {
+			const id = uniqid('userAgent-')
+			await commit(CREATE_USER_AGENT, {
+				id,
+				label: response.data.id.label,
+				text: response.data.id.text
 			})
 			await commit(CHANGE_SELECTED, id)
 		},

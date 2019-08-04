@@ -14,6 +14,9 @@ export default {
 		async handleActionNew () {
 			this.$emit('new')
 		},
+		async handleActionShare () {
+			this.$emit('share')
+		},
 		async handleActionDelete () {
 			this.isDeletingActive = true
 		},

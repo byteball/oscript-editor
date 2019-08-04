@@ -25,6 +25,10 @@
 			</div>
 		</template>
 		<template v-else>
+			<base href="/" />
+			<div v-show="isSelectedAgentUser" v-if="!$route.params.id" class="agent-controls-action blue" title="Share Agent" @click="handleActionShare">
+				<img class="agent-controls-action-img" src="static/images/icons/share.png">
+			</div>
 			<div v-show="isSelectedAgentUser" class="agent-controls-action" title="Rename Agent" @click="handleActionRename">
 				<img class="agent-controls-action-img" src="static/images/icons/edit.png">
 			</div>
