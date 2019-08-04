@@ -76,6 +76,11 @@ export default () => ({
 			}).then(function (response) {
 				let urlCode = response.data.uri.split('/bins/').pop()
 				router.push({ path: '/s/' + urlCode })
+				navigator.clipboard.writeText(window.location.href).then(function () {
+					window.alert('Url generated and Copied to Clipboard Successfully')
+				}, function () {
+					window.alert('Url is not Copied to Clipboard, Please try to copy it from address bar.')
+				})
 			})
 		},
 		[DELETE_USER_AGENT] (state, id) {
