@@ -60,12 +60,27 @@ export default () => ({
 		[UPDATE_USER_AGENT_TEXT] (state, { userAgentId, text }) {
 			state.userAgents.find(a => a.id === userAgentId).text = text
 		},
-		[CREATE_USER_AGENT] (state, { id, text, label }) {
-			state.userAgents.unshift({
-				id,
-				label,
-				text
-			})
+		[CREATE_USER_AGENT] (state, { id, text, label, isShared }) {
+			if (!isShared) {
+				state.userAgents.unshift({
+					id,
+					label,
+					text
+				})
+			} else {
+				let findOldAgentText = state.userAgents.find(a => a.text === text)
+				if (findOldAgentText) {
+					findOldAgentText.text = text
+					findOldAgentText.id = id
+					// state.userAgents.find(a => a.text === text).text = text
+				} else {
+					state.userAgents.unshift({
+						id,
+						label: label + '  -' + id,
+						text
+					})
+				}
+			}
 		},
 		[SHARE_USER_AGENT] (state, id) {
 			const agent = state.userAgents.find(a => a.id === id)
@@ -119,7 +134,8 @@ export default () => ({
 			await commit(CREATE_USER_AGENT, {
 				id,
 				label: response.data.id.label,
-				text: response.data.id.text
+				text: response.data.id.text,
+				isShared: true
 			})
 			await commit(CHANGE_SELECTED, id)
 		},
