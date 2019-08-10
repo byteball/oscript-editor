@@ -69,16 +69,65 @@ export default () => ({
 				})
 			} else {
 				let findOldAgentText = state.userAgents.find(a => a.text === text)
+				let findOldAgentLabel = state.userAgents.find(a => a.label === label)
 				if (findOldAgentText) {
 					findOldAgentText.text = text
 					findOldAgentText.id = id
-					// state.userAgents.find(a => a.text === text).text = text
+					// This below condition checks. If there is already named label and the old text and if that text === label's state text
+				} else if (findOldAgentLabel && findOldAgentText && findOldAgentLabel.text === findOldAgentText.text) {
+					findOldAgentLabel.text = text
+					findOldAgentLabel.id = id
 				} else {
-					state.userAgents.unshift({
-						id,
-						label: label + '  -' + id,
-						text
-					})
+					var inBrackets = findOldAgentLabel.label.trim().match(/\(.*?\)/g)
+					if (findOldAgentLabel || inBrackets) {
+						if (inBrackets) {
+							var wasLabel = findOldAgentLabel.label
+							while (state.userAgents.find(a => a.label === wasLabel)) {
+								inBrackets = wasLabel.trim().match(/\(.*?\)/g)
+								var lastInc = inBrackets[inBrackets.length - 1]
+								var toInc = lastInc.match(/\d+/g)
+								toInc = parseInt(toInc) + 1
+								var nlabel = wasLabel.trim().substring(0, wasLabel.trim().length - 4)
+								wasLabel = nlabel + ' (' + toInc + ')'
+							}
+							state.userAgents.unshift({
+								id,
+								label: wasLabel,
+								text
+							})
+						} else {
+							// If user have copied label without brackets but then open that again
+							var nwasLabel = findOldAgentLabel.label
+							var labelToGet = nwasLabel + ' (' + 1 + ')'
+							if (state.userAgents.find(a => a.label === labelToGet)) {
+								while (state.userAgents.find(a => a.label === labelToGet)) {
+									inBrackets = labelToGet.trim().match(/\(.*?\)/g)
+									let lastInc = inBrackets[inBrackets.length - 1]
+									let toInc = lastInc.match(/\d+/g)
+									toInc = parseInt(toInc) + 1
+									let nlabel = labelToGet.trim().substring(0, labelToGet.trim().length - 4)
+									labelToGet = nlabel + ' (' + toInc + ')'
+								}
+								state.userAgents.unshift({
+									id,
+									label: labelToGet,
+									text
+								})
+							} else {
+								state.userAgents.unshift({
+									id,
+									label: label + ' (' + 1 + ')',
+									text
+								})
+							}
+						}
+					} else {
+						state.userAgents.unshift({
+							id,
+							label: label,
+							text
+						})
+					}
 				}
 			}
 		},
