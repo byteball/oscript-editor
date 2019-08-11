@@ -77,7 +77,7 @@ export default () => ({
 				} else if (findOldAgentLabel && findOldAgentText && findOldAgentLabel.text === findOldAgentText.text) {
 					findOldAgentLabel.text = text
 					findOldAgentLabel.id = id
-				} else {
+				} else if (findOldAgentLabel) {
 					var inBrackets = findOldAgentLabel.label.trim().match(/\(.*?\)/g)
 					if (findOldAgentLabel || inBrackets) {
 						if (inBrackets) {
@@ -121,13 +121,13 @@ export default () => ({
 								})
 							}
 						}
-					} else {
-						state.userAgents.unshift({
-							id,
-							label: label,
-							text
-						})
 					}
+				} else {
+					state.userAgents.unshift({
+						id,
+						label: label,
+						text
+					})
 				}
 			}
 		},
