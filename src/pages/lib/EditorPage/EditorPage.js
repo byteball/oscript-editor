@@ -167,8 +167,8 @@ export default {
 			if (this.serializedOjson !== '') {
 				this.openResultPane()
 				try {
-					this.resultMessage = await this.validateAa(this.serializedOjson)
-					this.resultMessage = this.resultMessage ? this.resultMessage : 'AA validated'
+					let body = await this.validateAa(this.serializedOjson)
+					this.resultMessage = body ? 'AA validated, complexity = ' + body.complexity + ', ops = ' + body.count_ops : 'AA validated'
 				} catch (e) {
 					if (e instanceof ValidationError) { this.resultMessage = e.message }
 					if (e instanceof ParsingError) { this.resultMessage = e.message }
