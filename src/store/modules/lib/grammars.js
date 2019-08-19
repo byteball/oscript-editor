@@ -30,7 +30,7 @@ export default () => ({
 		},
 		async validateOjson ({ commit }, ojson) {
 			try {
-				await promisify(aaValidation.validateAADefinition)(JSON.parse(ojson))
+				return await promisify(aaValidation.validateAADefinition)(JSON.parse(ojson))
 			} catch (err) {
 				throw new ValidationError(err)
 			}

@@ -116,7 +116,7 @@ export default {
 			parseOscript: 'grammars/parseOscript',
 			parseOjson: 'grammars/parseOjson',
 			validateAa: 'grammars/validateOjson',
-
+			// validateAa: 'backend/validate',
 			deployAa: 'backend/deploy',
 
 			changeSelectedAgent: 'agents/changeSelected',
@@ -167,8 +167,8 @@ export default {
 			if (this.serializedOjson !== '') {
 				this.openResultPane()
 				try {
-					await this.validateAa(this.serializedOjson)
-					this.resultMessage = 'Success'
+					this.resultMessage = await this.validateAa(this.serializedOjson)
+					this.resultMessage = this.resultMessage ? this.resultMessage : 'AA validated'
 				} catch (e) {
 					if (e instanceof ValidationError) { this.resultMessage = e.message }
 					if (e instanceof ParsingError) { this.resultMessage = e.message }
