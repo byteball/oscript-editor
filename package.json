@@ -13,7 +13,6 @@
 		"compileGrammar:ojson": "./node_modules/.bin/nearleyc ./src/languages/lib/grammars/ojson.ne -o ./src/languages/lib/grammars/ojson.js"
 	},
 	"dependencies": {
-		"ocore": "git+https://github.com/byteball/ocore.git#rocks-and-formulas",
 		"axios": "^0.19.0",
 		"config": "^3.1.0",
 		"core-js": "^2.6.5",
@@ -23,7 +22,9 @@
 		"monaco-editor-webpack-plugin": "^1.7.0",
 		"moo": "^0.5.0",
 		"nearley": "2.16.0",
+		"ocore": "git+https://github.com/byteball/ocore.git#rocks-and-formulas",
 		"uniqid": "^5.0.3",
+		"v-clipboard": "^2.2.2",
 		"vue": "^2.6.10",
 		"vue-monaco": "^0.3.2",
 		"vue-router": "^3.0.3",

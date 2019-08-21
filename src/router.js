@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { EditorPage } from 'src/pages'
+import { EditorPage, SharedAgentPage } from 'src/pages'
 
 Vue.use(Router)
 
@@ -14,9 +14,10 @@ export default new Router({
 			component: EditorPage
 		},
 		{
-			path: '/s/:id',
-			name: 'savedhome',
-			component: EditorPage
+			path: '/s/:shortcode',
+			name: 'shared',
+			props: true,
+			component: SharedAgentPage
 		}
 	]
 })

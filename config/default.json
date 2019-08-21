@@ -1,0 +1,7 @@
+{
+	"frontend": {
+		"myjsonApi": {
+			"url": "https://api.myjson.com/"
+		}
+	}
+}

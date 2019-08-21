@@ -1,9 +1,12 @@
 import Vue from 'vue'
+import Clipboard from 'v-clipboard'
 import * as monaco from 'monaco-editor'
 import monacoLanguages from 'src/languages'
 import App from './App/App.vue'
 import router from './router'
 import store from './store'
+
+Vue.use(Clipboard)
 
 Object.keys(monacoLanguages).forEach(l => {
 	const language = monacoLanguages[l]

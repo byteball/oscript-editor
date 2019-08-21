@@ -16,6 +16,11 @@ const BACKEND = axios.create({
 	timeout: 5000
 })
 
+const MYJSON_API = axios.create({
+	baseURL: config.myjsonApi.url,
+	timeout: 5000
+})
+
 BACKEND.interceptors.response.use(
 	(response) => {
 		return response
@@ -45,5 +50,6 @@ BACKEND.interceptors.response.use(
 	}
 )
 export {
-	BACKEND
+	BACKEND,
+	MYJSON_API
 }

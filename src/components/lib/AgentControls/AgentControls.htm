@@ -1,14 +1,15 @@
-<div class="root-agent-controls" :class="{ renaming: isRenamingActive }" @mouseleave="handleMouseleave">
+<div class="root-agent-controls" :class="{ 'force-visible': isRenamingActive || isSharingActive }" @mouseleave="handleMouseleave">
 	<div class="agent-controls">
 		<template v-if="isRenamingActive">
-			<div class="agent-controls-rename">
+			<div class="agent-controls-input-container">
 				<input
+					ref="renameInputEl"
+					v-model="renameInput"
 					@keyup.enter="handleActionRenameDone"
 					@keyup.esc="handleActionRenameCancel"
 					@blur="handleActionRenameCancel"
-					ref="renameInputEl"
-					class="agent-controls-rename-input"
-					type="text" v-model="renameInput"
+					class="agent-controls-input"
+					type="text"
 				>
 			</div>
 			<div class="agent-controls-action green" title="Done" @mousedown="handleActionRenameDone">
@@ -24,9 +25,39 @@
 				<img class="agent-controls-action-img" src="static/images/icons/check.png">
 			</div>
 		</template>
+		<template v-else-if="isSharingSuccess">
+			<div class="agent-controls-input-container">
+				<input
+					@blur="handleActionShareCancel"
+					ref="sharedUrlInputEl"
+					class="agent-controls-input"
+					v-model="sharedUri"
+					type="text"
+				>
+			</div>
+			<div class="agent-controls-action green" title="Copy to clipboard" @mousedown="handleCopySharedUri">
+				<img class="agent-controls-action-img" src="static/images/icons/copy.png">
+			</div>
+		</template>
+		<template v-else-if="isSharingCopyingSuccess">
+			<div class="agent-controls-text">Link copied to clipboard</div>
+			<div class="agent-controls-action green" title="Dismiss" @mousedown="handleDismissSharingCopying">
+				<img class="agent-controls-action-img" src="static/images/icons/check.png">
+			</div>
+		</template>
+		<template v-else-if="isSharingFailed">
+			<div class="agent-controls-text">Failed to share agent</div>
+			<div class="agent-controls-action red" title="Dismiss" @click="handleDismissSharingFailed">
+				<img class="agent-controls-action-img" src="static/images/icons/cross.png">
+			</div>
+		</template>
+		<template v-else-if="isSharingActive">
+			<div class="agent-controls-action blue" title="Sharing...">
+				<img class="agent-controls-action-img" src="static/images/icons/loading.png">
+			</div>
+		</template>
 		<template v-else>
-			<base href="/" />
-			<div v-show="isSelectedAgentUser" v-if="!$route.params.id" class="agent-controls-action blue" title="Share Agent" @click="handleActionShare">
+			<div v-show="isSelectedAgentUser" class="agent-controls-action blue" title="Share Agent" @click="handleActionShare">
 				<img class="agent-controls-action-img" src="static/images/icons/share.png">
 			</div>
 			<div v-show="isSelectedAgentUser" class="agent-controls-action" title="Rename Agent" @click="handleActionRename">
