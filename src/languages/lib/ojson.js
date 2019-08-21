@@ -73,6 +73,7 @@ export default {
 
 			string_double: [
 				[/[^\\"]+/, { cases: {
+					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
 					'@default': 'autocomplete'
 				} }],
@@ -83,6 +84,7 @@ export default {
 
 			string_single: [
 				[/[^\\']+/, { cases: {
+					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
 					'@default': 'autocomplete'
 				} }],
@@ -92,6 +94,7 @@ export default {
 			],
 			string_backtick: [
 				[/[^\\`]+/, { cases: {
+					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
 					'@default': 'autocomplete'
 				} }],

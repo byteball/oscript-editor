@@ -11,9 +11,9 @@ let lexer = moo.states({
 		space: {match: /\s+/, lineBreaks: true},
 		comment: /\/\/.*$/,
 		blockComment: { match: /\/\*[^]*?\*\//, lineBreaks: true },
-		messages: 'messages',
-		init: 'init',
-		bounce_fees: 'bounce_fees',
+		messages: ['"messages"', 'messages', '`messages`', "'messages'"],
+		init: ['"init"', 'init', '`init`', "'init'"],
+		bounce_fees: ['"bounce_fees"', 'bounce_fees', '`bounce_fees`', "'bounce_fees'"],
 		formulaDoubleStart: { match: '"{', push: 'formulaDouble' },
 		formulaSingleStart: { match: "'{", push: 'formulaSingle' },
 		formulaBackStart: { match: '`{', push: 'formulaBack' },
@@ -24,15 +24,15 @@ let lexer = moo.states({
 		':': ':',
 		',': ',',
 		autonomous_agent: 'autonomous agent',
-		ifWord: 'if',
+		ifWord: ['"if"', 'if', '`if`', "'if'"],
 		null: 'null',
-		base: 'base',
-		cases: 'cases',
-		app: {match: 'app:', push: 'appList'},
-		state: 'state',
-		payloadFormula: /payload:\s+(?![{\[])/,
-		payload: { match: /payload:\s+{/, push: 'payload'},
-		payloadArray: { match: /payload:\s+\[/, push: 'payload'},
+		base: ['"base"', 'base', '`base`', "'base'"],
+		cases: ['"cases"', 'cases', '`cases`', "'cases'"],
+		app: {match: ['"app":', 'app:', '`app`:', "'app':"], push: 'appList'},
+		state: ['"state"', 'state', '`state`', "'state'"],
+		payloadFormula: [/payload:\s+(?![{\[])/, /"payload":\s+(?![{\[])/, /`payload`:\s+(?![{\[])/, /'payload':\s+(?![{\[])/],
+		payload: { match: [/payload:\s+{/, /"payload":\s+{/, /'payload':\s+{/, /`payload`:\s+{/], push: 'payload'},
+		payloadArray: { match: [/payload:\s+\[/, /"payload":\s+\[/, /'payload':\s+\[/, /`payload`:\s+\[/], push: 'payload'},
 		base64: [
 			/'(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})'/,
 			/"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})"/,
@@ -81,7 +81,6 @@ let lexer = moo.states({
 		'"': '"',
 		"'": "'",
 		'`': '`',
-		// [+-]?([0-9]*[.])?[0-9]+
 		decimal: /(?:[+-])?(?:[0-9]*[.])?[0-9]+/,
 		str: /[a-zA-Z_0-9 =+*/@-]+/,
 	},
@@ -158,12 +157,19 @@ const bounceFees = (d) => ({
 
 const bounceAsset = (d) => d[2]
 
-const assetPair = (d) => ({
-	type: TYPES.BOUNCE_ASSET,
-	asset: d[0][0].text,
-	value: d[3],
-	context: c(d[0][0])
-})
+const assetPair = (d) => {
+	let asset = d[0][0].text
+	if (asset.match(/base/) || asset.match(/'base'/) || asset.match(/"base"/) || asset.match(/`base`/)) {
+		asset = 'base'
+	}
+
+	return {
+		type: TYPES.BOUNCE_ASSET,
+		asset: asset,
+		value: d[3],
+		context: c(d[0][0])
+	}
+}
 
 const messagesArray = (d) => ({
 	type: TYPES.MESSAGES,
@@ -310,7 +316,6 @@ const commaOptionalSingle = (d) => d[0]
 const commaOptionalMany = (d) => {
 	let array = d[1].map(e => e[2][0])
 	array.unshift(d[0][0])
-	array.map(e => e[0])
 	return array
 }
 
