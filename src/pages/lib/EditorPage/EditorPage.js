@@ -6,6 +6,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import monacoLanguages from 'src/languages'
 import { AgentControls } from 'src/components'
 import { ValidationError, ParsingError } from 'src/errors'
+import axios from 'axios'
 
 const TYPES = {
 	IF: 'IF',
@@ -83,6 +84,18 @@ export default {
 	created () {
 		this.debouncedCodeChanged = debounce(this.codeChanged, 500, { trailing: true })
 		this.code = this.selectedAgent.text || ''
+		if (this.$route.params.id) {
+			axios({
+				method: 'get',
+				url: 'https://api.myjson.com/bins/' + this.$route.params.id,
+				responseType: 'stream'
+			}).then((response) => {
+				if (response) {
+					this.handleAgentActionSharedNew(response)
+				}
+				this.$router.push({ path: '/' })
+			})
+		}
 	},
 	mounted () {
 		this.switchEditorWrapLines(this.wrapLines)
@@ -121,6 +134,8 @@ export default {
 
 			changeSelectedAgent: 'agents/changeSelected',
 			createNewAgent: 'agents/createNewAgent',
+			shareThisAgent: 'agents/shareThisAgent',
+			createNewAgentShared: 'agents/createNewAgentShared',
 			deleteUserAgent: 'agents/deleteAgent',
 			renameUserAgent: 'agents/renameAgent',
 			updateAgentText: 'agents/updateText',
@@ -136,6 +151,7 @@ export default {
 				try {
 					const parserResult = await this.parseOjson(this.code)
 					this.serializedOjson = await this.serializeOjson(parserResult)
+					this.$router.push({ path: '/' })
 				} catch (e) {
 					this.openResultPane()
 					this.resultMessage = e.message
@@ -297,6 +313,13 @@ export default {
 			await this.createNewAgent('New Agent')
 			this.doNotUpdateAgentText = true
 			this.code = this.templates[0].text
+		},
+		async handleAgentActionSharedNew (response) {
+			await this.createNewAgentShared(response)
+			this.code = response.data.id.text
+		},
+		async handleAgentActionShare () {
+			await this.shareThisAgent(this.selectedAgent.id)
 		},
 		async handleAgentActionDelete () {
 			await this.deleteUserAgent(this.selectedAgent.id)
