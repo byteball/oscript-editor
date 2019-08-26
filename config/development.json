@@ -1,11 +1,11 @@
 {
 	"frontend": {
 		"api": {
-			"url": "https://testnet.oscript.org/api/v1/"
+			"url": "http://localhost:3000/api/v1/"
 		},
-		"mode": "testnet",
+		"mode": "development",
 		"explorer": {
-			"url": "https://testnetexplorer.obyte.org/"
+			"url": "http://localhost:8080/"
 		}
 	}
 }
