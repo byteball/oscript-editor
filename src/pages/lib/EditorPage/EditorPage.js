@@ -190,15 +190,6 @@ export default {
 		async handleAgentActionRename (newLabel) {
 			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel })
 		},
-		async handleAgentActionShare (shortcode) {
-			if (this.isSelectedAgentUser) {
-				const currentAgentId = this.selectedAgent.id
-				const currentText = this.selectedAgent.text
-				const currentLabel = this.selectedAgent.label
-				await this.deleteUserAgent(currentAgentId)
-				await this.addSharedAgent({ text: currentText, label: currentLabel, shortcode })
-			}
-		},
 		openResultPane () {
 			if (!this.resultPaneOpened) {
 				this.resultPaneOpened = true

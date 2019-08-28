@@ -64,18 +64,16 @@ export default {
 					: await this.myjsonUpload({ label: this.selectedAgent.label, text: this.selectedAgent.text })
 				this.sharedUri = window.location.href + `s/${shortcode}`
 				this.isSharingSuccess = true
-				this.isSharingActive = false
 				this.$clipboard(this.sharedUri)
-				this.$emit('share', shortcode)
 
 				this.timeoutID = setTimeout(() => {
 					this.handleDismissSharingSuccess()
-				}, 5000)
+				}, 3000)
 			} catch (error) {
 				this.isSharingFailed = true
 				this.timeoutID = setTimeout(() => {
 					this.handleDismissSharingFailed()
-				}, 5000)
+				}, 3000)
 			}
 		},
 		async handleDismissSharingFailed () {
