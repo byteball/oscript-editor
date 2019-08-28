@@ -27,7 +27,7 @@ export default function () {
 			}),
 			createPersistedState({
 				key: 'persistedAgents',
-				paths: [ 'agents.selected', 'agents.userAgents' ],
+				paths: [ 'agents.selected', 'agents.userAgents', 'agents.sharedAgents' ],
 				getState (name, storage) {
 					const state = JSON.parse(storage[name] || '{}')
 					return {

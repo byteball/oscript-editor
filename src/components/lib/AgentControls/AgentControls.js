@@ -1,10 +1,6 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-	props: {
-		selectedLabel: String,
-		isSelectedAgentUser: Boolean
-	},
 	data () {
 		return {
 			sharedUri: '',
@@ -14,13 +10,14 @@ export default {
 			isRenamingActive: false,
 			isSharingFailed: false,
 			isSharingSuccess: false,
-			isDeletingActive: false,
-			isSharingCopyingSuccess: false
+			isDeletingActive: false
 		}
 	},
 	computed: {
 		...mapGetters({
-			selectedAgent: 'agents/selectedAgent'
+			selectedAgent: 'agents/selectedAgent',
+			isSelectedAgentUser: 'agents/isSelectedAgentUser',
+			isSelectedAgentShared: 'agents/isSelectedAgentShared'
 		})
 	},
 	methods: {
@@ -41,7 +38,7 @@ export default {
 			this.isDeletingActive = false
 		},
 		async handleActionRename () {
-			this.renameInput = this.selectedLabel
+			this.renameInput = this.selectedAgent.label
 			this.isRenamingActive = true
 			setTimeout(() => {
 				this.$refs.renameInputEl.focus()
@@ -62,18 +59,23 @@ export default {
 		async handleActionShare () {
 			this.isSharingActive = true
 			try {
-				const shortcode = await this.myjsonUpload({ label: this.selectedAgent.label, text: this.selectedAgent.text })
+				const shortcode = this.isSelectedAgentShared
+					? this.selectedAgent.shortcode
+					: await this.myjsonUpload({ label: this.selectedAgent.label, text: this.selectedAgent.text })
 				this.sharedUri = window.location.href + `s/${shortcode}`
 				this.isSharingSuccess = true
-				setTimeout(() => {
-					this.$refs.sharedUrlInputEl.focus()
-					this.$refs.sharedUrlInputEl.setSelectionRange(0, this.sharedUri.length)
-				}, 10)
+				this.isSharingActive = false
+				this.$clipboard(this.sharedUri)
+				this.$emit('share', shortcode)
+
+				this.timeoutID = setTimeout(() => {
+					this.handleDismissSharingSuccess()
+				}, 5000)
 			} catch (error) {
 				this.isSharingFailed = true
 				this.timeoutID = setTimeout(() => {
 					this.handleDismissSharingFailed()
-				}, 3000)
+				}, 5000)
 			}
 		},
 		async handleDismissSharingFailed () {
@@ -82,24 +84,11 @@ export default {
 			}
 			this.resetSharingState()
 		},
-		async handleCopySharedUri () {
-			this.$clipboard(this.sharedUri)
-			this.isSharingSuccess = false
-			this.isSharingCopyingSuccess = true
-			this.timeoutID = setTimeout(() => {
-				this.handleDismissSharingCopying()
-			}, 3000)
-		},
-		async handleDismissSharingCopying () {
+		async handleDismissSharingSuccess () {
 			if (this.timeoutID) {
 				window.clearTimeout(this.timeoutID)
 			}
 			this.resetSharingState()
-		},
-		async handleActionShareCancel () {
-			if (!this.isSharingCopyingSuccess) {
-				this.resetSharingState()
-			}
 		},
 		resetSharingState () {
 			this.sharedUri = ''
@@ -107,7 +96,6 @@ export default {
 			this.isSharingActive = false
 			this.isSharingFailed = false
 			this.isSharingSuccess = false
-			this.isSharingCopyingSuccess = false
 		}
 	}
 }

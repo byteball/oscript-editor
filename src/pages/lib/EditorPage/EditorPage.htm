@@ -17,16 +17,18 @@
 		</div>
 		<div class="editor-controls-select">
 			<agent-controls class="agent-actions"
-				:isSelectedAgentUser="isSelectedAgentUser"
-				:selectedLabel="selectedAgent.label"
 				@rename="handleAgentActionRename"
 				@delete="handleAgentActionDelete"
 				@new="handleAgentActionNew"
+				@share="handleAgentActionShare"
 			></agent-controls>
 			AAs:
 			<select @change="handleTemplateSelect" :value="selectedAgent.id">
 				<optgroup v-if="userAgents.length" label="Autonomous Agents:">
 					<option v-for="agent in userAgents" :value="agent.id">{{ agent.label }}</option>
+				</optgroup>
+				<optgroup v-if="sharedAgents.length" label="Shared Agents:">
+					<option v-for="agent in sharedAgents" :value="agent.id">{{ agent.label }}</option>
 				</optgroup>
 				<optgroup label="Templates:">
 					<option v-for="agent in templates" :value="agent.id">{{ agent.label }}</option>

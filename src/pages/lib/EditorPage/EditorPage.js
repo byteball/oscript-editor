@@ -68,12 +68,14 @@ export default {
 			wrapLines: state => state.ui.settings.wrapLines,
 
 			templates: state => state.agents.templates,
-			userAgents: state => state.agents.userAgents
+			userAgents: state => state.agents.userAgents,
+			sharedAgents: state => state.agents.sharedAgents
 		}),
 		...mapGetters({
 			selectedAgent: 'agents/selectedAgent',
 			isSelectedAgentUser: 'agents/isSelectedAgentUser',
-			isSelectedAgentTemplate: 'agents/isSelectedAgentTemplate'
+			isSelectedAgentTemplate: 'agents/isSelectedAgentTemplate',
+			isSelectedAgentShared: 'agents/isSelectedAgentShared'
 		}),
 		badge () {
 			switch (config.mode) {
@@ -92,6 +94,7 @@ export default {
 			validateAa: 'grammars/validateOjson',
 
 			changeSelectedAgent: 'agents/changeSelected',
+			addSharedAgent: 'agents/addSharedAgent',
 			createNewAgent: 'agents/createNewAgent',
 			deleteUserAgent: 'agents/deleteAgent',
 			renameUserAgent: 'agents/renameAgent',
@@ -186,6 +189,15 @@ export default {
 		},
 		async handleAgentActionRename (newLabel) {
 			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel })
+		},
+		async handleAgentActionShare (shortcode) {
+			if (this.isSelectedAgentUser) {
+				const currentAgentId = this.selectedAgent.id
+				const currentText = this.selectedAgent.text
+				const currentLabel = this.selectedAgent.label
+				await this.deleteUserAgent(currentAgentId)
+				await this.addSharedAgent({ text: currentText, label: currentLabel, shortcode })
+			}
 		},
 		openResultPane () {
 			if (!this.resultPaneOpened) {

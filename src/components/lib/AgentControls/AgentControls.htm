@@ -26,22 +26,11 @@
 			</div>
 		</template>
 		<template v-else-if="isSharingSuccess">
-			<div class="agent-controls-input-container">
-				<input
-					@blur="handleActionShareCancel"
-					ref="sharedUrlInputEl"
-					class="agent-controls-input"
-					v-model="sharedUri"
-					type="text"
-				>
+			<div class="agent-controls-text">
+				<div>Link copied to clipboard</div>
+				<div class="agent-controls-text-link">{{ sharedUri }}</div>
 			</div>
-			<div class="agent-controls-action green" title="Copy to clipboard" @mousedown="handleCopySharedUri">
-				<img class="agent-controls-action-img" src="static/images/icons/copy.png">
-			</div>
-		</template>
-		<template v-else-if="isSharingCopyingSuccess">
-			<div class="agent-controls-text">Link copied to clipboard</div>
-			<div class="agent-controls-action green" title="Dismiss" @mousedown="handleDismissSharingCopying">
+			<div class="agent-controls-action green" title="Dismiss" @click="handleDismissSharingSuccess">
 				<img class="agent-controls-action-img" src="static/images/icons/check.png">
 			</div>
 		</template>
@@ -57,13 +46,13 @@
 			</div>
 		</template>
 		<template v-else>
-			<div v-show="isSelectedAgentUser" class="agent-controls-action blue" title="Share Agent" @click="handleActionShare">
+			<div v-show="isSelectedAgentUser || isSelectedAgentShared" class="agent-controls-action blue" title="Share Agent" @click="handleActionShare">
 				<img class="agent-controls-action-img" src="static/images/icons/share.png">
 			</div>
-			<div v-show="isSelectedAgentUser" class="agent-controls-action" title="Rename Agent" @click="handleActionRename">
+			<div v-show="isSelectedAgentUser || isSelectedAgentShared" class="agent-controls-action" title="Rename Agent" @click="handleActionRename">
 				<img class="agent-controls-action-img" src="static/images/icons/edit.png">
 			</div>
-			<div v-show="isSelectedAgentUser" class="agent-controls-action red" title="Delete Agent" @click="handleActionDelete">
+			<div v-show="isSelectedAgentUser || isSelectedAgentShared" class="agent-controls-action red" title="Delete Agent" @click="handleActionDelete">
 				<img class="agent-controls-action-img" src="static/images/icons/delete.png">
 			</div>
 			<div class="agent-controls-action green" title="New Agent" @click="handleActionNew">

@@ -9,14 +9,17 @@ const templatesArray = Object.keys(templates).map((t, index) => ({
 
 export const CHANGE_SELECTED = 'agents/selected/change'
 export const CREATE_USER_AGENT = 'agents/userAgent/create'
-export const SHARE_USER_AGENT = 'agents/userAgent/share'
 export const RENAME_USER_AGENT = 'agents/userAgent/rename'
 export const DELETE_USER_AGENT = 'agents/userAgent/delete'
 export const UPDATE_USER_AGENT_TEXT = 'agents/userAgent/update/text'
+export const ADD_SHARED_AGENT = 'agents/sharedAgent/add'
+export const DELETE_SHARED_AGENT = 'agents/sharedAgent/delete'
+export const RENAME_SHARED_AGENT = 'agents/sharedAgent/rename'
 
 export const AGENT_TYPE = {
 	TEMPLATE: 'template',
-	USER: 'user'
+	USER: 'user',
+	SHARED: 'shared'
 }
 
 export default () => ({
@@ -24,6 +27,7 @@ export default () => ({
 	state: {
 		templates: templatesArray,
 		userAgents: [],
+		sharedAgents: [],
 		selected: 'template_0'
 	},
 	getters: {
@@ -33,6 +37,12 @@ export default () => ({
 				return {
 					...agent,
 					type: AGENT_TYPE.TEMPLATE
+				}
+			} else if (state.selected.startsWith('sharedAgent')) {
+				const agent = state.sharedAgents.find(t => t.id === state.selected)
+				return {
+					...agent,
+					type: AGENT_TYPE.SHARED
 				}
 			} else {
 				const agent = state.userAgents.find(t => t.id === state.selected)
@@ -49,6 +59,10 @@ export default () => ({
 		isSelectedAgentTemplate: (state, getters) => {
 			const selectedAgent = getters.selectedAgent
 			return selectedAgent.type === AGENT_TYPE.TEMPLATE
+		},
+		isSelectedAgentShared: (state, getters) => {
+			const selectedAgent = getters.selectedAgent
+			return selectedAgent.type === AGENT_TYPE.SHARED
 		}
 	},
 	mutations: {
@@ -58,11 +72,19 @@ export default () => ({
 		[UPDATE_USER_AGENT_TEXT] (state, { userAgentId, text }) {
 			state.userAgents.find(a => a.id === userAgentId).text = text
 		},
-		[CREATE_USER_AGENT] (state, { id, text, label, isShared }) {
+		[CREATE_USER_AGENT] (state, { id, text, label }) {
 			state.userAgents.unshift({
 				id,
+				text,
+				label
+			})
+		},
+		[ADD_SHARED_AGENT] (state, { id, text, label, shortcode }) {
+			state.sharedAgents.unshift({
+				id,
+				text,
 				label,
-				text
+				shortcode
 			})
 		},
 		[DELETE_USER_AGENT] (state, id) {
@@ -71,8 +93,20 @@ export default () => ({
 				state.userAgents.splice(index, 1)
 			}
 		},
+		[DELETE_SHARED_AGENT] (state, id) {
+			const index = state.sharedAgents.findIndex(a => a.id === id)
+			if (index !== -1) {
+				state.sharedAgents.splice(index, 1)
+			}
+		},
 		[RENAME_USER_AGENT] (state, { id, newLabel }) {
 			const agent = state.userAgents.find(a => a.id === id)
+			if (agent) {
+				agent.label = newLabel
+			}
+		},
+		[RENAME_SHARED_AGENT] (state, { id, newLabel }) {
+			const agent = state.sharedAgents.find(a => a.id === id)
 			if (agent) {
 				agent.label = newLabel
 			}
@@ -92,15 +126,37 @@ export default () => ({
 			})
 			await commit(CHANGE_SELECTED, id)
 		},
-		async deleteAgent ({ commit, state }, id) {
-			await commit(DELETE_USER_AGENT, id)
+		async addSharedAgent ({ commit, state, dispatch }, { label, text, shortcode }) {
+			const id = uniqid('sharedAgent-')
+
+			await commit(ADD_SHARED_AGENT, {
+				id,
+				shortcode,
+				label: await dispatch('getSharedLabel', label),
+				text: text || state.templates[0].text
+			})
+			await commit(CHANGE_SELECTED, id)
+		},
+		async deleteAgent ({ commit, state, getters }, id) {
+			if (getters.isSelectedAgentUser) {
+				await commit(DELETE_USER_AGENT, id)
+			} else if (getters.isSelectedAgentShared) {
+				await commit(DELETE_SHARED_AGENT, id)
+			}
+
 			const nextId = state.userAgents.length
 				? state.userAgents[0].id
-				: state.templates[0].id
+				: state.sharedAgents.length
+					? state.sharedAgents[0].id
+					: state.templates[0].id
 			await commit(CHANGE_SELECTED, nextId)
 		},
-		async renameAgent ({ commit, state }, { id, newLabel }) {
-			return commit(RENAME_USER_AGENT, { id, newLabel })
+		async renameAgent ({ commit, state, getters }, { id, newLabel }) {
+			if (getters.isSelectedAgentUser) {
+				return commit(RENAME_USER_AGENT, { id, newLabel })
+			} else if (getters.isSelectedAgentShared) {
+				return commit(RENAME_SHARED_AGENT, { id, newLabel })
+			}
 		},
 		async updateText ({ commit, getters, dispatch }, text) {
 			const agent = getters.selectedAgent
@@ -109,22 +165,39 @@ export default () => ({
 					userAgentId: agent.id,
 					text
 				})
-			} else if (getters.isSelectedAgentTemplate) {
+			} else if (getters.isSelectedAgentTemplate || getters.isSelectedAgentShared) {
 				const id = uniqid('userAgent-')
-				const label = await dispatch('getIncrementedLabel', agent.label + ' copy')
+				const label = await dispatch('getUserAgentLabel', agent.label + ' copy')
 
 				await commit(CREATE_USER_AGENT, { id, label, text })
 				await commit(CHANGE_SELECTED, id)
 			}
 		},
-		async getIncrementedLabel ({ state }, prefix) {
-			const max = state.userAgents
-				.filter(a => a.label.startsWith(prefix))
+		async getIncrementedLabel ({ state }, { prefix, agentsArray }) {
+			const max = agentsArray
+				.filter(a => a.label.match(new RegExp(`^${prefix}( \\d+)?$`)))
 				.reduce((max, cur) => {
+					if (cur.label === prefix) {
+						return Math.max(max, 0)
+					}
 					const m = cur.label.match(/\d+$/)
 					return m ? Math.max(m[0], max) : max
-				}, 0)
-			return `${prefix} ${max + 1}`
+				}, -1)
+			const postfix = max === -1
+				? ''
+				: max === 0
+					? ' 2'
+					: ` ${max + 1}`
+			return prefix + postfix
+		},
+		async getUserAgentLabel ({ state, dispatch }, prefix) {
+			return dispatch('getIncrementedLabel', { prefix, agentsArray: state.userAgents })
+		},
+		async getSharedLabel ({ state, dispatch }, prefix) {
+			return dispatch('getIncrementedLabel', { prefix, agentsArray: state.sharedAgents })
+		},
+		async getExistingSharedAgent ({ state }, text) {
+			return state.sharedAgents.find(agent => agent.text === text)
 		}
 	}
 })
