@@ -2,6 +2,7 @@ import MonacoEditor from 'vue-monaco'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import Multiselect from 'vue-multiselect'
 import monacoLanguages from 'src/languages'
 import { AgentControls } from 'src/components'
 import { ValidationError, ParsingError } from 'src/errors'
@@ -13,6 +14,7 @@ const ojson = monacoLanguages['ojson']
 
 export default {
 	components: {
+		Multiselect,
 		MonacoEditor,
 		AgentControls
 	},
@@ -77,6 +79,37 @@ export default {
 			isSelectedAgentTemplate: 'agents/isSelectedAgentTemplate',
 			isSelectedAgentShared: 'agents/isSelectedAgentShared'
 		}),
+		templateOptions () {
+			return [
+				...(
+					this.userAgents.length
+						? [{
+							type: 'My Agents',
+							agents: this.userAgents
+						}]
+						: []
+				),
+				...(
+					this.sharedAgents.length
+						? [{
+							type: 'Shared Agents',
+							agents: this.sharedAgents
+						}]
+						: []
+				),
+				{
+					type: 'Templates',
+					agents: this.templates
+				}
+			]
+		},
+		agentSelectPrefix () {
+			return this.isSelectedAgentShared
+				? 'Shared: '
+				: this.isSelectedAgentTemplate
+					? 'Template: '
+					: ''
+		},
 		badge () {
 			switch (config.mode) {
 			case 'development':
@@ -153,9 +186,8 @@ export default {
 				}
 			}
 		},
-		async handleTemplateSelect (event) {
-			const selected = event.target.value
-			await this.changeSelectedAgent(selected)
+		async handleTemplateSelect (agent) {
+			await this.changeSelectedAgent(agent.id)
 			this.doNotUpdateAgentText = true
 			this.code = this.selectedAgent.text
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
@@ -173,8 +205,7 @@ export default {
 				this.$refs.editor.getMonaco().updateOptions({ wordWrap: 'off' })
 			}
 		},
-		handleThemeSelect (event) {
-			const theme = event.target.value
+		handleThemeSelect (theme) {
 			this.setTheme(theme)
 		},
 		async handleAgentActionNew () {

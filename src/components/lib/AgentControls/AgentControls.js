@@ -10,7 +10,8 @@ export default {
 			isRenamingActive: false,
 			isSharingFailed: false,
 			isSharingSuccess: false,
-			isDeletingActive: false
+			isDeletingActive: false,
+			isSharingCopyingSuccess: false
 		}
 	},
 	computed: {
@@ -64,11 +65,6 @@ export default {
 					: await this.myjsonUpload({ label: this.selectedAgent.label, text: this.selectedAgent.text })
 				this.sharedUri = window.location.href + `s/${shortcode}`
 				this.isSharingSuccess = true
-				this.$clipboard(this.sharedUri)
-
-				this.timeoutID = setTimeout(() => {
-					this.handleDismissSharingSuccess()
-				}, 3000)
 			} catch (error) {
 				this.isSharingFailed = true
 				this.timeoutID = setTimeout(() => {
@@ -82,7 +78,15 @@ export default {
 			}
 			this.resetSharingState()
 		},
-		async handleDismissSharingSuccess () {
+		async handleCopySharedUri () {
+			this.$clipboard(this.sharedUri)
+			this.isSharingSuccess = false
+			this.isSharingCopyingSuccess = true
+			this.timeoutID = setTimeout(() => {
+				this.handleDismissSharingCopying()
+			}, 3000)
+		},
+		async handleDismissSharingCopying () {
 			if (this.timeoutID) {
 				window.clearTimeout(this.timeoutID)
 			}
@@ -94,6 +98,7 @@ export default {
 			this.isSharingActive = false
 			this.isSharingFailed = false
 			this.isSharingSuccess = false
+			this.isSharingCopyingSuccess = false
 		}
 	}
 }

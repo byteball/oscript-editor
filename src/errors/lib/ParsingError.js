@@ -3,6 +3,9 @@ export default class ParsingError extends Error {
 		super(message)
 		this.line = line
 		this.column = column
-		Error.captureStackTrace(this, this.constructor)
+
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, this.constructor)
+		}
 	}
 }

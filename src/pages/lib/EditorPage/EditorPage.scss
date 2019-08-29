@@ -31,14 +31,16 @@ $result_pane_height: 10rem;
 			}
 		}
 		.editor-controls-select {
+			@include flex(row, flex-start, center);
 			position: relative;
 			margin-left: 2rem;
 			color: $color-dark-grey;
-			select {
-				margin-left: .5rem;
-				height: 32px;
-				padding-left: .5rem;
-				background-color: $color-white;
+			.select {
+				margin-left: .8rem;
+				min-width: 10rem;
+				&.select-agent {
+					width: 420px;
+				}
 			}
 			.agent-actions {
 				width: 100%;
@@ -59,13 +61,31 @@ $result_pane_height: 10rem;
 		}
 		.editor-controls-checkbox {
 			@include flex(row, flex-start, center);
-			height: 32px;
+			height: 40px;
 			margin-left: 2rem;
 			color: $color-dark-grey;
-			input {
-				margin: 0 0 0 1rem;
-				width: 1.8rem;
-				height: 1.8rem;
+			input[type=checkbox] {
+				@include flex(row, center, center);
+				position: relative;
+				appearance: none;
+				outline: none;
+				cursor: pointer;
+				border-radius: 3px;
+				border: 1px solid #e8e8e8;
+				margin-left: .8rem;
+				width: 22px;
+				height: 22px;
+				&:checked {
+					&:after {
+						content: '';
+						position: absolute;
+						border-radius: 1px;
+						width: 14px;
+						height: 14px;
+						background-color: #01a982;
+						background-color: $color-primary;
+					}
+				}
 			}
 		}
 	}

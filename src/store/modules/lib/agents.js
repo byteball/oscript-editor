@@ -121,7 +121,7 @@ export default () => ({
 
 			await commit(CREATE_USER_AGENT, {
 				id,
-				label: await dispatch('getIncrementedLabel', label),
+				label: await dispatch('getUserAgentLabel', label),
 				text: text || state.templates[0].text
 			})
 			await commit(CHANGE_SELECTED, id)
@@ -166,11 +166,7 @@ export default () => ({
 					text
 				})
 			} else if (getters.isSelectedAgentTemplate || getters.isSelectedAgentShared) {
-				const id = uniqid('userAgent-')
-				const label = await dispatch('getUserAgentLabel', agent.label + ' copy')
-
-				await commit(CREATE_USER_AGENT, { id, label, text })
-				await commit(CHANGE_SELECTED, id)
+				await dispatch('createNewAgent', { label: agent.label + ' copy', text })
 			}
 		},
 		async getIncrementedLabel ({ state }, { prefix, agentsArray }) {

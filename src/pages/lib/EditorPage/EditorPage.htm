@@ -10,10 +10,14 @@
 		</div>
 		<div class="editor-controls-select">
 			Theme:
-			<select @change="handleThemeSelect" :value="theme">
-				<option>dark</option>
-				<option>white</option>
-			</select>
+			<multiselect
+				class="select"
+				:value="theme"
+				:searchable="false"
+				:show-labels="false"
+				:options="['dark', 'white']"
+				@select="handleThemeSelect"
+			></multiselect>
 		</div>
 		<div class="editor-controls-select">
 			<agent-controls class="agent-actions"
@@ -22,17 +26,23 @@
 				@new="handleAgentActionNew"
 			></agent-controls>
 			AAs:
-			<select @change="handleTemplateSelect" :value="selectedAgent.id">
-				<optgroup v-if="userAgents.length" label="Autonomous Agents:">
-					<option v-for="agent in userAgents" :value="agent.id">{{ agent.label }}</option>
-				</optgroup>
-				<optgroup v-if="sharedAgents.length" label="Shared Agents:">
-					<option v-for="agent in sharedAgents" :value="agent.id">{{ agent.label }}</option>
-				</optgroup>
-				<optgroup label="Templates:">
-					<option v-for="agent in templates" :value="agent.id">{{ agent.label }}</option>
-				</optgroup>
-			</select>
+			<multiselect
+				class="select select-agent"
+				:value="selectedAgent"
+				:options="templateOptions"
+				:show-labels="false"
+				placeholder="Type agent name..."
+				group-values="agents"
+				group-label="type"
+				track-by="id"
+				label="label"
+				@select="handleTemplateSelect"
+			>
+				<template slot="singleLabel" slot-scope="{ option }">
+					<strong>{{ agentSelectPrefix }}</strong>
+					{{ option.label }}
+				</template>
+		</multiselect>
 		</div>
 	</div>
 	<div class="editor-container" :class="`theme-${theme}`">

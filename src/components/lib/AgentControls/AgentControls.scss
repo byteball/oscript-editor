@@ -23,10 +23,6 @@
 		}
 		&-text {
 			margin-right: 1rem;
-			&-link {
-				font-size: 1rem;
-				opacity: .8;
-			}
 		}
 		&-action {
 			@include flex(row, center, center);
