@@ -11,7 +11,7 @@ $result_pane_height: 10rem;
 	.editor-controls {
 		@include flex(row, flex-end, flex-end);
 		width: 100%;
-		padding-bottom: 1rem;
+		padding-bottom: .4rem;
 		margin-top: 4rem;
 		.editor-header {
 			align-self: flex-end;
@@ -34,6 +34,7 @@ $result_pane_height: 10rem;
 			@include flex(row, flex-start, center);
 			position: relative;
 			margin-left: 2rem;
+			height: 40px;
 			color: $color-dark-grey;
 			.select {
 				margin-left: .8rem;
@@ -65,7 +66,6 @@ $result_pane_height: 10rem;
 			margin-left: 2rem;
 			color: $color-dark-grey;
 			input[type=checkbox] {
-				@include flex(row, center, center);
 				position: relative;
 				appearance: none;
 				outline: none;
@@ -73,17 +73,22 @@ $result_pane_height: 10rem;
 				border-radius: 3px;
 				border: 1px solid #e8e8e8;
 				margin-left: .8rem;
-				width: 22px;
-				height: 22px;
+				width: 20px;
+				height: 20px;
+				&:hover {
+					background-color: #e8e8e8;
+				}
 				&:checked {
 					&:after {
 						content: '';
 						position: absolute;
-						border-radius: 1px;
-						width: 14px;
-						height: 14px;
-						background-color: #01a982;
-						background-color: $color-primary;
+						top: 0;
+						left: 5px;
+						width: 6px;
+						height: 11px;
+						border: solid $color-primary;
+						border-width: 0 3px 3px 0;
+						transform: rotate(45deg);
 					}
 				}
 			}

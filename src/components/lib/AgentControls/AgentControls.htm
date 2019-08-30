@@ -28,13 +28,14 @@
 		<template v-else-if="isSharingSuccess">
 			<div class="agent-controls-input-container">
 				<input
-					disabled
+					readOnly
+					ref="shareInputEl"
 					class="agent-controls-input"
 					v-model="sharedUri"
 					type="text"
 				>
 			</div>
-			<div class="agent-controls-action green" title="Copy to clipboard" @mousedown="handleCopySharedUri">
+			<div class="agent-controls-action green" title="Copy to clipboard" v-clipboard="handleCopySharedUri">
 				<img class="agent-controls-action-img" src="static/images/icons/copy.png">
 			</div>
 		</template>

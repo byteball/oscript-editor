@@ -63,6 +63,7 @@ export default {
 	},
 	mounted () {
 		this.switchEditorWrapLines(this.wrapLines)
+		this.$refs.editor.getMonaco().focus()
 	},
 	computed: {
 		...mapState({
@@ -105,9 +106,9 @@ export default {
 		},
 		agentSelectPrefix () {
 			return this.isSelectedAgentShared
-				? 'Shared: '
+				? '[S] '
 				: this.isSelectedAgentTemplate
-					? 'Template: '
+					? '[T] '
 					: ''
 		},
 		badge () {
@@ -191,6 +192,7 @@ export default {
 			this.doNotUpdateAgentText = true
 			this.code = this.selectedAgent.text
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
+			this.$refs.editor.getMonaco().focus()
 			this.resultMessage = ''
 		},
 		handleWrapLinesCheckbox () {

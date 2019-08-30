@@ -16,6 +16,7 @@
 				:searchable="false"
 				:show-labels="false"
 				:options="['dark', 'white']"
+				:optionHeight="24"
 				@select="handleThemeSelect"
 			></multiselect>
 		</div>
@@ -31,16 +32,17 @@
 				:value="selectedAgent"
 				:options="templateOptions"
 				:show-labels="false"
-				placeholder="Type agent name..."
+				:placeholder="agentSelectPrefix + selectedAgent.label"
 				group-values="agents"
 				group-label="type"
 				track-by="id"
 				label="label"
+				:optionHeight="28"
+				:maxHeight="420"
 				@select="handleTemplateSelect"
 			>
 				<template slot="singleLabel" slot-scope="{ option }">
-					<strong>{{ agentSelectPrefix }}</strong>
-					{{ option.label }}
+					{{ agentSelectPrefix }} {{ option.label }}
 				</template>
 		</multiselect>
 		</div>

@@ -65,6 +65,10 @@ export default {
 					: await this.myjsonUpload({ label: this.selectedAgent.label, text: this.selectedAgent.text })
 				this.sharedUri = window.location.href + `s/${shortcode}`
 				this.isSharingSuccess = true
+				setTimeout(() => {
+					this.$refs.shareInputEl.focus()
+					this.$refs.shareInputEl.setSelectionRange(0, this.sharedUri.length)
+				}, 10)
 			} catch (error) {
 				this.isSharingFailed = true
 				this.timeoutID = setTimeout(() => {
@@ -78,13 +82,13 @@ export default {
 			}
 			this.resetSharingState()
 		},
-		async handleCopySharedUri () {
-			this.$clipboard(this.sharedUri)
+		handleCopySharedUri () {
 			this.isSharingSuccess = false
 			this.isSharingCopyingSuccess = true
 			this.timeoutID = setTimeout(() => {
 				this.handleDismissSharingCopying()
 			}, 3000)
+			return this.sharedUri
 		},
 		async handleDismissSharingCopying () {
 			if (this.timeoutID) {
