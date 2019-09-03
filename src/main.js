@@ -19,6 +19,7 @@ Object.keys(monacoLanguages).forEach(l => {
 	}
 	if (language.suggestions) {
 		monaco.languages.registerCompletionItemProvider(language.id, {
+			triggerCharacters: language.triggerCharacters,
 			provideCompletionItems: (model, position) => {
 				return { suggestions: language.suggestions(model, position) }
 			}
