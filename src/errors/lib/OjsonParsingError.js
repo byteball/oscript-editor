@@ -1,4 +1,4 @@
-export default class InternalError extends Error {
+export default class OjsonParsingError extends Error {
 	constructor (message) {
 		super(message)
 

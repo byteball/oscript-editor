@@ -1,5 +1,6 @@
 import * as monaco from 'monaco-editor'
 import cloneDeep from 'lodash/cloneDeep'
+import uniq from 'lodash/uniq'
 import { ojsonKeysList, ojsonValuesList, oscriptWordsList } from './words'
 
 export default {
@@ -73,6 +74,7 @@ export default {
 
 			string_double: [
 				[/[^\\"]+/, { cases: {
+					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
 					'@default': 'autocomplete'
 				} }],
@@ -83,6 +85,7 @@ export default {
 
 			string_single: [
 				[/[^\\']+/, { cases: {
+					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
 					'@default': 'autocomplete'
 				} }],
@@ -92,6 +95,7 @@ export default {
 			],
 			string_backtick: [
 				[/[^\\`]+/, { cases: {
+					'@keyword': 'keyword.ojson',
 					'@words': 'variable.predefined',
 					'@default': 'autocomplete'
 				} }],
@@ -143,6 +147,7 @@ export default {
 			blockComment: ['/*', '*/']
 		}
 	},
+	triggerCharacters: '$',
 	suggestions: (model, position) => {
 		const lineUntilPosition = model.getValueInRange({
 			startLineNumber: position.lineNumber,
@@ -159,7 +164,11 @@ export default {
 		}
 
 		if (isOscript(model, position)) {
-			return cloneDeep(oscriptWordsList).map(makeQuoted)
+			if (lineUntilPosition.search(/\$\s*/)) {
+				return oscriptVariables(model)
+			} else {
+				return cloneDeep(oscriptWordsList).map(makeQuoted)
+			}
 		}
 
 		if (isOjsonValues(model, position)) {
@@ -227,6 +236,15 @@ const isOscript = (model, position) => {
 			return false
 		}
 	}
+}
+
+const oscriptVariables = (model, position) => {
+	const text = model.getValue()
+	return uniq(text.match(/\$[A-Za-z_]+/g)).map(e => ({
+		label: e.slice(1),
+		insertText: e.slice(1),
+		kind: monaco.languages.CompletionItemKind.Variable
+	}))
 }
 
 const quotedAutocomplete = (textUntilPosition, label) => {

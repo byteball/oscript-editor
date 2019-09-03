@@ -8,14 +8,14 @@
 			bottom: .5rem;
 			position: relative;
 		}
-		&-rename {
+		&-input-container {
 			@include flex(row, flex-start, center);
 			flex: 1;
 			&::before {
 				content: '';
 				width: 50px;
 			}
-			&-input {
+			.agent-controls-input {
 				height: 32px;
 				padding-left: .8rem;
 				width: 100%;
@@ -57,7 +57,7 @@
 			opacity: 1;
 		}
 	}
-	&.renaming {
+	&.force-visible {
 		opacity: 1!important;
 	}
 }

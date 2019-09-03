@@ -1,9 +1,12 @@
 import Vue from 'vue'
+import Clipboard from 'v-clipboard'
 import * as monaco from 'monaco-editor'
 import monacoLanguages from 'src/languages'
 import App from './App/App.vue'
 import router from './router'
 import store from './store'
+
+Vue.use(Clipboard)
 
 Object.keys(monacoLanguages).forEach(l => {
 	const language = monacoLanguages[l]
@@ -16,6 +19,7 @@ Object.keys(monacoLanguages).forEach(l => {
 	}
 	if (language.suggestions) {
 		monaco.languages.registerCompletionItemProvider(language.id, {
+			triggerCharacters: language.triggerCharacters,
 			provideCompletionItems: (model, position) => {
 				return { suggestions: language.suggestions(model, position) }
 			}

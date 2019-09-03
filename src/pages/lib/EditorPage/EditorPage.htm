@@ -10,29 +10,46 @@
 		</div>
 		<div class="editor-controls-select">
 			Theme:
-			<select @change="handleThemeSelect" :value="theme">
-				<option>dark</option>
-				<option>white</option>
-			</select>
+			<multiselect
+				class="select"
+				:value="theme"
+				:searchable="false"
+				:show-labels="false"
+				:options="['dark', 'white']"
+				:optionHeight="24"
+				@select="handleThemeSelect"
+			></multiselect>
 		</div>
 		<div class="editor-controls-select">
 			<agent-controls class="agent-actions"
-				:isSelectedAgentUser="isSelectedAgentUser"
-				:selectedLabel="selectedAgent.label"
 				@rename="handleAgentActionRename"
 				@delete="handleAgentActionDelete"
 				@new="handleAgentActionNew"
-				@share="handleAgentActionShare"
 			></agent-controls>
 			AAs:
-			<select @change="handleTemplateSelect" :value="selectedAgent.id">
-				<optgroup v-if="userAgents.length" label="Autonomous Agents:">
-					<option v-for="agent in userAgents" :value="agent.id">{{ agent.label }}</option>
-				</optgroup>
-				<optgroup label="Templates:">
-					<option v-for="agent in templates" :value="agent.id">{{ agent.label }}</option>
-				</optgroup>
-			</select>
+			<multiselect
+				ref="refAgentDropdown"
+				class="select select-agent"
+				:value="selectedAgent"
+				:options="templateOptions"
+				:show-labels="false"
+				:placeholder="agentSelectPrefix + selectedAgent.label"
+				group-values="agents"
+				group-label="type"
+				track-by="id"
+				label="label"
+				:optionHeight="24"
+				:maxHeight="420"
+				@select="handleTemplateSelect"
+				@open="setAgentDropdownPointer"
+			>
+				<template slot="singleLabel" slot-scope="{ option }">
+					{{ agentSelectPrefix }} {{ option.label }}
+				</template>
+				<template slot="noResult" slot-scope="{ option }">
+					<div class="multiselect-no-results">No elements found. Consider changing the search query.</div>
+				</template>
+		</multiselect>
 		</div>
 	</div>
 	<div class="editor-container" :class="`theme-${theme}`">

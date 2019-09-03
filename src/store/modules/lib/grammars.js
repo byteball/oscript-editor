@@ -1,32 +1,18 @@
 import { promisify } from 'util'
-import nearley from 'nearley'
-import { UndefinedGrammarError, ValidationError } from 'src/errors'
+import { ValidationError, OjsonParsingError } from 'src/errors'
 
 const aaValidation = require('ocore/aa_validation')
-const ojsonGrammar = require('src/languages/lib/grammars/ojson.js')
-const oscriptGrammar = require('ocore/formula/grammar.js')
+const ojson = require('ocore/formula/parse_ojson')
 
 export default () => ({
 	namespaced: true,
-	state: {
-		ojson: ojsonGrammar,
-		oscript: oscriptGrammar
-	},
 	actions: {
-		async parse ({ state }, { text, grammar: grammarName }) {
-			const grammar = state[grammarName]
-			if (!grammar) {
-				throw new UndefinedGrammarError(`Grammar '${grammarName}' undefined`)
+		async parseOjson ({ commit }, text) {
+			try {
+				return await promisify(ojson.parse)(text)
+			} catch (err) {
+				throw new OjsonParsingError(err)
 			}
-			const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar))
-			parser.feed(text)
-			return parser.results
-		},
-		async parseOjson ({ dispatch }, text) {
-			return dispatch('parse', { text, grammar: 'ojson' })
-		},
-		async parseOscript ({ dispatch }, text) {
-			return dispatch('parse', { text, grammar: 'oscript' })
 		},
 		async validateOjson ({ commit }, ojson) {
 			try {
