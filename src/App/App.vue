@@ -12,13 +12,17 @@ $multiselect-fontsize: 14px;
 .select-agent {
 	.multiselect__option {
 		padding: 0 20px!important;
+		min-height: $multiselect-height;
 		&.multiselect__option--group {
 			padding-left: 12px!important;
 		}
 	}
 	.multiselect-no-results {
 		position: relative;
+		font-size: $multiselect-fontsize;
 		left: -8px;
+		padding: 0;
+		padding-top: 4px;
 	}
 }
 
