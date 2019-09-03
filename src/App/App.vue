@@ -16,6 +16,10 @@ $multiselect-fontsize: 14px;
 			padding-left: 12px!important;
 		}
 	}
+	.multiselect-no-results {
+		position: relative;
+		left: -8px;
+	}
 }
 
 .multiselect {
@@ -72,7 +76,7 @@ $multiselect-fontsize: 14px;
 				}
 				&.multiselect__option--selected {
 					font-weight: normal;
-					background-color: white;
+					background-color: #e8e8e8;
 				}
 			}
 		}

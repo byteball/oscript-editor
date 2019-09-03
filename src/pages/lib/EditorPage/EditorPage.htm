@@ -28,6 +28,7 @@
 			></agent-controls>
 			AAs:
 			<multiselect
+				ref="refAgentDropdown"
 				class="select select-agent"
 				:value="selectedAgent"
 				:options="templateOptions"
@@ -37,12 +38,16 @@
 				group-label="type"
 				track-by="id"
 				label="label"
-				:optionHeight="28"
+				:optionHeight="24"
 				:maxHeight="420"
 				@select="handleTemplateSelect"
+				@open="setAgentDropdownPointer"
 			>
 				<template slot="singleLabel" slot-scope="{ option }">
 					{{ agentSelectPrefix }} {{ option.label }}
+				</template>
+				<template slot="noResult" slot-scope="{ option }">
+					<div class="multiselect-no-results">No elements found. Consider changing the search query.</div>
 				</template>
 		</multiselect>
 		</div>

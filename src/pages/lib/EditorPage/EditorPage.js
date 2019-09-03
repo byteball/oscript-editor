@@ -106,9 +106,9 @@ export default {
 		},
 		agentSelectPrefix () {
 			return this.isSelectedAgentShared
-				? '[S] '
+				? 'Shared: '
 				: this.isSelectedAgentTemplate
-					? '[T] '
+					? 'Template: '
 					: ''
 		},
 		badge () {
@@ -230,6 +230,14 @@ export default {
 					this.$refs.resultPaneEditor.getMonaco().getModel().updateOptions(this.resultPaneModelOptions)
 				})
 			}
+		},
+		setAgentDropdownPointer () {
+			const currentIndex = this.$refs.refAgentDropdown.filteredOptions.findIndex(option => option.id === this.selectedAgent.id)
+			this.$refs.refAgentDropdown.pointerSet(currentIndex)
+			const scroll = this.$refs.refAgentDropdown.optionHeight * currentIndex
+			this.$nextTick(() => {
+				this.$refs.refAgentDropdown.$refs.list.scrollTop = scroll
+			})
 		}
 	}
 }
