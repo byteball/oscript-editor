@@ -13,7 +13,9 @@ export default {
 			'address', 'amount', 'asset', 'attestors', 'ifseveral', 'ifnone', 'type',
 			'oracles', 'feed_name', 'min_mci', 'feed_value', 'what',
 			'min', 'max', 'pi', 'e', 'sqrt', 'ln', 'ceil', 'floor', 'round', 'abs', 'hypot',
-			'is_valid_signed_package', 'sha256', 'is_valid_sig', 'json_parse', 'json_stringify', 'number_from_seed'
+			'is_valid_signed_package', 'sha256', 'is_valid_sig', 'json_parse', 'json_stringify', 'number_from_seed',
+			'length', 'is_valid_address', 'substring', 'starts_with', 'ends_with', 'contains',
+			'parse_date', 'timestamp_to_string', 'typeof', 'storage_size'
 		],
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
