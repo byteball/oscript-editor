@@ -1211,6 +1211,18 @@ Euler's number rounded to 15 digits precision: 2.71828182845905.
 		}
 	},
 	{
+		label: 'storage_size',
+		insertText: 'storage_size',
+		kind: monaco.languages.CompletionItemKind.Constant,
+		detail: '`storage_size` size in bytes',
+		documentation: {
+			value:
+`
+Size of AA’s storage occupied before the current invocation.
+`
+		}
+	},
+	{
 		label: 'OR',
 		insertText: 'OR',
 		kind: monaco.languages.CompletionItemKind.Keyword,
