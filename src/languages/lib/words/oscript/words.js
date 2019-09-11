@@ -90,7 +90,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'trigger.output',
-		insertText: 'trigger.output[expr].field',
+		insertText: 'trigger.output',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`trigger.output` external reference',
 		documentation: {
@@ -132,7 +132,7 @@ If there is more than one output that satisfies the search criteria (which is po
 	{
 		quoted: false,
 		label: 'trigger.data',
-		insertText: 'trigger.data.field',
+		insertText: 'trigger.data',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`trigger.data` external reference',
 		documentation: {
@@ -305,7 +305,7 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 	{
 		quoted: false,
 		label: 'asset[',
-		insertText: 'asset[expr].field',
+		insertText: 'asset["base"].exists',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`asset` external reference',
 		documentation: {
@@ -313,7 +313,7 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 `
 	\`{
 	asset[expr].field
-	asset[expr].[field_expr]
+	asset[expr][field_expr]
 	}\`
 
 Extracts information about an asset. This adds +1 to complexity. \`expr\` is \`base\` for bytes or an expression that evaluates to an asset ID.
@@ -349,7 +349,7 @@ If the asset ID is valid, but does not exist then \`false\` is returned for any 
 	{
 		quoted: false,
 		label: 'data_feed',
-		insertText: 'data_feed[expr]',
+		insertText: 'data_feed',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`data_feed` external reference',
 		documentation: {
@@ -386,7 +386,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'in_data_feed',
-		insertText: 'in_data_feed[expr]',
+		insertText: 'in_data_feed',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`in_data_feed` external reference',
 		documentation: {
@@ -419,7 +419,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'attestation',
-		insertText: 'attestation[expr].field',
+		insertText: 'attestation[[aaa=bbb, ccc=ddd, ...]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`attestation` external reference',
 		documentation: {
@@ -461,7 +461,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'input',
-		insertText: 'input[expr].field',
+		insertText: 'input',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`input` external reference',
 		documentation: {
@@ -495,7 +495,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'output',
-		insertText: 'output[expr].field',
+		insertText: 'output',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`output` external reference',
 		documentation: {
