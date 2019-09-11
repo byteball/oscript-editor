@@ -1237,8 +1237,6 @@ Non-boolean operands are converted to booleans.
 The result is a boolean.
 
 If the first operand evaluates to \`true\`, second operand of \`OR\` is not evaluated.
-
-If the first operand evaluates to \`false\`, second operand of \`AND\` is not evaluated.
 `
 		}
 	},
@@ -1255,8 +1253,6 @@ Lowercase name \`and\` is also allowed.
 Non-boolean operands are converted to booleans.
 
 The result is a boolean.
-
-If the first operand evaluates to \`true\`, second operand of \`OR\` is not evaluated.
 
 If the first operand evaluates to \`false\`, second operand of \`AND\` is not evaluated.
 `
