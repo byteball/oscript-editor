@@ -145,6 +145,19 @@ export default [
 		}
 	},
 	{
+		quoted: true,
+		label: 'state',
+		insertText: 'state',
+		kind: monaco.languages.CompletionItemKind.Enum,
+		detail: '`state` app type',
+		documentation: {
+			value:
+`
+Special app type, which is not possible in regular units but is used only in AAs to produce state changes. The state message must always be the last message in the \`messages\` array.
+`
+		}
+	},
+	{
 		quoted: false,
 		label: 'base',
 		insertText: 'base',
@@ -178,43 +191,6 @@ export default [
 		documentation: {
 			value:
 `
-`
-		}
-	},
-	{
-		quoted: false,
-		label: 'state',
-		insertText: 'state',
-		kind: monaco.languages.CompletionItemKind.Enum,
-		detail: '`state` app type',
-		documentation: {
-			value:
-`
-A state message is a special message in the \`messages\` array that performs state changes.  It is the only oscript where state variables are assigned.  Unlike regular messages that always have \`payload\`, state message has a field named \`state\` instead that contains a state changing script:
-
-	{
-		messages: [
-			{
-				app: 'payment',
-				payload: {
-					asset: 'base',
-					outputs: [
-						{address: "{trigger.address}", amount: "{trigger.output[[asset=base]] - 1000}"}
-					]
-				}
-			},
-			{
-				app: 'state',
-				state: \`{
-					var['responded'] = 1;
-					var['total_balance_sent_back'] += trigger.output[[asset=base]] - 1000;
-					var[trigger.address || '_response_unit'] = response_unit;
-				}\`
-			}
-		]
-	}
-
-The state message must always be the last message in the \`messages\` array.  It is not included in the final response unit and its script (state script) is evaluated **after** the response unit is already prepared.  It is the only oscript where response_unit variable is available. State script contains only statements, it is not allowed to return any value.
 `
 		}
 	}

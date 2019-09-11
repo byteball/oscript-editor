@@ -106,6 +106,19 @@ The object in \`payload\` is the data this message delivers.
 	},
 	{
 		quoted: false,
+		label: 'asset',
+		insertText: 'asset: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`asset` field',
+		documentation: {
+			value:
+`
+Asset of the response transaction
+`
+		}
+	},
+	{
+		quoted: false,
 		label: 'outputs',
 		insertText: 'outputs: ',
 		kind: monaco.languages.CompletionItemKind.Field,
@@ -190,17 +203,17 @@ Any object can have an additional \`init\` field.  It is evaluated immediately a
 	{
 		messages: [
 			{
-				init: \`{ $addr = trigger.address; }\`,
-				app: 'data',
+				init: "{ $addr = trigger.address; }",
+				app: "data",
 				payload: {
-					timestamp: \`{timestamp}\`,
-					subscriber: \`{$addr}\`
+					timestamp: "{timestamp}",
+					subscriber: "{$addr}"
 				}
 			},
 			{
-				if: \`{trigger.data.withdrawal_amount > 1000}\`,
-				init: \`{ $amount = trigger.data.withdrawal_amount - 1000; }\`,
-				app: 'payment',
+				if: "{trigger.data.withdrawal_amount > 1000}",
+				init: "{ $amount = trigger.data.withdrawal_amount - 1000; }",
+				app: "payment",
 				payload: {
 					asset: "base",
 					outputs: [
@@ -225,21 +238,21 @@ The \`init\` field itself is removed from the object.
 		documentation: {
 			value:
 `
-A state message is a special message in the \`messages\` array that performs state changes.  It is the only oscript where [state variables](#State variables) are assigned.  Unlike regular messages that always have \`payload\`, state message has a field named \`state\` instead that contains a state changing script:
+A state message is a special message in the \`messages\` array that performs state changes.  It is the only oscript where state variables are assigned.  Unlike regular messages that always have \`payload\`, state message has a field named \`state\` instead that contains a state changing script:
 
 	{
 		messages: [
 			{
-				app: 'payment',
+				app: "payment",
 				payload: {
-					asset: 'base',
+					asset: "base",
 					outputs: [
 						{address: "{trigger.address}", amount: "{trigger.output[[asset=base]] - 1000}"}
 					]
 				}
 			},
 			{
-				app: 'state',
+				app: "state",
 				state: \`{
 					var['responded'] = 1;
 					var['total_balance_sent_back'] += trigger.output[[asset=base]] - 1000;
@@ -249,7 +262,7 @@ A state message is a special message in the \`messages\` array that performs sta
 		]
 	}
 
-The state message must always be the last message in the \`messages\` array.  It is not included in the final response unit and its script (state script) is evaluated **after** the response unit is already prepared.  It is the only oscript where [response_unit](#response_unit) variable is available. State script contains only statements, it is not allowed to return any value.
+The state message must always be the last message in the \`messages\` array.  It is not included in the final response unit and its script (state script) is evaluated **after** the response unit is already prepared.  It is the only oscript where \`response_unit\` variable is available. State script contains only statements, it is not allowed to return any value.
 `
 		}
 	},
@@ -262,19 +275,7 @@ The state message must always be the last message in the \`messages\` array.  It
 		documentation: {
 			value:
 `
-`
-		}
-	},
-	{
-		quoted: false,
-		label: 'is_transferrable',
-		insertText: 'is_transferrable: ',
-		kind: monaco.languages.CompletionItemKind.Field,
-		detail: '`is_transferrable` field',
-		documentation: {
-			value:
-`
-\`is_transferrable\`: boolean, is the asset transferrable?
+\`asset\` can be \`base\` for bytes, asset id for any other asset, or any expression that evaluates to an asset id or \`base\` string.
 `
 		}
 	},
@@ -306,6 +307,19 @@ The state message must always be the last message in the \`messages\` array.  It
 	},
 	{
 		quoted: false,
+		label: 'is_transferrable',
+		insertText: 'is_transferrable: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`is_transferrable` field',
+		documentation: {
+			value:
+`
+\`is_transferrable\`: boolean, is the asset transferrable?
+`
+		}
+	},
+	{
+		quoted: false,
 		label: 'auto_destroy',
 		insertText: 'auto_destroy: ',
 		kind: monaco.languages.CompletionItemKind.Field,
@@ -326,7 +340,22 @@ The state message must always be the last message in the \`messages\` array.  It
 		documentation: {
 			value:
 `
-\`fixed_denominations\`: boolean,is the asset issued in fixed denominations?
+\`fixed_denominations\`: boolean, is the asset issued in fixed denominations? Currently only \`false\` is supported.
+`
+		}
+	},
+	{
+		quoted: false,
+		label: 'denominations',
+		insertText: 'denominations: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`denominations` field',
+		documentation: {
+			value:
+`
+Currently not supported.
+
+\`denominations\`: array of objects like this \`{denomination: 5, count_coins: 1e10}\` if \`fixed_denominations\` is \`true\`.
 `
 		}
 	},
@@ -365,20 +394,46 @@ The state message must always be the last message in the \`messages\` array.  It
 		documentation: {
 			value:
 `
-\`spender_attested\`: boolean, should each holder be attested?
+\`spender_attested\`: boolean, should each holder be attested? 
 `
 		}
 	},
 	{
 		quoted: false,
-		label: 'is_issued',
-		insertText: 'is_issued: ',
+		label: 'attestors',
+		insertText: 'attestors: ',
 		kind: monaco.languages.CompletionItemKind.Field,
-		detail: '`is_issued` field',
+		detail: '`attestors` field',
 		documentation: {
 			value:
 `
-\`is_issued\`: boolean, is any amount of the asset already issued?
+\`attestors\`: array of strings, if \`spender_attested\` \`true\`, the definition must also include the array of approved attestor addresses.
+`
+		}
+	},
+	{
+		quoted: false,
+		label: 'issue_condition',
+		insertText: 'issue_condition: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`issue_condition` field',
+		documentation: {
+			value:
+`
+\`issue_condition\`: array of two-element arrays, optional and can specify the restrictions when the asset can be issued.
+`
+		}
+	},
+	{
+		quoted: false,
+		label: 'transfer_condition',
+		insertText: 'transfer_condition: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`transfer_condition` field',
+		documentation: {
+			value:
+`
+\`transfer_condition\`: array of two-element arrays, optional and can specify the restrictions when the asset can be transferred.
 `
 		}
 	}

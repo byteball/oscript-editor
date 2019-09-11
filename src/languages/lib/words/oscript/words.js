@@ -90,7 +90,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'trigger.output',
-		insertText: 'trigger.output',
+		insertText: 'trigger.output[expr].field',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`trigger.output` external reference',
 		documentation: {
@@ -132,7 +132,7 @@ If there is more than one output that satisfies the search criteria (which is po
 	{
 		quoted: false,
 		label: 'trigger.data',
-		insertText: 'trigger.data',
+		insertText: 'trigger.data.field',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`trigger.data` external reference',
 		documentation: {
@@ -305,7 +305,7 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 	{
 		quoted: false,
 		label: 'asset[',
-		insertText: 'asset',
+		insertText: 'asset[expr].field',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`asset` external reference',
 		documentation: {
@@ -319,6 +319,7 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 Extracts information about an asset. This adds +1 to complexity. \`expr\` is \`base\` for bytes or an expression that evaluates to an asset ID.
 
 \`field\` is on of the following, \`field_expr\` should evaluate to one of the following:
+* \`exists\`: boolean, returns \`false\` if asset ID is invalid;
 * \`cap\`: number, total supply of the asset.  For uncapped assets, 0 is returned;
 * \`is_private\`: boolean, is the asset private?
 * \`is_transferrable\`: boolean, is the asset transferrable?
@@ -328,24 +329,27 @@ Extracts information about an asset. This adds +1 to complexity. \`expr\` is \`b
 * \`cosigned_by_definer\`: boolean, should each transfer be cosigned by definer?
 * \`spender_attested\`: boolean, should each holder be attested?
 * \`is_issued\`: boolean, is any amount of the asset already issued?
+* \`definer_address\`: string, returns wallet address of the definer.
 
 Examples:
 
 	\`{
 	asset[base].cap
-	asset["base"].cap
-	asset["n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY="].is_issued
-	asset["n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY="]['is_' || 'issued']
+	asset['base"].cap
+	asset['abc"].exists
+	asset['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY='].is_issued
+	asset['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY=']['is_' || 'issued']
+	asset['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY=']['is_' || 'private']
 	}\`
 
-If the asset does not exist, \`false\` is returned for any field.
+If the asset ID is valid, but does not exist then \`false\` is returned for any field.
 `
 		}
 	},
 	{
 		quoted: false,
 		label: 'data_feed',
-		insertText: 'data_feed',
+		insertText: 'data_feed[expr]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`data_feed` external reference',
 		documentation: {
@@ -382,7 +386,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'in_data_feed',
-		insertText: 'in_data_feed',
+		insertText: 'in_data_feed[expr]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`in_data_feed` external reference',
 		documentation: {
@@ -415,7 +419,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'attestation',
-		insertText: 'attestation',
+		insertText: 'attestation[expr].field',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`attestation` external reference',
 		documentation: {
@@ -457,7 +461,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'input',
-		insertText: 'input',
+		insertText: 'input[expr].field',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`input` external reference',
 		documentation: {
@@ -491,7 +495,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'output',
-		insertText: 'output',
+		insertText: 'output[expr].field',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`output` external reference',
 		documentation: {
@@ -525,6 +529,22 @@ Examples:
 		}
 	},
 	{
+		label: 'typeof',
+		insertText: 'typeof',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`typeof` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	typeof(anything)
+	}\`
+
+Returns \`"string"\`, \`"number"\`, \`"boolean"\` or \`"object"\`.
+`
+		}
+	},
+	{
 		label: 'sqrt',
 		insertText: 'sqrt',
 		kind: monaco.languages.CompletionItemKind.Function,
@@ -532,7 +552,10 @@ Examples:
 		documentation: {
 			value:
 `
-\`sqrt(number)\`
+	\`{
+	sqrt(number)
+	}\`
+
 This function adds +1 to complexity count.
 
 Negative numbers cause an error.  Non-number inputs are converted to numbers or result in error.
@@ -547,7 +570,10 @@ Negative numbers cause an error.  Non-number inputs are converted to numbers or 
 		documentation: {
 			value:
 `
-\`ln(number)\`
+	\`{
+	ls(number)
+	}\`
+
 This function adds +1 to complexity count.
 
 Negative numbers cause an error. Non-number inputs are converted to numbers or result in error.
@@ -562,7 +588,10 @@ Negative numbers cause an error. Non-number inputs are converted to numbers or r
 		documentation: {
 			value:
 `
-\`abs(number)\`
+	\`{
+	abs(number)
+	}\`
+
 Returns absolute value of a number. Non-number inputs are converted to numbers or result in error.
 `
 		}
@@ -575,7 +604,9 @@ Returns absolute value of a number. Non-number inputs are converted to numbers o
 		documentation: {
 			value:
 `
-\`round(number [, decimal_places])\`
+	\`{
+	round(number [, decimal_places])
+	}\`
 
 Rounds the input number to the specified number of decimal places (0 if omitted). \`round\` uses \`ROUND_HALF_EVEN\` rules.  Non-number inputs are converted to numbers or result in error. Negative or non-integer \`decimal_places\` results in error. \`decimal_places\` greater than 15 results in error.
 `
@@ -589,7 +620,9 @@ Rounds the input number to the specified number of decimal places (0 if omitted)
 		documentation: {
 			value:
 `
-\`ceil(number [, decimal_places])\`
+	\`{
+	ceil(number [, decimal_places])
+	}\`
 
 Rounds the input number to the specified number of decimal places (0 if omitted). \`round\` uses \`ROUND_HALF_EVEN\` rules.  Non-number inputs are converted to numbers or result in error. Negative or non-integer \`decimal_places\` results in error. \`decimal_places\` greater than 15 results in error.
 `
@@ -603,7 +636,9 @@ Rounds the input number to the specified number of decimal places (0 if omitted)
 		documentation: {
 			value:
 `
-\`floor(number [, decimal_places])\`
+	\`{
+	floor(number [, decimal_places])
+	}\`
 
 Rounds the input number to the specified number of decimal places (0 if omitted). \`round\` uses \`ROUND_HALF_EVEN\` rules.  Non-number inputs are converted to numbers or result in error. Negative or non-integer \`decimal_places\` results in error. \`decimal_places\` greater than 15 results in error.
 `
@@ -617,7 +652,9 @@ Rounds the input number to the specified number of decimal places (0 if omitted)
 		documentation: {
 			value:
 `
-\`min(number1, [number2[, number3[, ...]]])\`
+	\`{
+	min(number1, [number2[, number3[, ...]]])
+	}\`
 
 Returns minimum among the set of numbers.  Non-number inputs are converted to numbers or result in error.
 `
@@ -631,7 +668,9 @@ Returns minimum among the set of numbers.  Non-number inputs are converted to nu
 		documentation: {
 			value:
 `
-\`max(number1, [number2[, number3[, ...]]])\`
+	\`{
+	max(number1, [number2[, number3[, ...]]])
+	}\`
 
 Returns maximum among the set of numbers.  Non-number inputs are converted to numbers or result in error.
 `
@@ -645,11 +684,126 @@ Returns maximum among the set of numbers.  Non-number inputs are converted to nu
 		documentation: {
 			value:
 `
-\`hypot(number1, [number2[, number3[, ...]]])\`
+	\`{
+	hypot(number1, [number2[, number3[, ...]]])
+	}\`
 
 Returns the square root of the sum of squares of all arguments.  Boolean parameters are converted to 1 and 0, objects are taken as 1, all other types result in error.  The function returns a non-infinity result even if some intermediary results (squares) would overflow.
 
 This function adds +1 to complexity count.
+`
+		}
+	},
+	{
+		label: 'substring',
+		insertText: 'substring',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`substring` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	substring(string, start_index[, length])
+	}\`
+
+Returns part of the string. If length is not set then returns rest of the string from start index.
+`
+		}
+	},
+	{
+		label: 'starts_with',
+		insertText: 'starts_with',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`starts_with` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	starts_with(string, prefix)
+	}\`
+
+Returns boolean when the string starts with specified string.
+`
+		}
+	},
+	{
+		label: 'ends_with',
+		insertText: 'ends_with',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`ends_with` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	ends_with(string, suffix)
+	}\`
+
+Returns boolean when the string ends with specified string.
+`
+		}
+	},
+	{
+		label: 'contains',
+		insertText: 'contains',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`contains` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	contains(string, search_string)
+	}\`
+
+Returns boolean whether the string contains searched string or not.
+`
+		}
+	},
+	{
+		label: 'length',
+		insertText: 'length',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`length` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	length(string)
+	}\`
+
+Returns the number of characters in string.
+`
+		}
+	},
+	{
+		label: 'parse_date',
+		insertText: 'parse_date',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`parse_date` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	parse_date(ISO8601_date)
+	parse_date(ISO8601_datetime)
+	}\`
+
+Attempts to parse string of date or date + time and returns timestamp. If you need to get seconds from UNIX Epoch of a current unit then use \`timestamp\`.
+`
+		}
+	},
+	{
+		label: 'timestamp_to_string',
+		insertText: 'timestamp_to_string',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`timestamp_to_string` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	timestamp_to_string(timestamp[, 'date'|'datetime'])
+	}\`
+
+Returns string format of date or date + time from \`timestamp\`.
 `
 		}
 	},
@@ -661,7 +815,9 @@ This function adds +1 to complexity count.
 		documentation: {
 			value:
 `
-\`json_parse(string)\`
+	\`{
+	json_parse(string)
+	}\`
 
 Attempts to parse the input JSON string. If the result of parsing is an object, the object is returned.  If the result is a scalar (boolean, string, number), the scalar is returned.
 
@@ -681,7 +837,9 @@ Non-string input is converted to string.
 		documentation: {
 			value:
 `
-\`json_stringify(string)\`
+	\`{
+	json_stringify(string)
+	}\`
 
 Stringifies the input parameter into JSON.  The parameter can also be a number, boolean, or string.  If it is a number outside the IEEE754 range, the formula fails.  Objects in the returned JSON are sorted by keys.
 `
@@ -726,6 +884,22 @@ This function is useful for generating pseudorandom numbers from a seed string. 
 	}\`
 
 Returns sha256 of input string in base64 encoding.  Non-string inputs are converted to strings. This function adds +1 to complexity count.
+`
+		}
+	},
+	{
+		label: 'is_valid_address',
+		insertText: 'is_valid_address',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_valid_address` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_valid_address(string)
+	}\`
+
+Returns boolean whether the wallet address is valid or not.
 `
 		}
 	},
@@ -934,8 +1108,8 @@ Examples:
 
 	\`{
 	balance[base]
-	balance["n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY="]
-	balance["JVUJQ7OPBJ7ZLZ57TTNFJIC3EW7AE2RY"][base]
+	balance['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY=']
+	balance['JVUJQ7OPBJ7ZLZ57TTNFJIC3EW7AE2RY'][base]
 	}\`
 `
 		}
@@ -977,19 +1151,40 @@ will result in the following response object:
 		}
 	},
 	{
-		label: 'base',
-		insertText: 'base',
-		kind: monaco.languages.CompletionItemKind.Text
-	},
-	{
 		label: 'asset',
 		insertText: 'asset',
-		kind: monaco.languages.CompletionItemKind.Text
+		kind: monaco.languages.CompletionItemKind.Text,
+		detail: '`asset` search criteria',
+		documentation: {
+			value:
+`
+\`asset\`: string, asset of input or output, can be \`base\` for bytes.
+`
+		}
+	},
+	{
+		label: 'base',
+		insertText: 'base',
+		kind: monaco.languages.CompletionItemKind.Text,
+		detail: '`base` search value',
+		documentation: {
+			value:
+`
+\`asset\` can be \`base\` for bytes, asset id for any other asset, or any expression that evaluates to an asset id or \`base\` string.
+`
+		}
 	},
 	{
 		label: 'amount',
 		insertText: 'amount',
-		kind: monaco.languages.CompletionItemKind.Text
+		kind: monaco.languages.CompletionItemKind.Text,
+		detail: '`amount` search criteria',
+		documentation: {
+			value:
+`
+\`amount\`: number, the condition for the amount of an input or output.
+`
+		}
 	},
 	{
 		label: 'pi',
@@ -1016,23 +1211,75 @@ Euler's number rounded to 15 digits precision: 2.71828182845905.
 		}
 	},
 	{
-		label: 'or',
-		insertText: 'or',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'OR',
+		insertText: 'OR',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`OR` binary logical operator',
+		documentation: {
+			value:
+`
+Lowercase name \`or\` is also allowed.
+
+Non-boolean operands are converted to booleans.
+
+The result is a boolean.
+
+If the first operand evaluates to \`true\`, second operand of \`OR\` is not evaluated.
+
+If the first operand evaluates to \`false\`, second operand of \`AND\` is not evaluated.
+`
+		}
 	},
 	{
-		label: 'and',
-		insertText: 'and',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'AND',
+		insertText: 'AND',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`AND` binary logical operator',
+		documentation: {
+			value:
+`
+Lowercase name \`and\` is also allowed.
+
+Non-boolean operands are converted to booleans.
+
+The result is a boolean.
+
+If the first operand evaluates to \`true\`, second operand of \`OR\` is not evaluated.
+
+If the first operand evaluates to \`false\`, second operand of \`AND\` is not evaluated.
+`
+		}
 	},
 	{
-		label: 'not',
-		insertText: 'not',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'NOT',
+		insertText: 'NOT',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`NOT` unary logical operator',
+		documentation: {
+			value:
+`
+Lowercase name \`not\` is also allowed. The operator can be also written as \`!\`.
+
+Non-boolean operand is converted to boolean.
+
+The result is a boolean.
+`
+		}
 	},
 	{
-		label: 'otherwise',
-		insertText: 'otherwise',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'OTHERWISE',
+		insertText: 'OTHERWISE',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`OTHERWISE` operator',
+		documentation: {
+			value:
+`
+Lowercase name \`otherwise\` is also allowed.
+
+\`expr1 OTHERWISE expr2\`
+
+If \`expr1\` is truthy, its result is returned and \`expr2\` is not evaluated. Otherwise, \`expr2\` is evaluated and its result returned.
+`
+		}
 	}
 ]
