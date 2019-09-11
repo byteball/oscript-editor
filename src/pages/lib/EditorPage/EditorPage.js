@@ -214,14 +214,17 @@ export default {
 			await this.createNewAgent({ label: 'New Agent' })
 			this.doNotUpdateAgentText = true
 			this.code = this.templates[0].text
+			this.$refs.editor.getMonaco().focus()
 		},
 		async handleAgentActionDelete () {
 			await this.deleteUserAgent(this.selectedAgent.id)
 			this.doNotUpdateAgentText = true
 			this.code = this.selectedAgent.text
+			this.$refs.editor.getMonaco().focus()
 		},
 		async handleAgentActionRename (newLabel) {
 			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel })
+			this.$refs.editor.getMonaco().focus()
 		},
 		openResultPane () {
 			if (!this.resultPaneOpened) {
