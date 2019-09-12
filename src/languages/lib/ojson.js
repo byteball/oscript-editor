@@ -184,11 +184,9 @@ export default {
 		let hints
 		if (isOscript(model, position)) {
 			let label = hover.word
-			if (label === 'asset') {
-				const nextChar = getNextChar(model, position.lineNumber, hover.endColumn)
-				if (nextChar === '[') {
-					label = 'asset['
-				}
+			const nextChar = getNextChar(model, position.lineNumber, hover.endColumn)
+			if (nextChar === '[' || nextChar === '=' || nextChar === '!') {
+				label += nextChar
 			} else {
 				label = getDotMergedWord(model, position.lineNumber, hover)
 			}

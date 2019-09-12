@@ -978,8 +978,35 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'oracles',
-		insertText: 'oracles',
+		label: 'asset=',
+		labelAlt: 'asset!',
+		insertText: 'asset=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`asset` search criteria',
+		documentation: {
+			value:
+`
+\`asset\`: string, asset of input or output, can be \`base\` for bytes. Comparison operators can be only \`=\` or \`!=\`;
+`
+		}
+	},
+	{
+		label: 'amount=',
+		labelAlt: 'amount!=',
+		insertText: 'amount=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`amount` search criteria',
+		documentation: {
+			value:
+`
+\`amount\`: number, the condition for the amount of an input or output.
+`
+		}
+	},
+	{
+		label: 'oracles=',
+		labelAlt: 'oracles!',
+		insertText: 'oracles=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`oracles` search criteria',
 		documentation: {
@@ -990,8 +1017,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'feed_name',
-		insertText: 'feed_name',
+		label: 'feed_name=',
+		labelAlt: 'feed_name!',
+		insertText: 'feed_name=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`feed_name` search criteria',
 		documentation: {
@@ -1002,8 +1030,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'feed_value',
-		insertText: 'feed_value',
+		label: 'feed_value=',
+		labelAlt: 'feed_value!',
+		insertText: 'feed_value=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`feed_value` search criteria',
 		documentation: {
@@ -1014,8 +1043,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'ifseveral',
-		insertText: 'ifseveral',
+		label: 'ifseveral=',
+		labelAlt: 'ifseveral!',
+		insertText: 'ifseveral=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`ifseveral` search criteria',
 		documentation: {
@@ -1026,8 +1056,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'ifnone',
-		insertText: 'ifnone',
+		label: 'ifnone=',
+		labelAlt: 'ifnone=',
+		insertText: 'ifnone=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`ifnone` search criteria',
 		documentation: {
@@ -1038,8 +1069,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'what',
-		insertText: 'what',
+		label: 'what=',
+		labelAlt: 'what!',
+		insertText: 'what=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`what` search criteria',
 		documentation: {
@@ -1050,8 +1082,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'type',
-		insertText: 'type',
+		label: 'type=',
+		labelAlt: 'type!',
+		insertText: 'type=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`type` search criteria',
 		documentation: {
@@ -1062,8 +1095,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'attestors',
-		insertText: 'attestors',
+		label: 'attestors=',
+		labelAlt: 'attestors!',
+		insertText: 'attestors=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`attestors` search criteria',
 		documentation: {
@@ -1074,8 +1108,9 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'address',
-		insertText: 'address',
+		label: 'address=',
+		labelAlt: 'address!',
+		insertText: 'address=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`address` search criteria',
 		documentation: {
@@ -1151,18 +1186,6 @@ will result in the following response object:
 		}
 	},
 	{
-		label: 'asset',
-		insertText: 'asset',
-		kind: monaco.languages.CompletionItemKind.Text,
-		detail: '`asset` search criteria',
-		documentation: {
-			value:
-`
-\`asset\`: string, asset of input or output, can be \`base\` for bytes.
-`
-		}
-	},
-	{
 		label: 'base',
 		insertText: 'base',
 		kind: monaco.languages.CompletionItemKind.Text,
@@ -1171,18 +1194,6 @@ will result in the following response object:
 			value:
 `
 \`asset\` can be \`base\` for bytes, asset id for any other asset, or any expression that evaluates to an asset id or \`base\` string.
-`
-		}
-	},
-	{
-		label: 'amount',
-		insertText: 'amount',
-		kind: monaco.languages.CompletionItemKind.Text,
-		detail: '`amount` search criteria',
-		documentation: {
-			value:
-`
-\`amount\`: number, the condition for the amount of an input or output.
 `
 		}
 	},

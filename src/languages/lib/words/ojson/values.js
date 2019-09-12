@@ -3,6 +3,19 @@ import * as monaco from 'monaco-editor'
 export default [
 	{
 		quoted: true,
+		label: 'asset',
+		insertText: 'asset',
+		kind: monaco.languages.CompletionItemKind.Enum,
+		detail: '`asset` app type',
+		documentation: {
+			value:
+`
+\`asset\`: used to define a new asset;
+`
+		}
+	},
+	{
+		quoted: true,
 		label: 'data',
 		insertText: 'data',
 		kind: monaco.languages.CompletionItemKind.Enum,
