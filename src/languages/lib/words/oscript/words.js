@@ -304,8 +304,8 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 	},
 	{
 		quoted: false,
-		label: 'asset[',
-		insertText: 'asset["base"].exists',
+		label: 'asset',
+		insertText: 'asset',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`asset` external reference',
 		documentation: {

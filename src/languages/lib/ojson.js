@@ -185,7 +185,7 @@ export default {
 		if (isOscript(model, position)) {
 			let label = hover.word
 			const nextChar = getNextChar(model, position.lineNumber, hover.endColumn)
-			if (nextChar === '[' || nextChar === '=' || nextChar === '!') {
+			if (nextChar === '=' || nextChar === '!') {
 				label += nextChar
 			} else {
 				label = getDotMergedWord(model, position.lineNumber, hover)
