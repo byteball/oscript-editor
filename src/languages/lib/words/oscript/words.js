@@ -49,7 +49,7 @@ Assigning state variables:
 
 \`var['var_name']\` reads the value of state variable \`var_name\` stored under current AA.
 
-\`var['AA_ADDRESS']['var_name']\` reads the value of state variable \`var_name\` stored under AA \`AA_ADDRESS\`.  \`AA_ADDRESS\` is a valid address or \`this address\` to refer to the current AA.
+\`var['AA_ADDRESS']['var_name']\` reads the value of state variable \`var_name\` stored under AA \`AA_ADDRESS\`.  \`AA_ADDRESS\` is a valid address or \`this_address\` to refer to the current AA.
 
 If there is no such variable, \`false\` is returned.
 
@@ -362,7 +362,7 @@ If the asset ID is valid, but does not exist then \`false\` is returned for any 
 Finds data feed value by search criteria.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this address\` is also a valid oracle address and it refers to the current AA;
+* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` is also a valid oracle address and it refers to the current AA;
 * \`feed_name\`: string, the name of the data feed;
 * \`feed_value\`: string or number, optional, search only for this specific value of the data feed;
 * \`min_mci\`: number, optional, search only since the specified MCI;
@@ -377,7 +377,7 @@ Examples:
 
 	\`{
 	data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD']]
-	data_feed[[oracles=this address, feed_name='score']]
+	data_feed[[oracles=this_address, feed_name='score']]
 	data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC:I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', feed_name='timestamp']]
 	}\`
 `
@@ -399,7 +399,7 @@ Examples:
 Determines if a data feed can be found by search criteria.  Returns \`true\` or \`false\`.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this address\` is also a valid oracle address and it refers to the current AA;
+* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` is also a valid oracle address and it refers to the current AA;
 * \`feed_name\`: string, the name of the data feed;
 * \`feed_value\`: string or number, search only for values of the data feed that are \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, or \`<=\` than the specified value;
 * \`min_mci\`: number, optional, search only since the specified MCI.
@@ -410,7 +410,7 @@ Examples:
 
 	\`{
 	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD', feed_value > 12345.67]]
-	in_data_feed[[oracles=this address, feed_name='score', feed_value=$score]]
+	in_data_feed[[oracles=this_address, feed_name='score', feed_value=$score]]
 	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC:I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', feed_name='timestamp', feed_value>=1.5e9]]
 	}\`
 `
@@ -433,7 +433,7 @@ Examples:
 Finds an attestation by search criteria.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this address\` is also a valid attestor address and it refers to the current AA;
+* \`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` is also a valid attestor address and it refers to the current AA;
 * \`address\`: string, the address that was attested;
 * \`ifseveral\`: string, optional, \`last\` or \`abort\`, what to do if several matching attestations are found, return the last one or abort the script with error, default is \`last\`
 * \`ifnone\`: string or number or boolean, optional, the value to return if nothing is found.  By default, this results in an error and aborts the script;
@@ -451,7 +451,7 @@ Examples:
 
 	\`{
 	attestation[[attestors='UOYYSPEE7UUW3KJAB5F4Y4AWMYMDDB4Y', address='BI2MNEVU4EFWL4WSBILFK7GGMVNS2Q3Q']].email
-	attestation[[attestors=this address, address=trigger.address]]
+	attestation[[attestors=this_address, address=trigger.address]]
 	attestation[[attestors='JEDZYC2HMGDBIDQKG3XSTXUSHMCBK725', address='TSXOWBIK2HEBVWYTFE6AH3UEAVUR2FIF', ifnone='anonymous']].steem_username
 	attestation[[attestors='JEDZYC2HMGDBIDQKG3XSTXUSHMCBK725', address='TSXOWBIK2HEBVWYTFE6AH3UEAVUR2FIF']].reputation
 	}\`
@@ -477,7 +477,7 @@ These language constructs are available only in non-AA formulas in smart contrac
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
 * \`asset\`: string, asset of input, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
-* \`address\`: string, the address receives spends an input, can be \`this address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
+* \`address\`: string, the address receives spends an input, can be \`this_address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
 * \`amount\`: number, the condition for the amount of an input.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
 \`field\` is one of \`amount\`, \`address\`, and \`asset\`.  It indicates which information about the input we are interested in.
@@ -511,7 +511,7 @@ These language constructs are available only in non-AA formulas in smart contrac
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
 * \`asset\`: string, asset of or output, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
-* \`address\`: string, the address receives an output, can be \`this address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
+* \`address\`: string, the address receives an output, can be \`this_address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
 * \`amount\`: number, the condition for the amount of an output.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
 \`field\` is one of \`amount\`, \`address\`, and \`asset\`.  It indicates which information about the output we are interested in.
@@ -985,7 +985,7 @@ Aborts the script's execution with error message passed as the function's argume
 		documentation: {
 			value:
 `
-\`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this address\` is also a valid oracle address and it refers to the current AA;
+\`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` is also a valid oracle address and it refers to the current AA;
 `
 		}
 	},
@@ -1069,7 +1069,7 @@ Aborts the script's execution with error message passed as the function's argume
 		documentation: {
 			value:
 `
-\`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this address\` is also a valid attestor address and it
+\`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` is also a valid attestor address and it
 `
 		}
 	},
