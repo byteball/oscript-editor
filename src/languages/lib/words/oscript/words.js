@@ -991,6 +991,19 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
+		label: 'address=',
+		labelAlts: ['address!'],
+		insertText: 'address=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`address` search criteria',
+		documentation: {
+			value:
+`
+\`address\`: string, the address that was attested;
+`
+		}
+	},
+	{
 		label: 'amount=',
 		labelAlts: ['amount!', 'amount>', 'amount<'],
 		insertText: 'amount=',
@@ -1005,7 +1018,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'oracles=',
-		labelAlts: ['oracles!'],
 		insertText: 'oracles=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`oracles` search criteria',
@@ -1018,7 +1030,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'feed_name=',
-		labelAlts: ['feed_name!'],
 		insertText: 'feed_name=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`feed_name` search criteria',
@@ -1031,7 +1042,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'feed_value=',
-		labelAlts: ['feed_value!'],
 		insertText: 'feed_value=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`feed_value` search criteria',
@@ -1043,8 +1053,19 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
+		label: 'min_mci=',
+		insertText: 'min_mci=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`min_mci` search criteria',
+		documentation: {
+			value:
+`
+\`min_mci\`: number, optional, search only since the specified MCI;
+`
+		}
+	},
+	{
 		label: 'ifseveral=',
-		labelAlts: ['ifseveral!'],
 		insertText: 'ifseveral=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`ifseveral` search criteria',
@@ -1057,7 +1078,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'ifnone=',
-		labelAlts: ['ifnone='],
 		insertText: 'ifnone=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`ifnone` search criteria',
@@ -1070,7 +1090,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'what=',
-		labelAlts: ['what!'],
 		insertText: 'what=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`what` search criteria',
@@ -1083,7 +1102,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'type=',
-		labelAlts: ['type!'],
 		insertText: 'type=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`type` search criteria',
@@ -1096,7 +1114,6 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'attestors=',
-		labelAlts: ['attestors!'],
 		insertText: 'attestors=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`attestors` search criteria',
@@ -1104,19 +1121,6 @@ Aborts the script's execution with error message passed as the function's argume
 			value:
 `
 \`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` is also a valid attestor address and it
-`
-		}
-	},
-	{
-		label: 'address=',
-		labelAlts: ['address!'],
-		insertText: 'address=',
-		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`address` search criteria',
-		documentation: {
-			value:
-`
-\`address\`: string, the address that was attested;
 `
 		}
 	},
