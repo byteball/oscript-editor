@@ -979,7 +979,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'asset=',
-		labelAlt: 'asset!',
+		labelAlts: ['asset!'],
 		insertText: 'asset=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`asset` search criteria',
@@ -992,20 +992,20 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'amount=',
-		labelAlt: 'amount!=',
+		labelAlts: ['amount!', 'amount>', 'amount<'],
 		insertText: 'amount=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`amount` search criteria',
 		documentation: {
 			value:
 `
-\`amount\`: number, the condition for the amount of an input or output.
+\`amount\`: number, the condition for the amount of an input or output. Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 `
 		}
 	},
 	{
 		label: 'oracles=',
-		labelAlt: 'oracles!',
+		labelAlts: ['oracles!'],
 		insertText: 'oracles=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`oracles` search criteria',
@@ -1018,7 +1018,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'feed_name=',
-		labelAlt: 'feed_name!',
+		labelAlts: ['feed_name!'],
 		insertText: 'feed_name=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`feed_name` search criteria',
@@ -1031,7 +1031,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'feed_value=',
-		labelAlt: 'feed_value!',
+		labelAlts: ['feed_value!'],
 		insertText: 'feed_value=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`feed_value` search criteria',
@@ -1044,7 +1044,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'ifseveral=',
-		labelAlt: 'ifseveral!',
+		labelAlts: ['ifseveral!'],
 		insertText: 'ifseveral=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`ifseveral` search criteria',
@@ -1057,7 +1057,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'ifnone=',
-		labelAlt: 'ifnone=',
+		labelAlts: ['ifnone='],
 		insertText: 'ifnone=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`ifnone` search criteria',
@@ -1070,7 +1070,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'what=',
-		labelAlt: 'what!',
+		labelAlts: ['what!'],
 		insertText: 'what=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`what` search criteria',
@@ -1083,7 +1083,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'type=',
-		labelAlt: 'type!',
+		labelAlts: ['type!'],
 		insertText: 'type=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`type` search criteria',
@@ -1096,7 +1096,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'attestors=',
-		labelAlt: 'attestors!',
+		labelAlts: ['attestors!'],
 		insertText: 'attestors=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`attestors` search criteria',
@@ -1109,7 +1109,7 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'address=',
-		labelAlt: 'address!',
+		labelAlts: ['address!'],
 		insertText: 'address=',
 		kind: monaco.languages.CompletionItemKind.Module,
 		detail: '`address` search criteria',
@@ -1235,7 +1235,7 @@ Size of AA’s storage occupied before the current invocation.
 	},
 	{
 		label: 'OR',
-		labelAlt: 'or',
+		labelAlts: ['or'],
 		insertText: 'OR',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`OR` binary logical operator',
@@ -1254,7 +1254,7 @@ If the first operand evaluates to \`true\`, second operand of \`OR\` is not eval
 	},
 	{
 		label: 'AND',
-		labelAlt: 'and',
+		labelAlts: ['and'],
 		insertText: 'AND',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`AND` binary logical operator',
@@ -1273,7 +1273,7 @@ If the first operand evaluates to \`false\`, second operand of \`AND\` is not ev
 	},
 	{
 		label: 'NOT',
-		labelAlt: 'not',
+		labelAlts: ['not'],
 		insertText: 'NOT',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`NOT` unary logical operator',
@@ -1290,7 +1290,7 @@ The result is a boolean.
 	},
 	{
 		label: 'OTHERWISE',
-		labelAlt: 'otherwise',
+		labelAlts: ['otherwise'],
 		insertText: 'OTHERWISE',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`OTHERWISE` operator',
