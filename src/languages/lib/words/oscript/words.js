@@ -97,17 +97,17 @@ Examples:
 			value:
 `
 	\`{
-	trigger.output[[asset=assetName]].field
-	trigger.output[[asset!=assetName]].field
+	trigger.output[[asset=assetID]].field
+	trigger.output[[asset!=assetID]].field
 	}\`
 
 Output sent to the AA address in the specified asset.
 
-\`assetName\` can be \`base\` for bytes or any expression that evaluates to asset ID.
+\`assetID\` can be \`base\` for bytes or any expression that evaluates to asset ID.
 
 \`field\` can be \`amount\` or \`asset\` or omitted.  If omitted, \`amount\` is assumed.  If the trigger unit had several outputs in the same asset to this AA address, their amounts are summed.
 
-The search criteria can be \`=\` (\`asset=assetName\`) or \`!=\` (\`asset!=assetName\`).
+The search criteria can be \`=\` (\`asset=assetID\`) or \`!=\` (\`asset!=assetID\`).
 
 Examples:
 
