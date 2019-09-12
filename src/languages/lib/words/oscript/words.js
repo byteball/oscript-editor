@@ -510,7 +510,7 @@ Tries to find an output in the current unit by search criteria.
 These language constructs are available only in non-AA formulas in smart contracts (\`["formula", ...]\` clause).
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
-* \`asset\`: string, asset of or output, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
+* \`asset\`: string, asset of output, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
 * \`address\`: string, the address receives an output, can be \`this_address\`.  Comparison operators can be only \`=\` or \`!=\` (other addresses);
 * \`amount\`: number, the condition for the amount of an output.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
