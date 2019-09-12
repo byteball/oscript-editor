@@ -1224,6 +1224,7 @@ Size of AA’s storage occupied before the current invocation.
 	},
 	{
 		label: 'OR',
+		labelAlt: 'or',
 		insertText: 'OR',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`OR` binary logical operator',
@@ -1242,6 +1243,7 @@ If the first operand evaluates to \`true\`, second operand of \`OR\` is not eval
 	},
 	{
 		label: 'AND',
+		labelAlt: 'and',
 		insertText: 'AND',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`AND` binary logical operator',
@@ -1260,6 +1262,7 @@ If the first operand evaluates to \`false\`, second operand of \`AND\` is not ev
 	},
 	{
 		label: 'NOT',
+		labelAlt: 'not',
 		insertText: 'NOT',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`NOT` unary logical operator',
@@ -1276,6 +1279,7 @@ The result is a boolean.
 	},
 	{
 		label: 'OTHERWISE',
+		labelAlt: 'otherwise',
 		insertText: 'OTHERWISE',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`OTHERWISE` operator',

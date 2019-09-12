@@ -193,7 +193,7 @@ export default {
 				label = getDotMergedWord(model, position.lineNumber, hover)
 			}
 
-			hints = oscriptWordsList.filter(w => w.label.toLowerCase() === label.toLowerCase() && w.documentation)
+			hints = oscriptWordsList.filter(w => (w.label === label || w.labelAlt === label) && w.documentation)
 		} else if (isOjsonValues(model, position)) {
 			hints = ojsonValuesList.filter(w => w.label === hover.word && w.documentation)
 		} else {
