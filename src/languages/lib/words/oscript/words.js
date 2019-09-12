@@ -90,7 +90,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'trigger.output',
-		insertText: 'trigger.output',
+		insertText: 'trigger.output[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`trigger.output` external reference',
 		documentation: {
@@ -349,7 +349,7 @@ If the asset ID is valid, but does not exist then \`false\` is returned for any 
 	{
 		quoted: false,
 		label: 'data_feed',
-		insertText: 'data_feed',
+		insertText: 'data_feed[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`data_feed` external reference',
 		documentation: {
@@ -386,7 +386,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'in_data_feed',
-		insertText: 'in_data_feed',
+		insertText: 'in_data_feed[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`in_data_feed` external reference',
 		documentation: {
@@ -419,7 +419,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'attestation',
-		insertText: 'attestation[[aaa=bbb, ccc=ddd, ...]]',
+		insertText: 'attestation[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`attestation` external reference',
 		documentation: {
@@ -461,7 +461,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'input',
-		insertText: 'input',
+		insertText: 'input[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`input` external reference',
 		documentation: {
@@ -495,7 +495,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'output',
-		insertText: 'output',
+		insertText: 'output[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`output` external reference',
 		documentation: {
