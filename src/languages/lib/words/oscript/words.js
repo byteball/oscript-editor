@@ -477,7 +477,7 @@ These language constructs are available only in non-AA formulas in smart contrac
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
 * \`asset\`: string, asset of input, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
-* \`address\`: string, the address receives spends an input, can be \`this_address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
+* \`address\`: string, the address receives spends an input, can be \`this_address\`.  Comparison operators can be only \`=\` or \`!=\` (other addresses);
 * \`amount\`: number, the condition for the amount of an input.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
 \`field\` is one of \`amount\`, \`address\`, and \`asset\`.  It indicates which information about the input we are interested in.
@@ -511,7 +511,7 @@ These language constructs are available only in non-AA formulas in smart contrac
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
 * \`asset\`: string, asset of or output, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
-* \`address\`: string, the address receives an output, can be \`this_address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
+* \`address\`: string, the address receives an output, can be \`this_address\`.  Comparison operators can be only \`=\` or \`!=\` (other addresses);
 * \`amount\`: number, the condition for the amount of an output.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
 \`field\` is one of \`amount\`, \`address\`, and \`asset\`.  It indicates which information about the output we are interested in.
