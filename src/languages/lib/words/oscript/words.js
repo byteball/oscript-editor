@@ -251,19 +251,6 @@ Timestamp of the MC unit that recently became stable, this is the unit whose sta
 	},
 	{
 		quoted: false,
-		label: 'min_mci',
-		insertText: 'min_mci',
-		kind: monaco.languages.CompletionItemKind.Keyword,
-		detail: '`min_mci` external reference',
-		documentation: {
-			value:
-`
-Hash of the MC unit that includes (or is equal to) the trigger unit.
-`
-		}
-	},
-	{
-		quoted: false,
 		label: 'this_address',
 		insertText: 'this_address',
 		kind: monaco.languages.CompletionItemKind.Keyword,
