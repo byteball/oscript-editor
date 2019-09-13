@@ -164,7 +164,7 @@ export default {
 		}
 
 		if (isOscript(model, position)) {
-			if (lineUntilPosition.search(/\$\S*$/) !== -1) {
+			if (lineUntilPosition.search(/\$[a-zA-Z_]*$/) !== -1) {
 				return oscriptVariables(model)
 			} else {
 				return cloneDeep(oscriptWordsList).map(makeQuoted)
