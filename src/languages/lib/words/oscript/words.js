@@ -2,13 +2,18 @@ import * as monaco from 'monaco-editor'
 
 export default [
 	{
-		label: 'false',
-		insertText: 'false',
+		label: 'if',
+		insertText: 'if () {',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
-		label: 'if',
-		insertText: 'if',
+		label: 'else if',
+		insertText: 'else if () {',
+		kind: monaco.languages.CompletionItemKind.Keyword
+	},
+	{
+		label: 'else',
+		insertText: 'else {',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
@@ -19,6 +24,11 @@ export default [
 	{
 		label: 'true',
 		insertText: 'true',
+		kind: monaco.languages.CompletionItemKind.Keyword
+	},
+	{
+		label: 'false',
+		insertText: 'false',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
