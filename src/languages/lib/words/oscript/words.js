@@ -301,8 +301,8 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 	},
 	{
 		quoted: false,
-		label: 'asset',
-		insertText: 'asset',
+		label: 'asset[',
+		insertText: 'asset[]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`asset` external reference',
 		documentation: {
@@ -359,7 +359,7 @@ If the asset ID is valid, but does not exist then \`false\` is returned for any 
 Finds data feed value by search criteria.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` is also a valid oracle address and it refers to the current AA;
+* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` refers to the current AA;
 * \`feed_name\`: string, the name of the data feed;
 * \`feed_value\`: string or number, optional, search only for this specific value of the data feed;
 * \`min_mci\`: number, optional, search only since the specified MCI;
@@ -396,7 +396,7 @@ Examples:
 Determines if a data feed can be found by search criteria.  Returns \`true\` or \`false\`.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` is also a valid oracle address and it refers to the current AA;
+* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` refers to the current AA;
 * \`feed_name\`: string, the name of the data feed;
 * \`feed_value\`: string or number, search only for values of the data feed that are \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, or \`<=\` than the specified value;
 * \`min_mci\`: number, optional, search only since the specified MCI.
@@ -568,7 +568,7 @@ Negative numbers cause an error.  Non-number inputs are converted to numbers or 
 			value:
 `
 	\`{
-	ls(number)
+	ln(number)
 	}\`
 
 This function adds +1 to complexity count.
@@ -700,10 +700,13 @@ This function adds +1 to complexity count.
 			value:
 `
 	\`{
-	substring(string, start_index[, length])
+	substring(string, start_index)
+	substring(string, start_index, length)
 	}\`
 
-Returns part of the string. If length is not set then returns rest of the string from start index.
+Returns part of the string. If \`length\` is not set then returns rest of the string from \`start_index\`.
+If \`start_index\` is negative then \`substring\` uses it as a character index from the end of the string.
+If \`start_index\` is negative and absolute of \`start_index\` is larger than the length of the string then \`substring\` uses 0 as the \`start_index\`.
 `
 		}
 	},
@@ -797,7 +800,9 @@ Attempts to parse string of date or date + time and returns timestamp. If you ne
 			value:
 `
 	\`{
-	timestamp_to_string(timestamp[, 'date'|'datetime'])
+	timestamp_to_string(timestamp)
+	timestamp_to_string(timestamp, 'date')
+	timestamp_to_string(timestamp, 'datetime')
 	}\`
 
 Returns string format of date or date + time from \`timestamp\`.
@@ -979,7 +984,7 @@ Aborts the script's execution with error message passed as the function's argume
 		labelAlts: ['asset!'],
 		insertText: 'asset=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`asset` search criteria',
+		detail: '`asset` search condition',
 		documentation: {
 			value:
 `
@@ -992,7 +997,7 @@ Aborts the script's execution with error message passed as the function's argume
 		labelAlts: ['address!'],
 		insertText: 'address=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`address` search criteria',
+		detail: '`address` search condition',
 		documentation: {
 			value:
 `
@@ -1005,7 +1010,7 @@ Aborts the script's execution with error message passed as the function's argume
 		labelAlts: ['amount!', 'amount>', 'amount<'],
 		insertText: 'amount=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`amount` search criteria',
+		detail: '`amount` search condition',
 		documentation: {
 			value:
 `
@@ -1017,11 +1022,11 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'oracles=',
 		insertText: 'oracles=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`oracles` search criteria',
+		detail: '`oracles` search condition',
 		documentation: {
 			value:
 `
-\`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` is also a valid oracle address and it refers to the current AA;
+\`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` refers to the current AA;
 `
 		}
 	},
@@ -1029,7 +1034,7 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'feed_name=',
 		insertText: 'feed_name=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`feed_name` search criteria',
+		detail: '`feed_name` search condition',
 		documentation: {
 			value:
 `
@@ -1039,9 +1044,10 @@ Aborts the script's execution with error message passed as the function's argume
 	},
 	{
 		label: 'feed_value=',
+		labelAlts: ['feed_value!', 'feed_value>', 'feed_value<'],
 		insertText: 'feed_value=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`feed_value` search criteria',
+		detail: '`feed_value` search condition',
 		documentation: {
 			value:
 `
@@ -1053,7 +1059,7 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'min_mci=',
 		insertText: 'min_mci=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`min_mci` search criteria',
+		detail: '`min_mci` search condition',
 		documentation: {
 			value:
 `
@@ -1065,7 +1071,7 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'ifseveral=',
 		insertText: 'ifseveral=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`ifseveral` search criteria',
+		detail: '`ifseveral` search condition',
 		documentation: {
 			value:
 `
@@ -1077,7 +1083,7 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'ifnone=',
 		insertText: 'ifnone=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`ifnone` search criteria',
+		detail: '`ifnone` search condition',
 		documentation: {
 			value:
 `
@@ -1089,7 +1095,7 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'what=',
 		insertText: 'what=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`what` search criteria',
+		detail: '`what` search condition',
 		documentation: {
 			value:
 `
@@ -1101,7 +1107,7 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'type=',
 		insertText: 'type=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`type` search criteria',
+		detail: '`type` search condition',
 		documentation: {
 			value:
 `
@@ -1113,11 +1119,11 @@ Aborts the script's execution with error message passed as the function's argume
 		label: 'attestors=',
 		insertText: 'attestors=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`attestors` search criteria',
+		detail: '`attestors` search condition',
 		documentation: {
 			value:
 `
-\`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` is also a valid attestor address and it
+\`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` refers to the current AA.
 `
 		}
 	},
