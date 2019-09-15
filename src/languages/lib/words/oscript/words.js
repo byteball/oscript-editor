@@ -3,17 +3,17 @@ import * as monaco from 'monaco-editor'
 export default [
 	{
 		label: 'if',
-		insertText: 'if () {',
+		insertText: 'if ()',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
 		label: 'else if',
-		insertText: 'else if () {',
+		insertText: 'else if ()',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
 		label: 'else',
-		insertText: 'else {',
+		insertText: 'else',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
