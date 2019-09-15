@@ -340,7 +340,7 @@ The state message must always be the last message in the \`messages\` array.  It
 		documentation: {
 			value:
 `
-\`fixed_denominations\`: boolean, is the asset issued in fixed denominations? Currently only \`false\` is supported.
+\`fixed_denominations\`: boolean, is the asset issued in fixed denominations? Currently AAs can't send fixed denomination assets, but if \`issued_by_definer_only\` is \`false\` then somebody else can issue them.
 `
 		}
 	},
@@ -353,7 +353,7 @@ The state message must always be the last message in the \`messages\` array.  It
 		documentation: {
 			value:
 `
-Currently not supported.
+Currently AAs can't send fixed denomination assets, but if \`issued_by_definer_only\` is \`false\` then somebody else can issue them.
 
 \`denominations\`: array of objects like this \`{denomination: 5, count_coins: 1e10}\` if \`fixed_denominations\` is \`true\`.
 `

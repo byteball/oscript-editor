@@ -321,7 +321,7 @@ Extracts information about an asset. This adds +1 to complexity. \`expr\` is \`b
 * \`is_private\`: boolean, is the asset private?
 * \`is_transferrable\`: boolean, is the asset transferrable?
 * \`auto_destroy\`: boolean, does the asset gets autodestroyed when sent to definer address?
-* \`fixed_denominations\`: boolean,is the asset issued in fixed denominations?
+* \`fixed_denominations\`: boolean, is the asset issued in fixed denominations? Currently AAs can't send fixed denomination assets, but if \`issued_by_definer_only\` is \`false\` then somebody else can issue them.
 * \`issued_by_definer_only\`: boolean, is the asset issued by definer only?
 * \`cosigned_by_definer\`: boolean, should each transfer be cosigned by definer?
 * \`spender_attested\`: boolean, should each holder be attested?
