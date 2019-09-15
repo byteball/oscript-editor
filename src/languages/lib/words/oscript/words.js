@@ -406,7 +406,7 @@ Data feeds are searched before the MCI of the triggering unit (inclusively).  If
 Examples:
 
 	\`{
-	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD', feed_value > 12345.67]]
+	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD', feed_value>12345.67]]
 	in_data_feed[[oracles=this_address, feed_name='score', feed_value=$score]]
 	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC:I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', feed_name='timestamp', feed_value>=1.5e9]]
 	}\`
