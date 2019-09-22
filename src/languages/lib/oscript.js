@@ -15,7 +15,8 @@ export default {
 			'min', 'max', 'pi', 'e', 'sqrt', 'ln', 'ceil', 'floor', 'round', 'abs', 'hypot',
 			'is_valid_signed_package', 'sha256', 'is_valid_sig', 'json_parse', 'json_stringify', 'number_from_seed',
 			'length', 'is_valid_address', 'substring', 'starts_with', 'ends_with', 'contains',
-			'parse_date', 'timestamp_to_string', 'typeof', 'storage_size'
+			'parse_date', 'timestamp_to_string', 'typeof', 'storage_size',
+			'is_integer', 'is_valid_amount', 'is_aa', 'index_of', 'array_length', 'is_array', 'is_assoc', 'unit'
 		],
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
