@@ -164,7 +164,7 @@ export default {
 		}
 
 		if (isOscript(model, position)) {
-			if (lineUntilPosition.search(/\$[a-zA-Z_]*$/) !== -1) {
+			if (lineUntilPosition.search(/\$[a-zA-Z0-9_]*$/) !== -1) {
 				return oscriptVariables(model)
 			} else {
 				return cloneDeep(oscriptWordsList).map(makeQuoted)
@@ -240,7 +240,7 @@ const isOscript = (model, position) => {
 
 const oscriptVariables = (model, position) => {
 	const text = model.getValue()
-	return uniq(text.match(/\$[A-Za-z_]+/g)).map(e => ({
+	return uniq(text.match(/\$[a-zA-Z0-9_]+/g)).map(e => ({
 		label: e.slice(1),
 		insertText: e.slice(1),
 		kind: monaco.languages.CompletionItemKind.Variable
