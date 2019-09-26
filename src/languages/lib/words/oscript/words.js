@@ -711,6 +711,22 @@ If \`start_index\` is negative and absolute of \`start_index\` is larger than th
 		}
 	},
 	{
+		label: 'index_of',
+		insertText: 'index_of',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`index_of` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	index_of(string, search_string)
+	}\`
+
+Returns integer index (starting from 0) of searched string position in string. If searched string is not found then -1 is returned. Use \`contains\` if you don't need to know the index of the searched string.
+`
+		}
+	},
+	{
 		label: 'starts_with',
 		insertText: 'starts_with',
 		kind: monaco.languages.CompletionItemKind.Function,
@@ -754,7 +770,7 @@ Returns boolean when the string ends with specified string.
 	contains(string, search_string)
 	}\`
 
-Returns boolean whether the string contains searched string or not.
+Returns boolean \`true\` if the string contains searched string.
 `
 		}
 	},
@@ -801,11 +817,12 @@ Attempts to parse string of date or date + time and returns timestamp. If you ne
 `
 	\`{
 	timestamp_to_string(timestamp)
-	timestamp_to_string(timestamp, 'date')
 	timestamp_to_string(timestamp, 'datetime')
+	timestamp_to_string(timestamp, 'date')
+	timestamp_to_string(timestamp, 'time')
 	}\`
 
-Returns string format of date or date + time from \`timestamp\`.
+	Returns string format of date + time (default, date or time from \`timestamp\`. Timezone is UTC.
 `
 		}
 	},
@@ -848,6 +865,22 @@ Stringifies the input parameter into JSON.  The parameter can also be a number, 
 		}
 	},
 	{
+		label: 'array_length',
+		insertText: 'array_length',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`array_length` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	array_length(object)
+	}\`
+
+Returns number of elements if the object is an array. Use \`is_array\` to determine if object is an array.
+`
+		}
+	},
+	{
 		label: 'number_from_seed',
 		insertText: 'number_from_seed',
 		kind: monaco.languages.CompletionItemKind.Function,
@@ -869,7 +902,7 @@ The second form returns an integer number from 0 to max inclusive.
 
 The third form returns an integer number from min to max inclusive.
 
-This function is useful for generating pseudorandom numbers from a seed string.  It adds +1 to complexity count.
+This function is useful for generating pseudo-random numbers from a seed string.  It adds +1 to complexity count.
 `
 		}
 	},
@@ -885,7 +918,55 @@ This function is useful for generating pseudorandom numbers from a seed string. 
 	sha256(string)
 	}\`
 
-Returns sha256 of input string in base64 encoding.  Non-string inputs are converted to strings. This function adds +1 to complexity count.
+Returns SHA-256 hash of input string in Base64 encoding. Non-string inputs are converted to strings. This function adds +1 to complexity count.
+`
+		}
+	},
+	{
+		label: 'is_integer',
+		insertText: 'is_integer',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_integer` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_integer(number)
+	}\`
+
+Returns boolean \`true\` if the number is without fractionals.
+`
+		}
+	},
+	{
+		label: 'is_array',
+		insertText: 'is_array',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_array` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_array(object)
+	}\`
+
+Returns boolean \`true\` if the object is an array.
+`
+		}
+	},
+	{
+		label: 'is_assoc',
+		insertText: 'is_assoc',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_assoc` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_assoc(object)
+	}\`
+
+Returns boolean \`true\` if the object is an associative array (dictionary).
 `
 		}
 	},
@@ -901,7 +982,39 @@ Returns sha256 of input string in base64 encoding.  Non-string inputs are conver
 	is_valid_address(string)
 	}\`
 
-Returns boolean whether the wallet address is valid or not.
+Returns boolean \`true\` if the string is valid Obyte wallet address.
+`
+		}
+	},
+	{
+		label: 'is_aa',
+		insertText: 'is_aa',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_aa` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_aa(string)
+	}\`
+
+Returns boolean \`true\` if the string is Autonomous Agent address.
+`
+		}
+	},
+	{
+		label: 'is_valid_amount',
+		insertText: 'is_valid_amount',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_valid_amount` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_valid_amount(number)
+	}\`
+
+Returns boolean \`true\` if number is positive, integer, and below MAX_CAP (maximum cap that any token can have on Obyte platform).
 `
 		}
 	},
