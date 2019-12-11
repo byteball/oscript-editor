@@ -35,8 +35,6 @@ export default {
 				[/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
 				[/\d+([eE][-+]?\d+)?/, 'number'],
 				// identifiers and keywords
-				[/this address/, 'keyword'],
-				[/other address/, 'keyword'],
 				[/trigger\.data/, 'keyword'],
 				[/trigger\.address/, 'keyword'],
 				[/trigger\.output/, 'keyword'],
