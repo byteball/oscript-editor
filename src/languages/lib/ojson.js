@@ -184,16 +184,14 @@ export default {
 		let hints
 		if (isOscript(model, position)) {
 			let label = hover.word
-			if (label === 'asset') {
-				const nextChar = getNextChar(model, position.lineNumber, hover.endColumn)
-				if (nextChar === '[') {
-					label = 'asset['
-				}
+			const nextChar = getNextChar(model, position.lineNumber, hover.endColumn)
+			if ((label === 'asset' && nextChar === '[') || nextChar === '=' || nextChar === '!' || nextChar === '<' || nextChar === '>') {
+				label += nextChar
 			} else {
 				label = getDotMergedWord(model, position.lineNumber, hover)
 			}
 
-			hints = oscriptWordsList.filter(w => w.label === label && w.documentation)
+			hints = oscriptWordsList.filter(w => (w.label === label || (Array.isArray(w.labelAlts) && w.labelAlts.indexOf(label) !== -1)) && w.documentation)
 		} else if (isOjsonValues(model, position)) {
 			hints = ojsonValuesList.filter(w => w.label === hover.word && w.documentation)
 		} else {
