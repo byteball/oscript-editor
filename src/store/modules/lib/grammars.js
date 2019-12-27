@@ -31,10 +31,10 @@ export default () => ({
 					throw new ValidationError(err)
 				}
 			} else {
-				await dispatch('validateParametrizedAA', template)
+				await dispatch('validateParameterizedAA', template)
 			}
 		},
-		async validateParametrizedAA ({ commit }, template) {
+		async validateParameterizedAA ({ commit }, template) {
 			if (ValidationUtils.hasFieldsExcept(template, ['base_aa', 'params'])) {
 				throw new ValidationError('foreign fields in parameterized AA definition')
 			}
