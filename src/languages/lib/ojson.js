@@ -13,7 +13,8 @@ export default {
 			'cap', 'is_private', 'is_transferrable', 'auto_destroy',
 			'fixed_denominations', 'issued_by_definer_only',
 			'cosigned_by_definer', 'spender_attested', 'issue_condition',
-			'transfer_condition', 'attestors', 'denominations'
+			'transfer_condition', 'attestors', 'denominations',
+			'base_aa', 'params'
 		],
 
 		words: [

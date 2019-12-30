@@ -381,5 +381,25 @@ The state message must always be the last message in the \`messages\` array.  It
 \`is_issued\`: boolean, is any amount of the asset already issued?
 `
 		}
+	},
+	{
+		quoted: false,
+		label: 'base_aa',
+		insertText: 'base_aa: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`address of base parameterized Autonomous Agent',
+		documentation: {
+			value:
+`
+address of base parameterized Autonomous Agent
+`
+		}
+	},
+	{
+		quoted: false,
+		label: 'params',
+		insertText: 'params: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`parameters passed to base parameterized Autonomous Agent'
 	}
 ]
