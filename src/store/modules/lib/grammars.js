@@ -26,7 +26,7 @@ export default () => ({
 
 			if ('messages' in template) {
 				try {
-					await promisify(aaValidation.validateAADefinition)(definition)
+					return await promisify(aaValidation.validateAADefinition)(definition)
 				} catch (err) {
 					throw new ValidationError(err)
 				}

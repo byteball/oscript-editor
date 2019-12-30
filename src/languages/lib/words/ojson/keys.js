@@ -436,5 +436,25 @@ Currently AAs can't send fixed denomination assets, but if \`issued_by_definer_o
 \`transfer_condition\`: array of two-element arrays, optional and can specify the restrictions when the asset can be transferred.
 `
 		}
+	},
+	{
+		quoted: false,
+		label: 'base_aa',
+		insertText: 'base_aa: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`address of base parameterized Autonomous Agent',
+		documentation: {
+			value:
+`
+address of base parameterized Autonomous Agent
+`
+		}
+	},
+	{
+		quoted: false,
+		label: 'params',
+		insertText: 'params: ',
+		kind: monaco.languages.CompletionItemKind.Field,
+		detail: '`parameters passed to base parameterized Autonomous Agent'
 	}
 ]
