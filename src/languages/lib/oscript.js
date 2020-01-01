@@ -17,7 +17,7 @@ export default {
 			'length', 'is_valid_address', 'substring', 'starts_with', 'ends_with', 'contains',
 			'parse_date', 'timestamp_to_string', 'typeof', 'storage_size',
 			'is_integer', 'is_valid_amount', 'is_aa', 'index_of', 'array_length', 'is_array', 'is_assoc', 'unit',
-			'to_upper', 'to_lower', 'exists', 'number_of_responses', 'vrf_verify'
+			'to_upper', 'to_lower', 'exists', 'number_of_responses', 'vrf_verify', 'definition'
 		],
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
