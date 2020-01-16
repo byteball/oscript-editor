@@ -136,8 +136,15 @@ $result_pane_height: 10rem;
 			background-color: $color-primary;
 			color: $color-white;
 			transition: background-color .2s ease-out;
+			&.actions-row-action-deploying {
+				background-color: grey;
+				cursor: progress;
+			}
 			&:hover {
 				background-color: lighten($color-primary, 15);
+				&.actions-row-action-deploying {
+					background-color: grey;
+				}
 			}
 		}
 	}

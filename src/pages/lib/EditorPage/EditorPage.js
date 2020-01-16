@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import monacoLanguages from 'src/languages'
-import { AgentControls } from 'src/components'
+import { AgentControls, QrCode } from 'src/components'
 import { ValidationError, ParsingError } from 'src/errors'
 
 /* eslint-disable-next-line no-undef */
@@ -14,12 +14,15 @@ const ojson = monacoLanguages['ojson']
 
 export default {
 	components: {
+		QrCode,
 		Multiselect,
 		MonacoEditor,
 		AgentControls
 	},
 	data () {
 		return {
+			deploymentUrl: '',
+			isDeploying: false,
 			serializedOjson: '',
 			language: ojson.id,
 			code: '',
@@ -49,6 +52,7 @@ export default {
 	},
 	watch: {
 		code () {
+			this.deploymentUrl = ''
 			if (this.doNotUpdateAgentText) {
 				this.doNotUpdateAgentText = false
 			} else {
@@ -137,7 +141,8 @@ export default {
 			setWrapLines: 'ui/setWrapLines',
 			setTheme: 'ui/setTheme',
 
-			deployAa: 'backend/deploy'
+			deployAaOnBackend: 'backend/deploy',
+			createAgentLink: 'backend/createAgentLink'
 		}),
 		async codeChanged () {
 			this.serializedOjson = ''
@@ -152,14 +157,22 @@ export default {
 				}
 			}
 		},
-		async deploy () {
-			this.resultMessage = ''
-			await this.codeChanged()
-
-			if (this.serializedOjson !== '') {
-				this.openResultPane()
+		async deployAa () {
+			this.openResultPane()
+			if (config.deployment.delpoyWithUserWallet) {
 				try {
-					const result = await this.deployAa(this.serializedOjson)
+					this.deploymentUrl = ''
+					const uri = await this.createAgentLink(this.code)
+					this.deploymentUrl = uri
+					this.resultMessage = 'Agent prepared for deployment\n' +
+						'Click on the temporary link below to deploy agent with your local Obyte wallet\n' +
+						'Or scan QR code to deploy it with another device'
+				} catch (e) {
+					this.resultMessage = e.response ? get(e, 'response.data.error', 'Unexpected error') : e.message
+				}
+			} else {
+				try {
+					const result = await this.deployAaOnBackend(this.serializedOjson)
 					const unit = get(result, 'result.unit', null)
 					const definitionMessage = get(unit, 'messages', []).find(m => m.app === 'definition')
 					this.resultMessage = 'Success\n' +
@@ -170,7 +183,17 @@ export default {
 				}
 			}
 		},
-		async validate () {
+		async handleDeployClick () {
+			this.isDeploying = true
+			this.resultMessage = ''
+			await this.codeChanged()
+
+			if (this.serializedOjson !== '') {
+				await this.deployAa()
+			}
+			this.isDeploying = false
+		},
+		async handleValidateClick () {
 			this.resultMessage = ''
 			await this.codeChanged()
 
@@ -193,6 +216,7 @@ export default {
 			this.code = this.selectedAgent.text
 			this.$refs.editor.getMonaco().setScrollPosition({ scrollTop: 0 })
 			this.$refs.editor.getMonaco().focus()
+			this.deploymentUrl = ''
 			this.resultMessage = ''
 		},
 		handleWrapLinesCheckbox () {
@@ -225,6 +249,9 @@ export default {
 		async handleAgentActionRename (newLabel) {
 			await this.renameUserAgent({ id: this.selectedAgent.id, newLabel })
 			this.$refs.editor.getMonaco().focus()
+		},
+		handleQrClosed () {
+			this.resultMessage = ''
 		},
 		openResultPane () {
 			if (!this.resultPaneOpened) {

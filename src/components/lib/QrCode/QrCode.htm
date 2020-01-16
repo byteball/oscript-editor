@@ -1,0 +1,20 @@
+<div v-if="qr" class="root-qr-code">
+	<div class="qr-code">
+		<div class="qr-code-close" @click="handleCloseClick"></div>
+		<vue-countdown :time="expirationTimeout" :interval="1000" tag="div">
+			<template slot-scope="props">
+				<div class="qr-code-timer">
+					Expires in {{String(props.minutes).padStart(2, '0')}}:{{String(props.seconds).padStart(2, '0')}}
+				</div>
+			</template>
+		</vue-countdown>
+		<a
+			class="qr-code-link"
+			:href="sourceString"
+			title="Deployment link"
+		>
+			<img :src="qr">
+			<div>Click to deploy agent</div>
+		</a>
+	</div>
+</div>

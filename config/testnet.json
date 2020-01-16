@@ -6,6 +6,9 @@
 		"mode": "testnet",
 		"explorer": {
 			"url": "https://testnetexplorer.obyte.org/"
+		},
+		"deployment": {
+			"delpoyWithUserWallet": false
 		}
 	}
 }
