@@ -26,6 +26,10 @@ export default () => ({
 				throw new Error('No shortcode in response')
 			}
 			return `${config.deployment.protocol}:data?app=definition&definition=${config.api.url}link/${data.shortcode}`
+		},
+		async isAgentDuplicate ({ commit }, ojson) {
+			const { data } = await BACKEND.post('/aa/is-duplicate', { data: ojson })
+			return data
 		}
 	}
 })

@@ -84,9 +84,9 @@
 		title="Autonomous Agents Documentation"
 	>Autonomous Agents Documentation</a>
 	<qr-code :sourceString="deploymentUrl" @closed="handleQrClosed"></qr-code>
-	<div class="actions-row">
-		<div class="actions-row-action" :class="isDeploying ? 'actions-row-action-deploying': ''" @click="handleValidateClick">Validate</div>
-		<div class="actions-row-action" :class="isDeploying ? 'actions-row-action-deploying': ''" @click="handleDeployClick">Deploy</div>
+	<div v-if="!deploymentUrl" class="actions-row">
+		<div class="actions-row-action" :class="isDeploying ? 'actions-row-action-deploying': ''" @click="handleValidateClick" title="Validate ojson syntax locally">Validate</div>
+		<div class="actions-row-action" :class="isDeploying ? 'actions-row-action-deploying': ''" @click="handleDeployClick" :title="deployTitle">{{ deployLabel }}</div>
 	</div>
 	<div class="socials-row">
 		<div class="social">

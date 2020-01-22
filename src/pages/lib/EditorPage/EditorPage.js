@@ -21,6 +21,8 @@ export default {
 	},
 	data () {
 		return {
+			deployLabel: config.deployment.delpoyWithUserWallet ? 'Deploy...' : 'Deploy',
+			deployTitle: config.deployment.delpoyWithUserWallet ? 'Deploy AA with user wallet' : 'Deploy AA with wallet on backend',
 			deploymentUrl: '',
 			isDeploying: false,
 			serializedOjson: '',
@@ -142,7 +144,8 @@ export default {
 			setTheme: 'ui/setTheme',
 
 			deployAaOnBackend: 'backend/deploy',
-			createAgentLink: 'backend/createAgentLink'
+			createAgentLink: 'backend/createAgentLink',
+			isAgentDuplicate: 'backend/isAgentDuplicate'
 		}),
 		async codeChanged () {
 			this.serializedOjson = ''
@@ -158,7 +161,6 @@ export default {
 			}
 		},
 		async deployAa () {
-			this.openResultPane()
 			if (config.deployment.delpoyWithUserWallet) {
 				try {
 					this.deploymentUrl = ''
@@ -189,7 +191,17 @@ export default {
 			await this.codeChanged()
 
 			if (this.serializedOjson !== '') {
-				await this.deployAa()
+				this.openResultPane()
+				try {
+					const res = await this.isAgentDuplicate(this.serializedOjson)
+					if (res.isDuplicate) {
+						this.resultMessage = res.error || 'Duplicate agent'
+					} else {
+						await this.deployAa()
+					}
+				} catch (e) {
+					this.resultMessage = e.message || e
+				}
 			}
 			this.isDeploying = false
 		},
@@ -251,6 +263,7 @@ export default {
 			this.$refs.editor.getMonaco().focus()
 		},
 		handleQrClosed () {
+			this.deploymentUrl = ''
 			this.resultMessage = ''
 		},
 		openResultPane () {

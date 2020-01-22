@@ -9,7 +9,7 @@
 		},
 		"deployment": {
 			"delpoyWithUserWallet": true,
-			"protocol": "obyte"
+			"protocol": "obyte-tn"
 		}
 	}
 }
