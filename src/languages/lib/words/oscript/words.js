@@ -2,13 +2,18 @@ import * as monaco from 'monaco-editor'
 
 export default [
 	{
-		label: 'false',
-		insertText: 'false',
+		label: 'if',
+		insertText: 'if ()',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
-		label: 'if',
-		insertText: 'if',
+		label: 'else if',
+		insertText: 'else if ()',
+		kind: monaco.languages.CompletionItemKind.Keyword
+	},
+	{
+		label: 'else',
+		insertText: 'else',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
@@ -19,6 +24,11 @@ export default [
 	{
 		label: 'true',
 		insertText: 'true',
+		kind: monaco.languages.CompletionItemKind.Keyword
+	},
+	{
+		label: 'false',
+		insertText: 'false',
 		kind: monaco.languages.CompletionItemKind.Keyword
 	},
 	{
@@ -49,7 +59,7 @@ Assigning state variables:
 
 \`var['var_name']\` reads the value of state variable \`var_name\` stored under current AA.
 
-\`var['AA_ADDRESS']['var_name']\` reads the value of state variable \`var_name\` stored under AA \`AA_ADDRESS\`.  \`AA_ADDRESS\` is a valid address or \`this address\` to refer to the current AA.
+\`var['AA_ADDRESS']['var_name']\` reads the value of state variable \`var_name\` stored under AA \`AA_ADDRESS\`.  \`AA_ADDRESS\` is a valid address or \`this_address\` to refer to the current AA.
 
 If there is no such variable, \`false\` is returned.
 
@@ -90,24 +100,24 @@ Examples:
 	{
 		quoted: false,
 		label: 'trigger.output',
-		insertText: 'trigger.output',
+		insertText: 'trigger.output[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`trigger.output` external reference',
 		documentation: {
 			value:
 `
 	\`{
-	trigger.output[[asset=assetName]].field
-	trigger.output[[asset!=assetName]].field
+	trigger.output[[asset=assetID]].field
+	trigger.output[[asset!=assetID]].field
 	}\`
 
 Output sent to the AA address in the specified asset.
 
-\`assetName\` can be \`base\` for bytes or any expression that evaluates to asset ID.
+\`assetID\` can be \`base\` for bytes or any expression that evaluates to asset ID.
 
 \`field\` can be \`amount\` or \`asset\` or omitted.  If omitted, \`amount\` is assumed.  If the trigger unit had several outputs in the same asset to this AA address, their amounts are summed.
 
-The search criteria can be \`=\` (\`asset=assetName\`) or \`!=\` (\`asset!=assetName\`).
+The search criteria can be \`=\` (\`asset=assetID\`) or \`!=\` (\`asset!=assetID\`).
 
 Examples:
 
@@ -251,19 +261,6 @@ Timestamp of the MC unit that recently became stable, this is the unit whose sta
 	},
 	{
 		quoted: false,
-		label: 'min_mci',
-		insertText: 'min_mci',
-		kind: monaco.languages.CompletionItemKind.Keyword,
-		detail: '`min_mci` external reference',
-		documentation: {
-			value:
-`
-Hash of the MC unit that includes (or is equal to) the trigger unit.
-`
-		}
-	},
-	{
-		quoted: false,
 		label: 'this_address',
 		insertText: 'this_address',
 		kind: monaco.languages.CompletionItemKind.Keyword,
@@ -305,7 +302,7 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 	{
 		quoted: false,
 		label: 'asset[',
-		insertText: 'asset',
+		insertText: 'asset[]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`asset` external reference',
 		documentation: {
@@ -313,39 +310,43 @@ The hash of the MC unit that includes (or is equal to) the trigger unit.
 `
 	\`{
 	asset[expr].field
-	asset[expr].[field_expr]
+	asset[expr][field_expr]
 	}\`
 
 Extracts information about an asset. This adds +1 to complexity. \`expr\` is \`base\` for bytes or an expression that evaluates to an asset ID.
 
 \`field\` is on of the following, \`field_expr\` should evaluate to one of the following:
+* \`exists\`: boolean, returns \`false\` if asset ID is invalid;
 * \`cap\`: number, total supply of the asset.  For uncapped assets, 0 is returned;
 * \`is_private\`: boolean, is the asset private?
 * \`is_transferrable\`: boolean, is the asset transferrable?
 * \`auto_destroy\`: boolean, does the asset gets autodestroyed when sent to definer address?
-* \`fixed_denominations\`: boolean,is the asset issued in fixed denominations?
+* \`fixed_denominations\`: boolean, is the asset issued in fixed denominations? Currently AAs can't send fixed denomination assets, but if \`issued_by_definer_only\` is \`false\` then somebody else can issue them.
 * \`issued_by_definer_only\`: boolean, is the asset issued by definer only?
 * \`cosigned_by_definer\`: boolean, should each transfer be cosigned by definer?
 * \`spender_attested\`: boolean, should each holder be attested?
 * \`is_issued\`: boolean, is any amount of the asset already issued?
+* \`definer_address\`: string, returns wallet address of the definer.
 
 Examples:
 
 	\`{
 	asset[base].cap
-	asset["base"].cap
-	asset["n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY="].is_issued
-	asset["n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY="]['is_' || 'issued']
+	asset['base"].cap
+	asset['abc"].exists
+	asset['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY='].is_issued
+	asset['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY=']['is_' || 'issued']
+	asset['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY=']['is_' || 'private']
 	}\`
 
-If the asset does not exist, \`false\` is returned for any field.
+If the asset ID is valid, but does not exist then \`false\` is returned for any field.
 `
 		}
 	},
 	{
 		quoted: false,
 		label: 'data_feed',
-		insertText: 'data_feed',
+		insertText: 'data_feed[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`data_feed` external reference',
 		documentation: {
@@ -358,7 +359,7 @@ If the asset does not exist, \`false\` is returned for any field.
 Finds data feed value by search criteria.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this address\` is also a valid oracle address and it refers to the current AA;
+* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` refers to the current AA;
 * \`feed_name\`: string, the name of the data feed;
 * \`feed_value\`: string or number, optional, search only for this specific value of the data feed;
 * \`min_mci\`: number, optional, search only since the specified MCI;
@@ -373,7 +374,7 @@ Examples:
 
 	\`{
 	data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD']]
-	data_feed[[oracles=this address, feed_name='score']]
+	data_feed[[oracles=this_address, feed_name='score']]
 	data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC:I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', feed_name='timestamp']]
 	}\`
 `
@@ -382,7 +383,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'in_data_feed',
-		insertText: 'in_data_feed',
+		insertText: 'in_data_feed[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`in_data_feed` external reference',
 		documentation: {
@@ -395,7 +396,7 @@ Examples:
 Determines if a data feed can be found by search criteria.  Returns \`true\` or \`false\`.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this address\` is also a valid oracle address and it refers to the current AA;
+* \`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` refers to the current AA;
 * \`feed_name\`: string, the name of the data feed;
 * \`feed_value\`: string or number, search only for values of the data feed that are \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, or \`<=\` than the specified value;
 * \`min_mci\`: number, optional, search only since the specified MCI.
@@ -405,8 +406,8 @@ Data feeds are searched before the MCI of the triggering unit (inclusively).  If
 Examples:
 
 	\`{
-	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD', feed_value > 12345.67]]
-	in_data_feed[[oracles=this address, feed_name='score', feed_value=$score]]
+	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC', feed_name='BTC_USD', feed_value>12345.67]]
+	in_data_feed[[oracles=this_address, feed_name='score', feed_value=$score]]
 	in_data_feed[[oracles='JPQKPRI5FMTQRJF4ZZMYZYDQVRD55OTC:I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT', feed_name='timestamp', feed_value>=1.5e9]]
 	}\`
 `
@@ -415,7 +416,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'attestation',
-		insertText: 'attestation',
+		insertText: 'attestation[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`attestation` external reference',
 		documentation: {
@@ -429,7 +430,7 @@ Examples:
 Finds an attestation by search criteria.  This adds +1 to complexity.
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.
-* \`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this address\` is also a valid attestor address and it refers to the current AA;
+* \`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` is also a valid attestor address and it refers to the current AA;
 * \`address\`: string, the address that was attested;
 * \`ifseveral\`: string, optional, \`last\` or \`abort\`, what to do if several matching attestations are found, return the last one or abort the script with error, default is \`last\`
 * \`ifnone\`: string or number or boolean, optional, the value to return if nothing is found.  By default, this results in an error and aborts the script;
@@ -447,7 +448,7 @@ Examples:
 
 	\`{
 	attestation[[attestors='UOYYSPEE7UUW3KJAB5F4Y4AWMYMDDB4Y', address='BI2MNEVU4EFWL4WSBILFK7GGMVNS2Q3Q']].email
-	attestation[[attestors=this address, address=trigger.address]]
+	attestation[[attestors=this_address, address=trigger.address]]
 	attestation[[attestors='JEDZYC2HMGDBIDQKG3XSTXUSHMCBK725', address='TSXOWBIK2HEBVWYTFE6AH3UEAVUR2FIF', ifnone='anonymous']].steem_username
 	attestation[[attestors='JEDZYC2HMGDBIDQKG3XSTXUSHMCBK725', address='TSXOWBIK2HEBVWYTFE6AH3UEAVUR2FIF']].reputation
 	}\`
@@ -457,7 +458,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'input',
-		insertText: 'input',
+		insertText: 'input[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`input` external reference',
 		documentation: {
@@ -473,7 +474,7 @@ These language constructs are available only in non-AA formulas in smart contrac
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
 * \`asset\`: string, asset of input, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
-* \`address\`: string, the address receives spends an input, can be \`this address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
+* \`address\`: string, the address receives spends an input, can be \`this_address\`.  Comparison operators can be only \`=\` or \`!=\` (other addresses);
 * \`amount\`: number, the condition for the amount of an input.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
 \`field\` is one of \`amount\`, \`address\`, and \`asset\`.  It indicates which information about the input we are interested in.
@@ -491,7 +492,7 @@ Examples:
 	{
 		quoted: false,
 		label: 'output',
-		insertText: 'output',
+		insertText: 'output[[]]',
 		kind: monaco.languages.CompletionItemKind.Keyword,
 		detail: '`output` external reference',
 		documentation: {
@@ -506,8 +507,8 @@ Tries to find an output in the current unit by search criteria.
 These language constructs are available only in non-AA formulas in smart contracts (\`["formula", ...]\` clause).
 
 There are multiple search criteria listed between the double brackets, their order is insignificant.  All search criteria are optional but at least one must be present.
-* \`asset\`: string, asset of or output, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
-* \`address\`: string, the address receives an output, can be \`this address\` or \`other address\`.  Comparison operators can be only \`=\` or \`!=\`;
+* \`asset\`: string, asset of output, can be \`base\` for bytes.  Comparison operators can be only \`=\` or \`!=\`;
+* \`address\`: string, the address receives an output, can be \`this_address\`.  Comparison operators can be only \`=\` or \`!=\` (other addresses);
 * \`amount\`: number, the condition for the amount of an output.  Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
 
 \`field\` is one of \`amount\`, \`address\`, and \`asset\`.  It indicates which information about the output we are interested in.
@@ -525,6 +526,22 @@ Examples:
 		}
 	},
 	{
+		label: 'typeof',
+		insertText: 'typeof',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`typeof` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	typeof(anything)
+	}\`
+
+Returns \`"string"\`, \`"number"\`, \`"boolean"\` or \`"object"\`.
+`
+		}
+	},
+	{
 		label: 'sqrt',
 		insertText: 'sqrt',
 		kind: monaco.languages.CompletionItemKind.Function,
@@ -532,7 +549,10 @@ Examples:
 		documentation: {
 			value:
 `
-\`sqrt(number)\`
+	\`{
+	sqrt(number)
+	}\`
+
 This function adds +1 to complexity count.
 
 Negative numbers cause an error.  Non-number inputs are converted to numbers or result in error.
@@ -547,7 +567,10 @@ Negative numbers cause an error.  Non-number inputs are converted to numbers or 
 		documentation: {
 			value:
 `
-\`ln(number)\`
+	\`{
+	ln(number)
+	}\`
+
 This function adds +1 to complexity count.
 
 Negative numbers cause an error. Non-number inputs are converted to numbers or result in error.
@@ -562,7 +585,10 @@ Negative numbers cause an error. Non-number inputs are converted to numbers or r
 		documentation: {
 			value:
 `
-\`abs(number)\`
+	\`{
+	abs(number)
+	}\`
+
 Returns absolute value of a number. Non-number inputs are converted to numbers or result in error.
 `
 		}
@@ -575,7 +601,9 @@ Returns absolute value of a number. Non-number inputs are converted to numbers o
 		documentation: {
 			value:
 `
-\`round(number [, decimal_places])\`
+	\`{
+	round(number [, decimal_places])
+	}\`
 
 Rounds the input number to the specified number of decimal places (0 if omitted). \`round\` uses \`ROUND_HALF_EVEN\` rules.  Non-number inputs are converted to numbers or result in error. Negative or non-integer \`decimal_places\` results in error. \`decimal_places\` greater than 15 results in error.
 `
@@ -589,7 +617,9 @@ Rounds the input number to the specified number of decimal places (0 if omitted)
 		documentation: {
 			value:
 `
-\`ceil(number [, decimal_places])\`
+	\`{
+	ceil(number [, decimal_places])
+	}\`
 
 Rounds the input number to the specified number of decimal places (0 if omitted). \`round\` uses \`ROUND_HALF_EVEN\` rules.  Non-number inputs are converted to numbers or result in error. Negative or non-integer \`decimal_places\` results in error. \`decimal_places\` greater than 15 results in error.
 `
@@ -603,7 +633,9 @@ Rounds the input number to the specified number of decimal places (0 if omitted)
 		documentation: {
 			value:
 `
-\`floor(number [, decimal_places])\`
+	\`{
+	floor(number [, decimal_places])
+	}\`
 
 Rounds the input number to the specified number of decimal places (0 if omitted). \`round\` uses \`ROUND_HALF_EVEN\` rules.  Non-number inputs are converted to numbers or result in error. Negative or non-integer \`decimal_places\` results in error. \`decimal_places\` greater than 15 results in error.
 `
@@ -617,7 +649,9 @@ Rounds the input number to the specified number of decimal places (0 if omitted)
 		documentation: {
 			value:
 `
-\`min(number1, [number2[, number3[, ...]]])\`
+	\`{
+	min(number1, [number2[, number3[, ...]]])
+	}\`
 
 Returns minimum among the set of numbers.  Non-number inputs are converted to numbers or result in error.
 `
@@ -631,7 +665,9 @@ Returns minimum among the set of numbers.  Non-number inputs are converted to nu
 		documentation: {
 			value:
 `
-\`max(number1, [number2[, number3[, ...]]])\`
+	\`{
+	max(number1, [number2[, number3[, ...]]])
+	}\`
 
 Returns maximum among the set of numbers.  Non-number inputs are converted to numbers or result in error.
 `
@@ -645,11 +681,148 @@ Returns maximum among the set of numbers.  Non-number inputs are converted to nu
 		documentation: {
 			value:
 `
-\`hypot(number1, [number2[, number3[, ...]]])\`
+	\`{
+	hypot(number1, [number2[, number3[, ...]]])
+	}\`
 
 Returns the square root of the sum of squares of all arguments.  Boolean parameters are converted to 1 and 0, objects are taken as 1, all other types result in error.  The function returns a non-infinity result even if some intermediary results (squares) would overflow.
 
 This function adds +1 to complexity count.
+`
+		}
+	},
+	{
+		label: 'substring',
+		insertText: 'substring',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`substring` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	substring(string, start_index)
+	substring(string, start_index, length)
+	}\`
+
+Returns part of the string. If \`length\` is not set then returns rest of the string from \`start_index\`.
+If \`start_index\` is negative then \`substring\` uses it as a character index from the end of the string.
+If \`start_index\` is negative and absolute of \`start_index\` is larger than the length of the string then \`substring\` uses 0 as the \`start_index\`.
+`
+		}
+	},
+	{
+		label: 'index_of',
+		insertText: 'index_of',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`index_of` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	index_of(string, search_string)
+	}\`
+
+Returns integer index (starting from 0) of searched string position in string. If searched string is not found then -1 is returned. Use \`contains\` if you don't need to know the index of the searched string.
+`
+		}
+	},
+	{
+		label: 'starts_with',
+		insertText: 'starts_with',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`starts_with` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	starts_with(string, prefix)
+	}\`
+
+Returns boolean when the string starts with specified string.
+`
+		}
+	},
+	{
+		label: 'ends_with',
+		insertText: 'ends_with',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`ends_with` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	ends_with(string, suffix)
+	}\`
+
+Returns boolean when the string ends with specified string.
+`
+		}
+	},
+	{
+		label: 'contains',
+		insertText: 'contains',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`contains` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	contains(string, search_string)
+	}\`
+
+Returns boolean \`true\` if the string contains searched string.
+`
+		}
+	},
+	{
+		label: 'length',
+		insertText: 'length',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`length` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	length(string)
+	}\`
+
+Returns the number of characters in string.
+`
+		}
+	},
+	{
+		label: 'parse_date',
+		insertText: 'parse_date',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`parse_date` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	parse_date(ISO8601_date)
+	parse_date(ISO8601_datetime)
+	}\`
+
+Attempts to parse string of date or date + time and returns timestamp. If you need to get seconds from UNIX Epoch of a current unit then use \`timestamp\`.
+`
+		}
+	},
+	{
+		label: 'timestamp_to_string',
+		insertText: 'timestamp_to_string',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`timestamp_to_string` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	timestamp_to_string(timestamp)
+	timestamp_to_string(timestamp, 'datetime')
+	timestamp_to_string(timestamp, 'date')
+	timestamp_to_string(timestamp, 'time')
+	}\`
+
+	Returns string format of date + time (default, date or time from \`timestamp\`. Timezone is UTC.
 `
 		}
 	},
@@ -661,7 +834,9 @@ This function adds +1 to complexity count.
 		documentation: {
 			value:
 `
-\`json_parse(string)\`
+	\`{
+	json_parse(string)
+	}\`
 
 Attempts to parse the input JSON string. If the result of parsing is an object, the object is returned.  If the result is a scalar (boolean, string, number), the scalar is returned.
 
@@ -681,9 +856,27 @@ Non-string input is converted to string.
 		documentation: {
 			value:
 `
-\`json_stringify(string)\`
+	\`{
+	json_stringify(string)
+	}\`
 
 Stringifies the input parameter into JSON.  The parameter can also be a number, boolean, or string.  If it is a number outside the IEEE754 range, the formula fails.  Objects in the returned JSON are sorted by keys.
+`
+		}
+	},
+	{
+		label: 'array_length',
+		insertText: 'array_length',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`array_length` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	array_length(object)
+	}\`
+
+Returns number of elements if the object is an array. Use \`is_array\` to determine if object is an array.
 `
 		}
 	},
@@ -709,7 +902,7 @@ The second form returns an integer number from 0 to max inclusive.
 
 The third form returns an integer number from min to max inclusive.
 
-This function is useful for generating pseudorandom numbers from a seed string.  It adds +1 to complexity count.
+This function is useful for generating pseudo-random numbers from a seed string.  It adds +1 to complexity count.
 `
 		}
 	},
@@ -725,7 +918,103 @@ This function is useful for generating pseudorandom numbers from a seed string. 
 	sha256(string)
 	}\`
 
-Returns sha256 of input string in base64 encoding.  Non-string inputs are converted to strings. This function adds +1 to complexity count.
+Returns SHA-256 hash of input string in Base64 encoding. Non-string inputs are converted to strings. This function adds +1 to complexity count.
+`
+		}
+	},
+	{
+		label: 'is_integer',
+		insertText: 'is_integer',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_integer` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_integer(number)
+	}\`
+
+Returns boolean \`true\` if the number is without fractionals.
+`
+		}
+	},
+	{
+		label: 'is_array',
+		insertText: 'is_array',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_array` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_array(object)
+	}\`
+
+Returns boolean \`true\` if the object is an array.
+`
+		}
+	},
+	{
+		label: 'is_assoc',
+		insertText: 'is_assoc',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_assoc` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_assoc(object)
+	}\`
+
+Returns boolean \`true\` if the object is an associative array (dictionary).
+`
+		}
+	},
+	{
+		label: 'is_valid_address',
+		insertText: 'is_valid_address',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_valid_address` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_valid_address(string)
+	}\`
+
+Returns boolean \`true\` if the string is valid Obyte wallet address.
+`
+		}
+	},
+	{
+		label: 'is_aa',
+		insertText: 'is_aa',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_aa` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_aa(string)
+	}\`
+
+Returns boolean \`true\` if the string is Autonomous Agent address.
+`
+		}
+	},
+	{
+		label: 'is_valid_amount',
+		insertText: 'is_valid_amount',
+		kind: monaco.languages.CompletionItemKind.Function,
+		detail: '`is_valid_amount` built-in',
+		documentation: {
+			value:
+`
+	\`{
+	is_valid_amount(number)
+	}\`
+
+Returns boolean \`true\` if number is positive, integer, and below MAX_CAP (maximum cap that any token can have on Obyte platform).
 `
 		}
 	},
@@ -804,22 +1093,61 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'oracles',
-		insertText: 'oracles',
+		label: 'asset=',
+		labelAlts: ['asset!'],
+		insertText: 'asset=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`oracles` search criteria',
+		detail: '`asset` search condition',
 		documentation: {
 			value:
 `
-\`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this address\` is also a valid oracle address and it refers to the current AA;
+\`asset\`: string, asset of input or output, can be \`base\` for bytes. Comparison operators can be only \`=\` or \`!=\`;
 `
 		}
 	},
 	{
-		label: 'feed_name',
-		insertText: 'feed_name',
+		label: 'address=',
+		labelAlts: ['address!'],
+		insertText: 'address=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`feed_name` search criteria',
+		detail: '`address` search condition',
+		documentation: {
+			value:
+`
+\`address\`: string, the address that was attested;
+`
+		}
+	},
+	{
+		label: 'amount=',
+		labelAlts: ['amount!', 'amount>', 'amount<'],
+		insertText: 'amount=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`amount` search condition',
+		documentation: {
+			value:
+`
+\`amount\`: number, the condition for the amount of an input or output. Allowed comparison operators are: \`=\`, \`!=\`, \`>\`, \`>=\`, \`<\`, \`<=\`.
+`
+		}
+	},
+	{
+		label: 'oracles=',
+		insertText: 'oracles=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`oracles` search condition',
+		documentation: {
+			value:
+`
+\`oracles\`: string, list of oracle addresses delimited by \`:\` (usually only one oracle). \`this_address\` refers to the current AA;
+`
+		}
+	},
+	{
+		label: 'feed_name=',
+		insertText: 'feed_name=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`feed_name` search condition',
 		documentation: {
 			value:
 `
@@ -828,10 +1156,11 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'feed_value',
-		insertText: 'feed_value',
+		label: 'feed_value=',
+		labelAlts: ['feed_value!', 'feed_value>', 'feed_value<'],
+		insertText: 'feed_value=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`feed_value` search criteria',
+		detail: '`feed_value` search condition',
 		documentation: {
 			value:
 `
@@ -840,10 +1169,22 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'ifseveral',
-		insertText: 'ifseveral',
+		label: 'min_mci=',
+		insertText: 'min_mci=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`ifseveral` search criteria',
+		detail: '`min_mci` search condition',
+		documentation: {
+			value:
+`
+\`min_mci\`: number, optional, search only since the specified MCI;
+`
+		}
+	},
+	{
+		label: 'ifseveral=',
+		insertText: 'ifseveral=',
+		kind: monaco.languages.CompletionItemKind.Module,
+		detail: '`ifseveral` search condition',
 		documentation: {
 			value:
 `
@@ -852,10 +1193,10 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'ifnone',
-		insertText: 'ifnone',
+		label: 'ifnone=',
+		insertText: 'ifnone=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`ifnone` search criteria',
+		detail: '`ifnone` search condition',
 		documentation: {
 			value:
 `
@@ -864,10 +1205,10 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'what',
-		insertText: 'what',
+		label: 'what=',
+		insertText: 'what=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`what` search criteria',
+		detail: '`what` search condition',
 		documentation: {
 			value:
 `
@@ -876,10 +1217,10 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'type',
-		insertText: 'type',
+		label: 'type=',
+		insertText: 'type=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`type` search criteria',
+		detail: '`type` search condition',
 		documentation: {
 			value:
 `
@@ -888,26 +1229,14 @@ Aborts the script's execution with error message passed as the function's argume
 		}
 	},
 	{
-		label: 'attestors',
-		insertText: 'attestors',
+		label: 'attestors=',
+		insertText: 'attestors=',
 		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`attestors` search criteria',
+		detail: '`attestors` search condition',
 		documentation: {
 			value:
 `
-\`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this address\` is also a valid attestor address and it
-`
-		}
-	},
-	{
-		label: 'address',
-		insertText: 'address',
-		kind: monaco.languages.CompletionItemKind.Module,
-		detail: '`address` search criteria',
-		documentation: {
-			value:
-`
-\`address\`: string, the address that was attested;
+\`attestors\`: string, list of attestor addresses delimited by \`:\` (usually only one attestor). \`this_address\` refers to the current AA.
 `
 		}
 	},
@@ -934,8 +1263,8 @@ Examples:
 
 	\`{
 	balance[base]
-	balance["n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY="]
-	balance["JVUJQ7OPBJ7ZLZ57TTNFJIC3EW7AE2RY"][base]
+	balance['n9y3VomFeWFeZZ2PcSEcmyBb/bI7kzZduBJigNetnkY=']
+	balance['JVUJQ7OPBJ7ZLZ57TTNFJIC3EW7AE2RY'][base]
 	}\`
 `
 		}
@@ -979,17 +1308,14 @@ will result in the following response object:
 	{
 		label: 'base',
 		insertText: 'base',
-		kind: monaco.languages.CompletionItemKind.Text
-	},
-	{
-		label: 'asset',
-		insertText: 'asset',
-		kind: monaco.languages.CompletionItemKind.Text
-	},
-	{
-		label: 'amount',
-		insertText: 'amount',
-		kind: monaco.languages.CompletionItemKind.Text
+		kind: monaco.languages.CompletionItemKind.Text,
+		detail: '`base` search value',
+		documentation: {
+			value:
+`
+\`asset\` can be \`base\` for bytes, asset id for any other asset, or any expression that evaluates to an asset id or \`base\` string.
+`
+		}
 	},
 	{
 		label: 'pi',
@@ -1016,23 +1342,87 @@ Euler's number rounded to 15 digits precision: 2.71828182845905.
 		}
 	},
 	{
-		label: 'or',
-		insertText: 'or',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'storage_size',
+		insertText: 'storage_size',
+		kind: monaco.languages.CompletionItemKind.Constant,
+		detail: '`storage_size` size in bytes',
+		documentation: {
+			value:
+`
+Size of AA’s storage occupied before the current invocation.
+`
+		}
 	},
 	{
-		label: 'and',
-		insertText: 'and',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'OR',
+		labelAlts: ['or'],
+		insertText: 'OR',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`OR` binary logical operator',
+		documentation: {
+			value:
+`
+Lowercase name \`or\` is also allowed.
+
+Non-boolean operands are converted to booleans.
+
+The result is a boolean.
+
+If the first operand evaluates to \`true\`, second operand of \`OR\` is not evaluated.
+`
+		}
 	},
 	{
-		label: 'not',
-		insertText: 'not',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'AND',
+		labelAlts: ['and'],
+		insertText: 'AND',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`AND` binary logical operator',
+		documentation: {
+			value:
+`
+Lowercase name \`and\` is also allowed.
+
+Non-boolean operands are converted to booleans.
+
+The result is a boolean.
+
+If the first operand evaluates to \`false\`, second operand of \`AND\` is not evaluated.
+`
+		}
 	},
 	{
-		label: 'otherwise',
-		insertText: 'otherwise',
-		kind: monaco.languages.CompletionItemKind.Keyword
+		label: 'NOT',
+		labelAlts: ['not'],
+		insertText: 'NOT',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`NOT` unary logical operator',
+		documentation: {
+			value:
+`
+Lowercase name \`not\` is also allowed. The operator can be also written as \`!\`.
+
+Non-boolean operand is converted to boolean.
+
+The result is a boolean.
+`
+		}
+	},
+	{
+		label: 'OTHERWISE',
+		labelAlts: ['otherwise'],
+		insertText: 'OTHERWISE',
+		kind: monaco.languages.CompletionItemKind.Keyword,
+		detail: '`OTHERWISE` operator',
+		documentation: {
+			value:
+`
+Lowercase name \`otherwise\` is also allowed.
+
+\`expr1 OTHERWISE expr2\`
+
+If \`expr1\` is truthy, its result is returned and \`expr2\` is not evaluated. Otherwise, \`expr2\` is evaluated and its result returned.
+`
+		}
 	}
 ]

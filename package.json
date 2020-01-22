@@ -12,15 +12,17 @@
 		"lint": "vue-cli-service lint --ext .js,.vue,.htm"
 	},
 	"dependencies": {
+		"@chenfengyuan/vue-countdown": "^1.1.4",
 		"axios": "^0.19.0",
 		"config": "^3.1.0",
 		"core-js": "^2.6.5",
 		"cross-env": "^5.2.0",
 		"decimal.js": "^10.2.0",
 		"lodash": "^4.17.11",
-		"monaco-editor-webpack-plugin": "^1.7.0",
+		"monaco-editor-webpack-plugin": "1.7.0",
 		"moo": "^0.5.0",
 		"ocore": "git+https://github.com/byteball/ocore.git#rocks-and-formulas",
+		"qrcode": "^1.4.4",
 		"uniqid": "^5.0.3",
 		"v-clipboard": "^2.2.2",
 		"vue": "^2.6.10",

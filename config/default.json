@@ -2,6 +2,11 @@
 	"frontend": {
 		"myjsonApi": {
 			"url": "https://api.myjson.com/"
-		}
+		},
+		"deployment": {
+			"delpoyWithUserWallet": true,
+			"protocol": "obyte"
+		},
+		"agentLinkExpirationTimeout": 300000
 	}
 }

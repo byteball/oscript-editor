@@ -16,7 +16,8 @@ export default {
 			'is_valid_signed_package', 'sha256', 'is_valid_sig', 'json_parse', 'json_stringify', 'number_from_seed',
 			'length', 'is_valid_address', 'substring', 'starts_with', 'ends_with', 'contains',
 			'parse_date', 'timestamp_to_string', 'typeof', 'storage_size',
-			'is_integer', 'is_valid_amount', 'is_aa', 'index_of', 'array_length', 'is_array', 'is_assoc', 'unit'
+			'is_integer', 'is_valid_amount', 'is_aa', 'index_of', 'array_length', 'is_array', 'is_assoc', 'unit',
+			'to_upper', 'to_lower', 'exists', 'number_of_responses', 'vrf_verify', 'definition'
 		],
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
@@ -34,8 +35,7 @@ export default {
 				[/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
 				[/\d+([eE][-+]?\d+)?/, 'number'],
 				// identifiers and keywords
-				[/this address/, 'keyword'],
-				[/other address/, 'keyword'],
+				[/params/, 'keyword'],
 				[/trigger\.data/, 'keyword'],
 				[/trigger\.address/, 'keyword'],
 				[/trigger\.output/, 'keyword'],
