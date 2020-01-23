@@ -1,0 +1,34 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+.root-qr-code {
+	position: relative;
+	margin: 1rem 0 2rem;
+	.qr-code {
+		@include flex(column, flex-start, center);
+		position: relative;
+		.qr-code-close {
+			cursor: pointer;
+			position: absolute;
+			top: 0;
+			right: 0;
+			&:after{
+				display: inline-block;
+				content: '\00d7';
+			}
+			&:hover:after {
+				font-weight: 700;
+			}
+		}
+		.qr-code-timer {
+			user-select: none;
+			position: absolute;
+			top: .2rem;
+			left: 1.6rem;
+			font-size: .8rem;
+		}
+		.qr-code-link {
+			@include flex(column, flex-start, center);
+		}
+	}
+}
