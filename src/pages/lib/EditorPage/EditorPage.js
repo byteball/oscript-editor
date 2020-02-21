@@ -145,7 +145,8 @@ export default {
 
 			deployAaOnBackend: 'backend/deploy',
 			createAgentLink: 'backend/createAgentLink',
-			isAgentDuplicate: 'backend/isAgentDuplicate'
+
+			isAgentDuplicate: 'obyte/isAgentDuplicate'
 		}),
 		async codeChanged () {
 			this.serializedOjson = ''

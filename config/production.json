@@ -8,8 +8,7 @@
 			"url": "https://explorer.obyte.org/"
 		},
 		"deployment": {
-			"delpoyWithUserWallet": true,
-			"protocol": "obyte"
+			"delpoyWithUserWallet": true
 		}
 	}
 }

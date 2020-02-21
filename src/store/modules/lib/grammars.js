@@ -1,16 +1,17 @@
+/* eslint-disable camelcase */
 import { promisify } from 'util'
 import { ValidationError, OjsonParsingError } from 'src/errors'
 
 const ValidationUtils = require('ocore/validation_utils')
 const aaValidation = require('ocore/aa_validation')
-const ojson = require('ocore/formula/parse_ojson')
+const parse_ojson = require('ocore/formula/parse_ojson')
 
 export default () => ({
 	namespaced: true,
 	actions: {
 		async parseOjson ({ commit }, text) {
 			try {
-				return await promisify(ojson.parse)(text)
+				return await promisify(parse_ojson.parse)(text)
 			} catch (err) {
 				throw new OjsonParsingError(err)
 			}

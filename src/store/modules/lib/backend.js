@@ -1,4 +1,5 @@
 import { BACKEND } from 'src/remotes'
+import constants from 'ocore/constants'
 
 /* eslint-disable-next-line no-undef */
 const config = __APP_CONFIG__
@@ -25,7 +26,7 @@ export default () => ({
 			if (!data.shortcode) {
 				throw new Error('No shortcode in response')
 			}
-			return `${config.deployment.protocol}:data?app=definition&definition=${config.api.url}link/${data.shortcode}`
+			return `${constants.bTestnet ? 'obyte-tn' : 'obyte'}:data?app=definition&definition=${config.api.url}link/${data.shortcode}`
 		},
 		async isAgentDuplicate ({ commit }, ojson) {
 			const { data } = await BACKEND.post('/aa/is-duplicate', { data: ojson })

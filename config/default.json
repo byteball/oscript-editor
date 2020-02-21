@@ -4,8 +4,7 @@
 			"url": "https://api.myjson.com/"
 		},
 		"deployment": {
-			"delpoyWithUserWallet": true,
-			"protocol": "obyte"
+			"delpoyWithUserWallet": true
 		},
 		"agentLinkExpirationTimeout": 300000
 	}

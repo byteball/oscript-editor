@@ -1,7 +1,7 @@
 export default {
 	id: 'oscript',
 	tokensProvider: {
-		// Set defaultToken to invalid to see what you do not tokenize yet
+		// Set defaultToken to invalid to see what you did not tokenize yet
 		defaultToken: 'invalid',
 		keywords: [
 			'if', 'else', 'return', 'true', 'false'
