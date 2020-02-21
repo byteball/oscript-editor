@@ -8,8 +8,7 @@
 			"url": "http://localhost:8080/"
 		},
 		"deployment": {
-			"delpoyWithUserWallet": true,
-			"protocol": "obyte-tn"
+			"delpoyWithUserWallet": true
 		}
 	}
 }

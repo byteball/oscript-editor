@@ -14,6 +14,9 @@ module.exports = {
 			}),
 			new webpack.DefinePlugin({
 				'__APP_CONFIG__': JSON.stringify(config.get('frontend'))
+			}),
+			new webpack.EnvironmentPlugin({
+				'testnet': null
 			})
 		]
 	},
