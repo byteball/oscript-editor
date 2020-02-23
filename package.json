@@ -22,7 +22,7 @@
 		"monaco-editor-webpack-plugin": "1.7.0",
 		"moo": "^0.5.0",
 		"obyte": "^0.1.7",
-		"ocore": "git+https://github.com/byteball/ocore.git#rocks-and-formulas",
+		"ocore": "git+https://github.com/byteball/ocore.git",
 		"qrcode": "^1.4.4",
 		"uniqid": "^5.0.3",
 		"v-clipboard": "^2.2.2",
