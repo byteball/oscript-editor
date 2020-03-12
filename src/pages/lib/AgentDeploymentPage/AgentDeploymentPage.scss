@@ -1,0 +1,20 @@
+@import 'src/styles/mixins';
+@import 'src/styles/variables';
+
+.root-agent-deployment-page {
+	@include flex(row, center, center);
+	height: 100%;
+	background-color: $color-white;
+	.qr-code {
+		@include flex(column, flex-start, center);
+		position: relative;
+		.qr-code-link {
+			@include flex(column, flex-start, center);
+		}
+		.qr-code-info {
+			margin-top: 8px;
+			color: $color-dark-grey;
+			font-size: 10px;
+		}
+	}
+}
