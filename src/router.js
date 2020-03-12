@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { EditorPage, SharedAgentPage } from 'src/pages'
+import { EditorPage, SharedAgentPage, AgentDeploymentPage } from 'src/pages'
 
 Vue.use(Router)
 
@@ -18,6 +18,12 @@ export default new Router({
 			name: 'shared',
 			props: true,
 			component: SharedAgentPage
+		},
+		{
+			path: '/d/:shortcode',
+			name: 'deployment',
+			props: true,
+			component: AgentDeploymentPage
 		}
 	]
 })
