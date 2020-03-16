@@ -31,6 +31,10 @@ export default () => ({
 		async isAgentDuplicate ({ commit }, ojson) {
 			const { data } = await BACKEND.post('/aa/is-duplicate', { data: ojson })
 			return data
+		},
+		async getAgent ({ commit }, shortcode) {
+			const { data } = await BACKEND.get(`/link/${shortcode}`)
+			return data
 		}
 	}
 })

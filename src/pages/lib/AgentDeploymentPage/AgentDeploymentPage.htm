@@ -1,13 +1,23 @@
 <div class="root-agent-deployment-page">
-	<div v-if="qr" class="qr-code">
-		<a
-			class="qr-code-link"
-			:href="deploymentUri"
-			title="Deployment link"
-		>
-			<img :src="qr">
-			<div>Click to deploy agent</div>
-		</a>
-		<div class="qr-code-info">Link will be available for {{ expirationTimeout / 60000 }} minutes</div>
-	</div>
+	<div v-if="invalidLink">This link does not exist</div>
+	<div v-else-if="expiredLink">Link has expired</div>
+	<template v-else>
+		<div v-if="qr" class="qr-code">
+			<a
+				class="qr-code-link"
+				:href="deploymentUri"
+				title="Deployment link"
+			>
+				<img :src="qr">
+				<div>Click to deploy agent</div>
+			</a>
+			<vue-countdown :time="expirationTimeout" :interval="1000" tag="div" @end="countdownDone">
+				<template slot-scope="props">
+					<div class="qr-code-info">
+						Expires in {{String(props.minutes).padStart(2, '0')}}:{{String(props.seconds).padStart(2, '0')}}
+					</div>
+				</template>
+			</vue-countdown>
+		</div>
+	</template>
 </div>
