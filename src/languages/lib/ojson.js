@@ -45,9 +45,9 @@ export default {
 				[/[{}[\]]/, '@brackets'],
 
 				// numbers
-				[/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
+				// [/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
 				[/0[xX][0-9a-fA-F]+/, 'number.hex'],
-				[/\d+/, 'number'],
+				[/[-+]?([0-9]|[1-9][0-9]+)(\.[0-9]+)?([eE][-+]?[0-9]+)?/, 'number'],
 
 				// delimiter: after number because of .\d floats
 				[/[;,.:]/, 'delimiter'],
