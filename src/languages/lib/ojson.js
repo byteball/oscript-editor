@@ -14,7 +14,7 @@ export default {
 			'fixed_denominations', 'issued_by_definer_only',
 			'cosigned_by_definer', 'spender_attested', 'issue_condition',
 			'transfer_condition', 'attestors', 'denominations',
-			'base_aa', 'params'
+			'base_aa', 'params', 'getters'
 		],
 
 		words: [

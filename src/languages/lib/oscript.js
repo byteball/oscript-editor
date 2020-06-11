@@ -17,12 +17,15 @@ export default {
 			'length', 'is_valid_address', 'substring', 'starts_with', 'ends_with', 'contains',
 			'parse_date', 'timestamp_to_string', 'typeof', 'storage_size',
 			'is_integer', 'is_valid_amount', 'is_aa', 'index_of', 'array_length', 'is_array', 'is_assoc', 'unit',
-			'to_upper', 'to_lower', 'exists', 'number_of_responses', 'vrf_verify', 'definition'
+			'to_upper', 'to_lower', 'exists', 'number_of_responses', 'vrf_verify', 'definition',
+			'delete', 'freeze', 'chash160', 'map', 'reduce', 'split', 'join', 'reverse', 'keys', 'replace',
+			'has_only', 'foreach', 'filter'
 		],
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
 			'||', '+', '-', '*', '/', '%', '^',
-			'+=', '-=', '*=', '/=', '%=', '||=', 'OR', 'AND', 'NOT', 'OTHERWISE', 'or', 'and', 'not', 'otherwise'
+			'+=', '-=', '*=', '/=', '%=', '||=', 'OR', 'AND', 'NOT', 'OTHERWISE', 'or', 'and', 'not', 'otherwise',
+			'=>'
 		],
 		// we include these common regular expressions
 		symbols: /[=><!?:|+\-*/%^]+/,
@@ -34,6 +37,7 @@ export default {
 				// numbers
 				[/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
 				[/\d+([eE][-+]?\d+)?/, 'number'],
+				[/[A-Z0-9]{32}\./, 'keyword'],
 				// identifiers and keywords
 				[/params/, 'keyword'],
 				[/trigger\.data/, 'keyword'],
