@@ -23,7 +23,7 @@ export default {
 	},
 	methods: {
 		...mapActions({
-			myjsonUpload: 'myjsonApi/upload'
+			uploadSharedAgent: 'backend/uploadSharedAgent'
 		}),
 		async handleActionNew () {
 			this.$emit('new')
@@ -62,7 +62,7 @@ export default {
 			try {
 				const shortcode = this.isSelectedAgentShared
 					? this.selectedAgent.shortcode
-					: await this.myjsonUpload({ label: this.selectedAgent.label, text: this.selectedAgent.text })
+					: await this.uploadSharedAgent({ label: this.selectedAgent.label, text: this.selectedAgent.text })
 				this.sharedUri = window.location.href + `s/${shortcode}`
 				this.isSharingSuccess = true
 				setTimeout(() => {

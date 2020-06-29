@@ -35,6 +35,14 @@ export default () => ({
 		async getAgent ({ commit }, shortcode) {
 			const { data } = await BACKEND.get(`/link/${shortcode}`)
 			return data
+		},
+		async uploadSharedAgent ({ commit }, object) {
+			const { data } = await BACKEND.post('/s', object)
+			return data.shortcode
+		},
+		async downloadSharedAgent ({ commit }, shortcode) {
+			const { data } = await BACKEND.get(`/s/${shortcode}`)
+			return data
 		}
 	}
 })

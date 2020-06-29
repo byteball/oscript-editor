@@ -5,7 +5,7 @@ export default {
 		shortcode: String
 	},
 	async created () {
-		const agent = await this.myjsonDownload(this.shortcode)
+		const agent = await this.downloadSharedAgent(this.shortcode)
 		const existingAgent = await this.getExistingSharedAgent(agent.text)
 		if (existingAgent) {
 			await this.changeSelectedAgent(existingAgent.id)
@@ -16,7 +16,7 @@ export default {
 	},
 	methods: {
 		...mapActions({
-			myjsonDownload: 'myjsonApi/download',
+			downloadSharedAgent: 'backend/downloadSharedAgent',
 			addSharedAgent: 'agents/addSharedAgent',
 			changeSelectedAgent: 'agents/changeSelected',
 			getExistingSharedAgent: 'agents/getExistingSharedAgent'

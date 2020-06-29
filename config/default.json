@@ -1,8 +1,5 @@
 {
 	"frontend": {
-		"myjsonApi": {
-			"url": "https://api.myjson.com/"
-		},
 		"deployment": {
 			"delpoyWithUserWallet": true
 		},
