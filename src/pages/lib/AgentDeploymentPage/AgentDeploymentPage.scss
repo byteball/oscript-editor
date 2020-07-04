@@ -5,6 +5,13 @@
 	@include flex(row, center, center);
 	height: 100%;
 	background-color: $color-white;
+	.link-not-exist {
+		@include flex(column, center, center);
+		.goto-editor-link {
+			margin-top: .5rem;
+			font-size: 1.2rem;
+		}
+	}
 	.qr-code {
 		@include flex(column, flex-start, center);
 		position: relative;

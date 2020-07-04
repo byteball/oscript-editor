@@ -1,5 +1,15 @@
+@import 'src/styles/mixins';
 @import 'src/styles/variables';
 
 .root-shared-agent-page {
+	@include flex(row, center, center);
 	background-color: $color-white;
+	height: 100%;
+	.agent-not-found {
+		@include flex(column, center, center);
+		.goto-editor-link {
+			margin-top: .5rem;
+			font-size: 1.2rem;
+		}
+	}
 }
