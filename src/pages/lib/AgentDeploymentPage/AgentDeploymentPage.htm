@@ -1,5 +1,8 @@
 <div class="root-agent-deployment-page">
-	<div v-if="invalidLink">This link does not exist</div>
+	<div v-if="invalidLink" class="link-not-exist">
+		<div>This link does not exist</div>
+		<a class="goto-editor-link" href="/">Go to editor</a>
+	</div>
 	<div v-else-if="expiredLink">Link has expired</div>
 	<template v-else>
 		<div v-if="qr" class="qr-code">

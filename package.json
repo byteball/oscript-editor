@@ -1,6 +1,6 @@
 {
 	"name": "oscript-editor",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"author": "Obyte",
 	"license": "MIT",
 	"description": "Online editor for Oscript - a language of autonomous agents",

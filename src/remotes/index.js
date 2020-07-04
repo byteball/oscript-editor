@@ -5,6 +5,7 @@ import {
 	ParsingError,
 	InternalError,
 	ValidationError,
+	SharedAgentNotFoundError,
 	AgentAlreadyDeployedError
 } from 'src/errors'
 
@@ -24,11 +25,13 @@ BACKEND.interceptors.response.use(
 		const { response } = error
 		if (response) {
 			if (response && response.status === 400) {
-				switch (response.status) {
+				switch (get(response, 'data.errorCode', '')) {
 				case ErrorCodes.VALIDATION_ERROR:
 					throw new ValidationError(response.data.error)
 				case ErrorCodes.PARSING_ERROR:
 					throw new ParsingError(response.data.error)
+				case ErrorCodes.SHARED_AGENT_NOT_FOUND_ERROR:
+					throw new SharedAgentNotFoundError(response.data.error)
 				}
 			} else if (response && response.status === 500) {
 				switch (response.status) {
