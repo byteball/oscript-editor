@@ -1,6 +1,7 @@
 import MonacoEditor from 'vue-monaco'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
+import objectHash from 'ocore/object_hash'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import monacoLanguages from 'src/languages'
@@ -214,7 +215,8 @@ export default {
 				this.openResultPane()
 				try {
 					const body = await this.validateAa(this.serializedOjson)
-					const result = body ? 'AA validated, complexity = ' + body.complexity + ', ops = ' + body.count_ops : 'AA validated'
+					const aaAddress = objectHash.getChash160(await this.parseOjson(this.code))
+					const result = body ? `AA validated, complexity = ${body.complexity}, ops = ${body.count_ops}, address = ${aaAddress}` : `AA validated, address = ${aaAddress}`
 					this.resultMessage = 'Success\n' + result
 				} catch (e) {
 					if (e instanceof ValidationError) { this.resultMessage = e.message }
