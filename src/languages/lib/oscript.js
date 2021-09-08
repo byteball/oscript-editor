@@ -19,7 +19,7 @@ export default {
 			'is_integer', 'is_valid_amount', 'is_aa', 'index_of', 'array_length', 'is_array', 'is_assoc', 'unit',
 			'to_upper', 'to_lower', 'exists', 'number_of_responses', 'vrf_verify', 'definition',
 			'delete', 'freeze', 'chash160', 'map', 'reduce', 'split', 'join', 'reverse', 'keys', 'replace',
-			'has_only', 'foreach', 'filter'
+			'has_only', 'foreach', 'filter', 'previous_aa_responses', 'log', 'require'
 		],
 		operators: [
 			'=', '>', '<', '!', '!!', '?', ':', '==', '<=', '>=', '!=',
@@ -42,9 +42,11 @@ export default {
 				[/params/, 'keyword'],
 				[/trigger\.data/, 'keyword'],
 				[/trigger\.address/, 'keyword'],
+				[/trigger\.outputs/, 'keyword'],
 				[/trigger\.output/, 'keyword'],
 				[/trigger\.unit/, 'keyword'],
 				[/trigger\.initial_address/, 'keyword'],
+				[/trigger\.initial_unit/, 'keyword'],
 				[/\w+\b/, { cases: { '@builtins': 'keyword',
 					'@keywords': 'keyword',
 					'@default': 'identifier'
@@ -59,7 +61,7 @@ export default {
 				[/@symbols/, { cases: { '@operators': 'operator' } }],
 				[/OR|or|AND|and|NOT|not|otherwise|OTHERWISE/, 'operator'],
 				// delimiter: after number because of .\d floats
-				[/[;,.]/, 'delimiter'],
+				[/[;,.#]/, 'delimiter'],
 				// strings
 				[/"([^"\\]|\\.)*$/, 'string.invalid'], // non-teminated string
 				[/'([^'\\]|\\.)*$/, 'string.invalid'], // non-teminated string
