@@ -1816,7 +1816,7 @@ Allows to inspect the definition of any address using definition['ADDRESS'] synt
 `
 \`map()\` executes a function over each element of an array or object
 
-The callback function for map accepts 1 or 2 arguments. If it accepts 1 argument, the value of each element is passed to it. If it accepts 2 arguments, key and value for objects or index and elememt for arrays are passed.
+The callback function for map accepts 1 or 2 arguments. If it accepts 1 argument, the value of each element is passed to it. If it accepts 2 arguments, key and value for objects or index and element for arrays are passed.
 
 The second argument is the maximum number of elements that an array or object can have. If it is larger, the script fails. This number must be a constant so that it can be known at deploy time, and the complexity of the entire operation is the complexity of the callback function times maximum number of elements. If the function has 0 complexity, the total complexity of map/reduce/foreach/filter is assumed to be 1 independently of the max number of elements. Max number of elements cannot exceed 100.
 
@@ -1870,7 +1870,7 @@ or by indicating a base AA that the \`$remote_aa\` is a parameterized AA of:
 `
 \`filter()\` creates a new array with all elements that pass the test implemented by the callback function
 
-The callback function for filter accepts 1 or 2 arguments. If it accepts 1 argument, the value of each element is passed to it. If it accepts 2 arguments, key and value for objects or index and elememt for arrays are passed.
+The callback function for filter accepts 1 or 2 arguments. If it accepts 1 argument, the value of each element is passed to it. If it accepts 2 arguments, key and value for objects or index and element for arrays are passed.
 
 The second argument is the maximum number of elements that an array or object can have. If it is larger, the script fails. This number must be a constant so that it can be known at deploy time, and the complexity of the entire operation is the complexity of the callback function times maximum number of elements. If the function has 0 complexity, the total complexity of map/reduce/foreach/filter is assumed to be 1 independently of the max number of elements. Max number of elements cannot exceed 100.
 
@@ -1927,7 +1927,7 @@ The second argument is the maximum number of elements that an array or object ca
 `
 \`foreach()\` executes a function over each element of an array or object
 
-The callback function for foreach accepts 1 or 2 arguments. If it accepts 1 argument, the value of each element is passed to it. If it accepts 2 arguments, key and value for objects or index and elememt for arrays are passed.
+The callback function for foreach accepts 1 or 2 arguments. If it accepts 1 argument, the value of each element is passed to it. If it accepts 2 arguments, key and value for objects or index and element for arrays are passed.
 
 The second argument is the maximum number of elements that an array or object can have. If it is larger, the script fails. This number must be a constant so that it can be known at deploy time, and the complexity of the entire operation is the complexity of the callback function times maximum number of elements. If the function has 0 complexity, the total complexity of map/reduce/foreach/filter is assumed to be 1 independently of the max number of elements. Max number of elements cannot exceed 100.
 
