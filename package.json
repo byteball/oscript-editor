@@ -50,7 +50,6 @@
 		"vue-template-compiler": "^2.6.10"
 	},
 	"resolutions": {
-		"level-rocksdb": "^4.0.0"
 	},
 	"gitHooks": {
 		"pre-commit": "lint-staged"
